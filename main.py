@@ -1,19 +1,23 @@
+#Import bot scripts
 import config
+import kb
 
+#Import discord python library
 import discord
 from discord.ext.commands import Bot
 
+#Import other libraries needed
 import datetime
-
-
 import requests
 
 killbot = Bot(command_prefix=config.PREFIX)
+
 
 @killbot.event
 async def on_ready():
     print("Bot online")
 
+#Bot commands go here.
 @killbot.command()
 async def  ping():
     return await killbot.say("Pong!")
