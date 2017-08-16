@@ -33,6 +33,6 @@ async def threat(*args):
     print(args)
     char = '%20'.join(args)
     await kb.getID(char)
-    return await killbot.say("Feature in development. "+ chars)
+    return await killbot.say("Feature in development. "+ char + "\n" + kb.URL)
 
 killbot.run(config.BOT_TOKEN)
