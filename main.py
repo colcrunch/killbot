@@ -25,6 +25,14 @@ async def  ping():
 @killbot.command(aliases = ['eve_time', 'evetime', 't'])
 async def time():
     time = datetime.datetime.utcnow()
-    return await killbot.say("Current Eve (UTC) Time: " + time.strftime("%H:%M "))
+    return await killbot.say("Current EVE (UTC) Time: " + time.strftime("%H:%M "))
+
+
+@killbot.command()
+async def threat(*args):
+    print(args)
+    char = '%20'.join(args)
+    await kb.getID(char)
+    return await killbot.say("Feature in development. "+ chars)
 
 killbot.run(config.BOT_TOKEN)
