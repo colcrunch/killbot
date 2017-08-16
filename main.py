@@ -22,13 +22,13 @@ async def on_ready():
 async def  ping():
     return await killbot.say("Pong!")
 
-@killbot.command(aliases = ['eve_time', 'evetime', 't'])
+@killbot.command(aliases = ['eve_time', 'evetime', 'et'])
 async def time():
     time = datetime.datetime.utcnow()
     return await killbot.say("Current EVE (UTC) Time: " + time.strftime("%H:%M "))
 
 
-@killbot.command()
+@killbot.command(aliases = ['t'])
 async def threat(*, char):
     print(char)
     await kb.getID(char)
