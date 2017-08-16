@@ -31,7 +31,6 @@ async def time():
 @killbot.command()
 async def threat(*, char):
     print(char)
-    #char = '%20'.join(args)
     await kb.getID(char)
     await kb.get_stats()
     return await killbot.say("Feature in development. "+ char + "\n" + kb.url)
