@@ -32,7 +32,11 @@ async def time():
 async def threat(*, char):
     print(char)
     await kb.getID(char)
-    await kb.get_stats()
+    if kb.cid == "0":
+        return await killbot.say("Character not found. Please check your spelling and try again.")
+    else:
+        await kb.get_stats()
+
     return await killbot.say("Feature in development. "+ char + "\n" + kb.url)
 
 killbot.run(config.BOT_TOKEN)
