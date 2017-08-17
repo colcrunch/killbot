@@ -25,7 +25,7 @@ async def  ping():
 @killbot.command(aliases = ['eve_time', 'evetime', 'et'])
 async def time():
     time = datetime.datetime.utcnow()
-    return await killbot.say("Current EVE (UTC) Time: " + time.strftime("%H:%M "))
+    return await killbot.say("Current EVE (UTC) Time: " + time.strftime("%H:%M"))
 
 
 @killbot.command(aliases = ['t'])
