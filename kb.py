@@ -19,10 +19,7 @@ async def get_stats():
         'user-agent': 'application: https://github.com/colcrunch/killbot contact: rhartnett35@gmail.com'
     }
     time = datetime.datetime.utcnow()
-    month = time.strftime("%m")
-    year = time.strftime("%Y")
-    top = year+month
-    global url
+    top = time.strftime("%Y%m")
     url = ("https://zkillboard.com/api/stats/characterID/"+cid+"/")
     r = requests.get(url, headers=headers)
     select = r.json()
@@ -32,4 +29,5 @@ async def get_stats():
     kills_mo = select["months"][top]["shipsDestroyed"]
     global stats
     stats = [danger, gang, kills_all, kills_mo]
-    print(stats)
+    global kburl
+    kburl = ("http://zkillboard.com/character/"+cid)

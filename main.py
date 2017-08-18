@@ -37,6 +37,6 @@ async def threat(*, char):
     else:
         await kb.get_stats()
 
-    return await killbot.say("Feature in development. "+ char + "\n" + kb.url)
+    return await killbot.say(":alien: "+char+" \n\n :skull_crossbones: "+str(kb.stats[0])+"  :children_crossing:"+str(kb.stats[1])+" :knife: "+str(kb.stats[2])+" :calendar:"+str(kb.stats[3])+"\n\n\n :bookmark: "+kb.kburl)
 
 killbot.run(config.BOT_TOKEN)
