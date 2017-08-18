@@ -25,7 +25,10 @@ async def get_stats():
     select = r.json()
     danger = select["dangerRatio"]
     gang = select["gangRatio"]
-    kills_all = select["allTimeSum"]
+    if 'allTimeSum' in select:
+        kills_all = select["allTimeSum"]
+    else:
+        kills_all = "< 100"
     kills_mo = select["months"][top]["shipsDestroyed"]
     global stats
     stats = [danger, gang, kills_all, kills_mo]
