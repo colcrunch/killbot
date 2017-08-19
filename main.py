@@ -1,6 +1,7 @@
 #Import bot scripts
 import config
 import kb
+import market
 
 #Import discord python library
 import discord
