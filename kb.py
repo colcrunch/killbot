@@ -23,13 +23,22 @@ async def get_stats():
     url = ("https://zkillboard.com/api/stats/characterID/"+cid+"/")
     r = requests.get(url, headers=headers)
     select = r.json()
-    danger = select["dangerRatio"]
-    gang = select["gangRatio"]
+    if 'dangerRatio' in select:
+        danger = select["dangerRatio"]
+    else:
+        danger = "NoData"
+    if 'gangRatio' in select:
+        gang = select["gangRatio"]
+    else:
+        gang = "No Data"
     if 'allTimeSum' in select:
         kills_all = select["allTimeSum"]
     else:
         kills_all = "<  100"
-    kills_mo = select["months"][top]["shipsDestroyed"]
+    if top in select:
+        kills_mo = select["months"][top]["shipsDestroyed"]
+    else:
+        kills_mo = "No Kills Yet"
     global stats
     stats = [danger, gang, kills_all, kills_mo]
     global kburl
