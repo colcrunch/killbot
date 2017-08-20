@@ -41,7 +41,6 @@ async def get_stats():
             kills_mo = select["months"][top]["shipsDestroyed"]
     else:
         kills_mo = "No Kills Yet"
-    print(top)
     global stats
     stats = [danger, gang, kills_all, kills_mo]
     global kburl
