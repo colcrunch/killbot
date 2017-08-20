@@ -35,10 +35,13 @@ async def get_stats():
         kills_all = select["allTimeSum"]
     else:
         kills_all = "<  100"
-    if top in select:
-        kills_mo = select["months"][top]["shipsDestroyed"]
+    if 'months' in select:
+        months = select['months']
+        if top in months:
+            kills_mo = select["months"][top]["shipsDestroyed"]
     else:
         kills_mo = "No Kills Yet"
+    print(top)
     global stats
     stats = [danger, gang, kills_all, kills_mo]
     global kburl

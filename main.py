@@ -34,13 +34,12 @@ async def time():
 @killbot.command(aliases = ['t'])
 async def threat(*, char):
     """ Gets stats for a character from zKill"""
-    print(char)
     await kb.getID(char)
     if kb.cid == "0":
         return await killbot.say("Character not found. Please check your spelling and try again.")
     else:
         await kb.get_stats()
-
+    
     return await killbot.say(":alien: "+char+" \n\n :skull_crossbones: "+str(kb.stats[0])+"  :children_crossing:"+str(kb.stats[1])+" :knife: "+str(kb.stats[2])+" :calendar:"+str(kb.stats[3])+"\n\n\n :bookmark: "+kb.kburl)
 
 @killbot.command(aliases = ['pc'])

@@ -14,12 +14,12 @@ async def getPrices(itemID):
     r = requests.get(url)
     price = r.json()
     prices = dict(price[0])
-    buy_min = str(round(prices['buy']['min'], 2))
-    buy_max = str(round(prices['buy']['max'], 2))
-    sell_min = str(round(prices['sell']['min'], 2))
-    sell_max = str(round(prices['sell']['max'], 2))
-    buy_avg = str(round(prices['buy']['avg'], 2))
-    sell_avg  = str(round(prices['sell']['avg'], 2))
+    buy_min = str('{:,}'.format(round(prices['buy']['min'], 2)))
+    buy_max = str('{:,}'.format(round(prices['buy']['max'], 2)))
+    sell_min = str('{:,}'.format(round(prices['sell']['min'], 2)))
+    sell_max = str('{:,}'.format(round(prices['sell']['max'], 2)))
+    buy_avg = str('{:,}'.format(round(prices['buy']['avg'], 2)))
+    sell_avg  = str('{:,}'.format(round(prices['sell']['avg'], 2)))
     global priceinfo
     priceinfo = [buy_min, buy_max, buy_avg, sell_min, sell_max, sell_avg]
     print(priceinfo)
