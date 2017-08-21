@@ -59,7 +59,7 @@ async def threat_error(error, ctx):
         return await killbot.say("You must specify a character to look up.")
     else:
         print(error)
-        return await killbot.say("Please contact Col Crunch about the following error (make sure to include the exact command that caused it.) \n\n  *** Error: ***  "+error)
+        return await killbot.say("Please contact Col Crunch about the following error (make sure to include the exact command that caused it.) \n\n*** Error: ***  "+str(error))
 
 #----------------------------------------------------------------------
 # Price Check command
@@ -87,4 +87,19 @@ async def pc_error(error, ctx):
         return await killbot.say("Please contact Col Crunch about the following error (make sure to include the exact command that caused it.) \n\n *** Error: ***  "+error)
 
 # -----------------------------------------------------------------------
+# Status command
+# Prints the status of tranquility.
+#-----------------------------------------------------------------------
+@killbot.command(aliases=['s', 'tq'])
+async def status():
+    """Prints the status and player count of tranqulilty."""
+    headers ={ 'user-agent': "Contact: rhartnett35@gmail.com Project: https://github.com/colcrunch/killbot/ "}
+    url = ("https://esi.tech.ccp.is/latest/status/?datasource=tranquility")
+    r = requests.get(url, headers=headers)
+    status = r.json()
+    if 'players' in status:
+        return await killbot.say("Tranquility is currently **ONLINE** with "+str('{:,}'.format(status['players']))+" players.")
+    else:
+        return await killbot.say("Tranquility is currently **OFFLINE** ")
+
 killbot.run(config.BOT_TOKEN)
