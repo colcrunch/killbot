@@ -59,7 +59,7 @@ async def threat_error(error, ctx):
         return await killbot.say("You must specify a character to look up.")
     else:
         print(error)
-        return await killbot.say(error)
+        return await killbot.say("Please contact Col Crunch about the following error (make sure to include the exact command that caused it.) \n\n  *** Error: ***  "+error)
 
 #----------------------------------------------------------------------
 # Price Check command
@@ -84,7 +84,7 @@ async def pc_error(error, ctx):
         return await killbot.say("You must specify an item to look up!")
     else:
         print(error)
-        return await killbot.say(error)
+        return await killbot.say("Please contact Col Crunch about the following error (make sure to include the exact command that caused it.) \n\n *** Error: ***  "+error)
 
 # -----------------------------------------------------------------------
 killbot.run(config.BOT_TOKEN)
