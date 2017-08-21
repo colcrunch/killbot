@@ -39,6 +39,8 @@ async def get_stats():
         months = select['months']
         if top in months:
             kills_mo = select["months"][top]["shipsDestroyed"]
+        else:
+            kills_mo = "No Kills Yet"
     else:
         kills_mo = "No Kills Yet"
     global stats

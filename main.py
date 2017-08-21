@@ -19,18 +19,29 @@ async def on_ready():
     print("Bot online")
 
 #Bot commands go here.
+#---------------------------------------------------------------------
+#   Ping Command
+#   Says "Pong!"
+#---------------------------------------------------------------------
 @killbot.command()
 async def  ping():
     """PONG!"""
     return await killbot.say("Pong!")
 
+#---------------------------------------------------------------------
+# Eve Time command
+# Returns the current EVE/UTC Time.
+#---------------------------------------------------------------------
 @killbot.command(aliases = ['eve_time', 'evetime', 'et'])
 async def time():
     """Displays EVE/UTC time."""
     time = datetime.datetime.utcnow()
     return await killbot.say("Current EVE (UTC) Time: " + time.strftime("%H:%M"))
 
-
+#--------------------------------------------------------------------
+#   Threat command
+#    This command uses kb.py to get the killboard stats of a given character.
+#--------------------------------------------------------------------
 @killbot.command(aliases = ['t'])
 async def threat(*, char: str):
     """ Gets stats for a character from zKill"""
@@ -47,8 +58,12 @@ async def threat_error(error, ctx):
     if isinstance(error, discord.ext.commands.MissingRequiredArgument):
         return await killbot.say("You must specify a character to look up.")
     else:
-        return await killbot.say("Nope")
+        return await killbot.say(error)
 
+#----------------------------------------------------------------------
+# Price Check command
+# This command checks jita prices for the given item against the eve-central API
+#----------------------------------------------------------------------
 @killbot.command(aliases = ['pc'])
 async def price_check(*, item):
     """ Checks prices for specified items in Jita """
@@ -62,4 +77,5 @@ async def price_check(*, item):
     priceinfo = market.priceinfo
     return await killbot.say(" :chart_with_upwards_trend:  "+ item +"\n\n :regional_indicator_b:     ***Max:*** "+priceinfo[1]+"  ***Min:*** "+priceinfo[0]+"  ***Avg:*** "+priceinfo[2]+" \n :regional_indicator_s:     ***Max:*** "+priceinfo[4]+" ***Min:*** "+priceinfo[3]+" ***Avg:*** "+priceinfo[5]+" \n\n :bookmark: https://eve-central.com/home/quicklook.html?typeid="+market.itemID )
 
+# -----------------------------------------------------------------------
 killbot.run(config.BOT_TOKEN)
