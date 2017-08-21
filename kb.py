@@ -4,15 +4,16 @@ import json
 import datetime
 
 async def getID(char):
-    url = ("http://api.eveonline.com/eve/CharacterID.xml.aspx?names="+ char)
+    url = ("https://esi.tech.ccp.is/latest/search/?categories=character&datasource=tranquility&language=en-us&search="+ char +"&strict=true")
     print(url)
-    response = requests.get(url)
-    tree = ElementTree.fromstring(response.content)
-    for row in tree.iter('row'):
-        att = row.attrib
-
+    r = requests.get(url)
+    json = r.json()
     global cid
-    cid = att['characterID']
+    if 'character' in json:
+        idlist = json['character']
+        cid = str(idlist[0])
+    else:
+        cid = "0"
 
 async def get_stats():
     headers = {
