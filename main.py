@@ -58,6 +58,7 @@ async def threat_error(error, ctx):
     if isinstance(error, discord.ext.commands.MissingRequiredArgument):
         return await killbot.say("You must specify a character to look up.")
     else:
+        print(error)
         return await killbot.say(error)
 
 #----------------------------------------------------------------------
@@ -76,6 +77,14 @@ async def price_check(*, item):
 
     priceinfo = market.priceinfo
     return await killbot.say(" :chart_with_upwards_trend:  "+ item +"\n\n :regional_indicator_b:     ***Max:*** "+priceinfo[1]+"  ***Min:*** "+priceinfo[0]+"  ***Avg:*** "+priceinfo[2]+" \n :regional_indicator_s:     ***Max:*** "+priceinfo[4]+" ***Min:*** "+priceinfo[3]+" ***Avg:*** "+priceinfo[5]+" \n\n :bookmark: https://eve-central.com/home/quicklook.html?typeid="+market.itemID )
+
+@price_check.error
+async def pc_error(error, ctx):
+    if isinstance(error, discord.ext.commands.MissingRequiredArgument):
+        return await killbot.say("You must specify an item to look up!")
+    else:
+        print(error)
+        return await killbot.say(error)
 
 # -----------------------------------------------------------------------
 killbot.run(config.BOT_TOKEN)
