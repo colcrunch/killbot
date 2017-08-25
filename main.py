@@ -10,6 +10,7 @@ from discord.ext.commands import Bot
 #Import other libraries needed
 import datetime
 import requests
+import asyncio
 
 killbot = Bot(command_prefix=config.PREFIX)
 
@@ -17,6 +18,10 @@ killbot = Bot(command_prefix=config.PREFIX)
 @killbot.event
 async def on_ready():
     print("Bot online")
+    print('Logged in as')
+    print(killbot.user.name)
+    print(killbot.user.id)
+    print('------')
 
 #Bot commands go here.
 #---------------------------------------------------------------------
@@ -26,6 +31,8 @@ async def on_ready():
 @killbot.command()
 async def  ping():
     """PONG!"""
+    message = "PONG"
+    await killbot.send_message(discord.Object(id=config.KILLWATCH_CHANNEL), message)
     return await killbot.say("Pong!")
 
 #---------------------------------------------------------------------
@@ -101,5 +108,22 @@ async def status():
         return await killbot.say("Tranquility is currently **ONLINE** with "+str('{:,}'.format(status['players']))+" players.")
     else:
         return await killbot.say("Tranquility is currently **OFFLINE** ")
+
+#----------------------------------------------------------------------
+# zKill Monitoring.
+#----------------------------------------------------------------------
+async def watch(chid, watchids):
+    await killbot.wait_until_ready()
+    counter = 0
+    channel = discord.Object(id=chid)
+    while not killbot.is_closed:
+        counter += 1
+        #await killbot.send_message(channel, counter)
+        await asyncio.sleep(10)
+
+if config.KILLWATCH_ENABLED == "TRUE":
+    print("Watching Corps:" + str(', '.join(config.watchids['corps'])) + " | Alliances:" + str(', '.join(config.watchids['alliances'])) + " | Characters:"+str(', '.join(config.watchids['characters']))+" in " +str(config.KILLWATCH_CHANNEL)+"\n")
+    killbot.loop.create_task(watch(config.KILLWATCH_CHANNEL, config.watchids))
+#----------------------------------------------------------------------
 
 killbot.run(config.BOT_TOKEN)

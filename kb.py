@@ -2,6 +2,11 @@ import requests
 from xml.etree import ElementTree
 import json
 import datetime
+import asyncio
+import config
+
+import discord
+from discord.ext.commands import Bot
 
 async def getID(char):
     url = ("https://esi.tech.ccp.is/latest/search/?categories=character&datasource=tranquility&language=en-us&search="+ char +"&strict=true")
