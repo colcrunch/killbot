@@ -32,7 +32,6 @@ async def on_ready():
 async def  ping():
     """PONG!"""
     message = "PONG"
-    await killbot.send_message(discord.Object(id=config.KILLWATCH_CHANNEL), message)
     return await killbot.say("Pong!")
 
 #---------------------------------------------------------------------
