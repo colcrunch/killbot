@@ -82,7 +82,14 @@ async def price_check(*, item):
         await market.getPrices(market.itemID)
 
     priceinfo = market.priceinfo
-    return await killbot.say(" :chart_with_upwards_trend:  "+ item +"\n\n :regional_indicator_b:     ***Max:*** "+priceinfo[1]+"  ***Min:*** "+priceinfo[0]+"  ***Avg:*** "+priceinfo[2]+" \n :regional_indicator_s:     ***Max:*** "+priceinfo[4]+" ***Min:*** "+priceinfo[3]+" ***Avg:*** "+priceinfo[5]+" \n\n :bookmark: https://eve-central.com/home/quicklook.html?typeid="+market.itemID )
+    plex_msg = ""
+    if item == "plex" or item == "PLEX":
+        buy_avg = str('{:,}'.format(market.avgs[0]*500))
+        sell_avg = str('{:,}'.format(market.avgs[1]*500))
+        plexinfo = [buy_avg, sell_avg]
+        plex_msg = "**Monthly Sub Cost**  \n ***Sell Avg:*** "+plexinfo[1]+"   ***Buy Avg:*** "+plexinfo[0]+"\n\n "
+
+    return await killbot.say(" :chart_with_upwards_trend:  "+ item +"\n\n "+plex_msg+":regional_indicator_b:     ***Max:*** "+priceinfo[1]+"  ***Min:*** "+priceinfo[0]+"  ***Avg:*** "+priceinfo[2]+" \n :regional_indicator_s:     ***Max:*** "+priceinfo[4]+" ***Min:*** "+priceinfo[3]+" ***Avg:*** "+priceinfo[5]+" \n\n :bookmark: https://eve-central.com/home/quicklook.html?typeid="+market.itemID )
 
 @price_check.error
 async def pc_error(error, ctx):

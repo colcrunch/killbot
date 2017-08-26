@@ -22,4 +22,6 @@ async def getPrices(itemID):
     sell_avg  = str('{:,}'.format(round(prices['sell']['avg'], 2)))
     global priceinfo
     priceinfo = [buy_min, buy_max, buy_avg, sell_min, sell_max, sell_avg]
+    global avgs
+    avgs = [round(prices['buy']['avg'], 2), round(prices['sell']['avg'], 2)]
     print(priceinfo)
