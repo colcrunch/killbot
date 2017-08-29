@@ -11,6 +11,7 @@ from discord.ext.commands import Bot
 import datetime
 import requests
 import asyncio
+import sqlite3
 
 killbot = Bot(command_prefix=config.PREFIX)
 

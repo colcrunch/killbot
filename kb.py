@@ -4,6 +4,7 @@ import json
 import datetime
 import asyncio
 import config
+import sqlite3
 
 import discord
 from discord.ext.commands import Bot
