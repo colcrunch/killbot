@@ -4,11 +4,15 @@ from xml.etree import ElementTree
 import sqlite3
 
 async def getID(item):
-    url = ("https://api.eve-marketdata.com/api/type_id.xml?char_name=Troy Aihaken&v="+item)
-    r = requests.get(url)
-    tree = ElementTree.fromstring(r.content)
+    conn = sqlite3.connect('sde.sqlite')
+    c = conn.cursor()
+    i = (item,)
+    c.execute('SELECT typeID, groupID FROM invTypes WHERE typeName LIKE ?',i)
+    t = c.fetchone()
+    print(t)
+    c.close()
     global itemID
-    itemID = tree.find("val").text
+    itemID = str(t[0])
 
 async def getPrices(itemID):
     url = ("http://api.eve-central.com/api/marketstat/json?typeid="+itemID+"&usesystem=30000142")

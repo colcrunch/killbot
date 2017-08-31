@@ -19,6 +19,7 @@ killbot = Bot(command_prefix=config.PREFIX)
 @killbot.event
 async def on_ready():
     print("Bot online")
+    print('------')
     print('Logged in as')
     print(killbot.user.name)
     print(killbot.user.id)
@@ -115,6 +116,14 @@ async def status():
         return await killbot.say("Tranquility is currently **ONLINE** with "+str('{:,}'.format(status['players']))+" players.")
     else:
         return await killbot.say("Tranquility is currently **OFFLINE** ")
+#----------------------------------------------------------------------
+# Github command
+# Hidden, but will bring up github info
+#----------------------------------------------------------------------
+@killbot.command(aliases=['gh'], hidden='true')
+async def github():
+    """Prints github repo link"""
+    return await killbot.say("https://github.com/colcrunch/killbot")
 
 #----------------------------------------------------------------------
 # zKill Monitoring.
