@@ -15,7 +15,6 @@ import sqlite3
 
 killbot = Bot(command_prefix=config.PREFIX)
 
-
 @killbot.event
 async def on_ready():
     print("Bot online")

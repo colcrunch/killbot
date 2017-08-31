@@ -4,15 +4,25 @@ import datetime
 import asyncio
 import config
 import sqlite3
+import urllib
+
+import aiohttp
+import async_timeout
 
 import discord
 from discord.ext.commands import Bot
 
+async def fetch(session, url):
+    headers = {'user-agent': 'application: https://github.com/colcrunch/killbot contact: rhartnett35@gmail.com','content-type': 'application/json'}
+    with async_timeout.timeout(10):
+        async with session.get(url, headers=headers) as response:
+            return await response.json()
+
 async def getID(char):
-    url = ("https://esi.tech.ccp.is/latest/search/?categories=character&datasource=tranquility&language=en-us&search="+ char +"&strict=true")
-    print(url)
-    r = requests.get(url)
-    json = r.json()
+    urlchar = urllib.parse.quote_plus(char)
+    async with aiohttp.ClientSession() as session:
+        json = await fetch(session, "https://esi.tech.ccp.is/latest/search/?categories=character&datasource=tranquility&language=en-us&search="+urlchar+"&strict=true")
+        print(json)
     global cid
     if 'character' in json:
         idlist = json['character']
@@ -21,14 +31,10 @@ async def getID(char):
         cid = "0"
 
 async def get_stats():
-    headers = {
-        'user-agent': 'application: https://github.com/colcrunch/killbot contact: rhartnett35@gmail.com'
-    }
     time = datetime.datetime.utcnow()
     top = time.strftime("%Y%m")
-    url = ("https://zkillboard.com/api/stats/characterID/"+cid+"/")
-    r = requests.get(url, headers=headers)
-    select = r.json()
+    async with aiohttp.ClientSession() as session:
+        select = await fetch(session, "https://zkillboard.com/api/stats/characterID/"+cid+"/")
     if 'dangerRatio' in select:
         danger = select["dangerRatio"]
     else:
