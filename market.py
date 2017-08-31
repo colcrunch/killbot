@@ -12,7 +12,10 @@ async def getID(item):
     print(t)
     c.close()
     global itemID
-    itemID = str(t[0])
+    if t is None:
+        itemID = "None"
+    else:
+        itemID = str(t[0])
 
 async def getPrices(itemID):
     async with aiohttp.ClientSession() as session:

@@ -77,7 +77,7 @@ async def price_check(*, item):
     """ Checks prices for specified items in Jita """
     print(item)
     await market.getID(item)
-    if len(market.itemID) == 1:
+    if market.itemID == "None":
         return await killbot.say("Item not found. Please check your spelling and try again.")
     else:
         await market.getPrices(market.itemID)
