@@ -1,6 +1,5 @@
 import requests
 import datetime
-from xml.etree import ElementTree
 import sqlite3
 
 async def getID(item):

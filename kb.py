@@ -1,5 +1,4 @@
 import requests
-from xml.etree import ElementTree
 import json
 import datetime
 import asyncio
