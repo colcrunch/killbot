@@ -1,6 +1,7 @@
-import requests
 import datetime
+import kb
 import sqlite3
+import aiohttp
 
 async def getID(item):
     conn = sqlite3.connect('sde.sqlite')
@@ -14,9 +15,8 @@ async def getID(item):
     itemID = str(t[0])
 
 async def getPrices(itemID):
-    url = ("http://api.eve-central.com/api/marketstat/json?typeid="+itemID+"&usesystem=30000142")
-    r = requests.get(url)
-    price = r.json()
+    async with aiohttp.ClientSession() as session:
+        price = await kb.fetch(session, "http://api.eve-central.com/api/marketstat/json?typeid="+itemID+"&usesystem=30000142")
     prices = dict(price[0])
     buy_min = str('{:,}'.format(round(prices['buy']['min'], 2)))
     buy_max = str('{:,}'.format(round(prices['buy']['max'], 2)))
