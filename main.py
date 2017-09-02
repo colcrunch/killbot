@@ -9,8 +9,8 @@ from discord.ext.commands import Bot
 
 #Import other libraries needed
 import datetime
-import requests
 import asyncio
+import aiohttp
 import sqlite3
 
 killbot = Bot(command_prefix=config.PREFIX)
@@ -107,10 +107,8 @@ async def pc_error(error, ctx):
 @killbot.command(aliases=['s', 'tq'])
 async def status():
     """Prints the status and player count of tranqulilty."""
-    headers ={ 'user-agent': "Contact: rhartnett35@gmail.com Project: https://github.com/colcrunch/killbot/ "}
-    url = ("https://esi.tech.ccp.is/latest/status/?datasource=tranquility")
-    r = requests.get(url, headers=headers)
-    status = r.json()
+    async with aiohttp.ClientSession() as session:
+        status = await kb.fetch(session, "https://esi.tech.ccp.is/latest/status/?datasource=tranquility")
     if 'players' in status:
         return await killbot.say("Tranquility is currently **ONLINE** with "+str('{:,}'.format(status['players']))+" players.")
     else:
