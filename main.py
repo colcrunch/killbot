@@ -132,11 +132,17 @@ async def watch(chid, watchids):
     channel = discord.Object(id=chid)
     while not killbot.is_closed:
         counter += 1
+        url = ""
         #await killbot.send_message(channel, counter)
         await asyncio.sleep(10)
 
 if config.KILLWATCH_ENABLED == "TRUE":
-    print("Watching Corps:" + str(', '.join(config.watchids['corps'])) + " | Alliances:" + str(', '.join(config.watchids['alliances'])) + " | Characters:"+str(', '.join(config.watchids['characters']))+" in " +str(config.KILLWATCH_CHANNEL)+"\n")
+    print(("Watching Corps:" + str(', '.join(config.watchids['corps']))+
+    " | Alliances:" + str(', '.join(config.watchids['alliances']))+
+     " | Characters:"+str(', '.join(config.watchids['characters']))+
+     "\nShipGroups: "+str(', '.join(config.watchids['groups']))+
+     " | ShipTypes: "+str(', '.join(config.watchids['shipTypes']))+
+     "\nChannel:  " +str(config.KILLWATCH_CHANNEL)+"\n"))
     killbot.loop.create_task(watch(config.KILLWATCH_CHANNEL, config.watchids))
 #----------------------------------------------------------------------
 
