@@ -12,6 +12,7 @@ import datetime
 import asyncio
 import aiohttp
 import sqlite3
+import re
 
 killbot = Bot(command_prefix=config.PREFIX)
 
@@ -84,7 +85,7 @@ async def price_check(*, item):
 
     priceinfo = market.priceinfo
     plex_msg = ""
-    if item == "plex" or item == "PLEX":
+    if item.lower() == "plex":
         buy_avg = str('{:,}'.format(market.avgs[0]*500))
         sell_avg = str('{:,}'.format(market.avgs[1]*500))
         plexinfo = [buy_avg, sell_avg]
