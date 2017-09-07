@@ -141,7 +141,7 @@ async def watch_redisq(chid, watchids):
         victim = kills['package']['killmail']['victim']
         message = "https://zkillboard.com/kill/"+killID+"/"
         vic = 0
-        print(killID)
+        #print(killID)
         #Are we tracking any of the groups that are the attackers?
         for attacker in attackers:
             if 'alliance' in attacker and attacker['alliance']['id_str'] in wids['alliances']:
