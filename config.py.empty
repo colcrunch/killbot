@@ -1,0 +1,5 @@
+BOT_TOKEN = ""
+PREFIX = "]"
+KILLWATCH_ENABLED = "TRUE"
+KILLWATCH_CHANNEL = 298668878664302592
+watchids = {'corps': [], 'alliances': ["1301367357","99005338","1354830081"], 'characters': [], 'groups': [], 'shipTypes': []}
