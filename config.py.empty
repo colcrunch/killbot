@@ -1,6 +1,6 @@
 BOT_TOKEN = ""
 PREFIX = "]"
-KILLWATCH_ENABLED = "TRUE"
+KILLWATCH_ENABLED = "FALSE"
 # '' is just a placeholder, do not use quotes around the channel id!
 KILLWATCH_CHANNEL = ''
 #All ids should be inside the brackets, separated by commas, and in quotes.
