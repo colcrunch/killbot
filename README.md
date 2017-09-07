@@ -11,4 +11,4 @@ A discord bot to pull killmails from zkill and maybe more.
     * Rename the sqlite file to sde.sqlite
 
 # Config
-Remember to rename `config.py.example` to `config.py`, and to fill it in.
+Remember to rename `config.py.empty` to `config.py`, and to fill it in.
