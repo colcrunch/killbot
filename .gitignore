@@ -1,2 +1,3 @@
 __pycache__/
 sde.sqlite
+config.py
