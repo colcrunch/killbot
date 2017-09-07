@@ -9,3 +9,6 @@ A discord bot to pull killmails from zkill and maybe more.
  * Get the SDE in SQLite format here: https://www.fuzzwork.co.uk/dump/sqlite-latest.sqlite.bz2
     * Unpack the archive in the same folder as the rest of the bot files.
     * Rename the sqlite file to sde.sqlite
+
+# Config
+Remember to rename `config.py.example` to `config.py`, and to fill it in.
