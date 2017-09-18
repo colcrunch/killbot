@@ -182,7 +182,7 @@ async def watch_redisq(chid, watchids):
         await asyncio.sleep(5)
 
 if config.KILLWATCH_ENABLED == "TRUE":
-    print(("Watching Corps:" + str(', '.join(config.watchids['corps']))+
+    print(("Watching \nCorps:" + str(', '.join(config.watchids['corps']))+
     " | Alliances:" + str(', '.join(config.watchids['alliances']))+
      " | Characters:"+str(', '.join(config.watchids['characters']))+
      "\nShipGroups: "+str(', '.join(config.watchids['groups']))+
