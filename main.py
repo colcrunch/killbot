@@ -151,37 +151,46 @@ async def watch_redisq(chid, watchids):
                 killID= str(kills['package']['killID'])
                 victim = kills['package']['killmail']['victim']
                 message = "https://zkillboard.com/kill/"+killID+"/"
-                vic = 0
                 print(killID)
+                logger.info("KillID: "killID)
+                attacks = len(attackers)
                 #Are we tracking any of the groups that are the attackers?
                 for attacker in attackers:
+                    vic = 0
                     if 'alliance' in attacker and str(attacker['alliance']['id']) in wids['alliances']:
                         print("Watching Attacker in "+killID)
+                        logger.info("Watching Attacker in "+killID)
                         await killbot.send_message(channel, message)
                         break
                     elif 'corporation' in attacker and str(attacker['corporation']['id']) in wids['corps']:
                         print("Watching Attacker in "+killID)
+                        logger.info("Watching Attacker in "+killID)
                         await killbot.send_message(channel, message)
                         break
                     elif 'character' in attacker and str(attacker['character']['id']) in wids['characters']:
                         print("Watching Attacker in "+killID)
+                        logger.info("Watching Attacker in "+killID)
                         await killbot.send_message(channel, message)
                         break
                     else:
-                        vic = 1
+                        vic += 1
 
                 # Victim checking is easy.
-                if vic == 1 and 'alliance' in victim and str(victim['alliance']['id']) in wids['alliances']:
+                if vic == attacks and 'alliance' in victim and str(victim['alliance']['id']) in wids['alliances']:
                     print("Watching Victim in "+killID)
+                    logger.info("Watching Victim in "+killID)
                     await killbot.send_message(channel, message)
-                elif vic == 1 and 'corporation' in victim and str(victim['corporation']['id']) in wids['corps']:
+                elif vic == attacks and 'corporation' in victim and str(victim['corporation']['id']) in wids['corps']:
                     print("Watching Victim in "+killID)
+                    logger.info("Watching Victim in "+killID)
                     await killbot.send_message(channel, message)
-                elif vic == 1 and 'character' in victim and str(victim['character']['id']) in wids['characters']:
+                elif vic == attacks and 'character' in victim and str(victim['character']['id']) in wids['characters']:
                     print("Watching Victim in "+killID)
+                    logger.info("Watching Victim in "+killID)
                     await killbot.send_message(channel, message)
-                elif vic == 1 and str(victim['shipType']['id']) in wids['shipTypes']:
+                elif vic == attacks and str(victim['shipType']['id']) in wids['shipTypes']:
                     print("Watching Ship Loss in "+killID)
+                    logger.info("Watching Victim in "+killID)
                     await killbot.send_message(channel, message)
                 else:
                     pass
