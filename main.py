@@ -105,6 +105,7 @@ async def pc_error(error, ctx):
     if isinstance(error, discord.ext.commands.MissingRequiredArgument):
         return await killbot.say("You must specify an item to look up!")
     else:
+        logger.error("There was an error with the price check command!: \n"+error)
         print(error)
         return await killbot.say("Please contact Col Crunch about the following error (make sure to include the exact command that caused it.) \n\n *** Error: ***  "+error)
 
