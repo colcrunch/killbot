@@ -19,7 +19,7 @@ async def getID(item):
 
 async def getPrices(itemID):
     async with aiohttp.ClientSession() as session:
-        price = await kb.fetch(session, "http://api.eve-central.com/api/marketstat/json?typeid="+itemID+"&usesystem=30000142")
+        price = await kb.fetch(session, "http://api.evemarketer.com/ec/marketstat/json?typeid="+itemID+"&usesystem=30000142")#"http://api.eve-central.com/api/marketstat/json?typeid="+itemID+"&usesystem=30000142")
     prices = dict(price[0])
     buy_min = str('{:,}'.format(round(prices['buy']['min'], 2)))
     buy_max = str('{:,}'.format(round(prices['buy']['max'], 2)))
