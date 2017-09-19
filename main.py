@@ -13,6 +13,13 @@ import asyncio
 import aiohttp
 import sqlite3
 import re
+import logging
+
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='discord'+datetime.datetime.utcnow().strftime("%Y%m%d%H%M")+'.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s ::: %(levelname)s ::: %(name)s :::  %(message)s'))
+logger.addHandler(handler)
 
 killbot = Bot(command_prefix=config.PREFIX)
 
@@ -127,59 +134,64 @@ async def github():
 # zKill Monitoring.
 #----------------------------------------------------------------------
 async def watch_redisq(chid, watchids):
+    logger.info(" Killboard watching started")
     wids = config.watchids
     await killbot.wait_until_ready()
     counter = 0
     channel = discord.Object(id=chid)
-    while not killbot.is_closed:
-        counter += 1
-        url = "https://redisq.zkillboard.com/listen.php"
-        async with aiohttp.ClientSession() as session:
-            kills = await kb.fetch(session, url)
-        if kills['package'] is not None :
-            attackers = kills['package']['killmail']['attackers']
-            killID= str(kills['package']['killID'])
-            victim = kills['package']['killmail']['victim']
-            message = "https://zkillboard.com/kill/"+killID+"/"
-            vic = 0
-            print(killID)
-            #Are we tracking any of the groups that are the attackers?
-            for attacker in attackers:
-                if 'alliance' in attacker and str(attacker['alliance']['id']) in wids['alliances']:
-                    print("Watching Attacker in "+killID)
-                    await killbot.send_message(channel, message)
-                    break
-                elif 'corporation' in attacker and str(attacker['corporation']['id']) in wids['corps']:
-                    print("Watching Attacker in "+killID)
-                    await killbot.send_message(channel, message)
-                    break
-                elif 'character' in attacker and str(attacker['character']['id']) in wids['characters']:
-                    print("Watching Attacker in "+killID)
-                    await killbot.send_message(channel, message)
-                    break
-                else:
-                    vic = 1
+    try:
+        while not killbot.is_closed:
+            counter += 1
+            url = "https://redisq.zkillboard.com/listen.php"
+            async with aiohttp.ClientSession() as session:
+                kills = await kb.fetch(session, url)
+            if kills['package'] is not None :
+                attackers = kills['package']['killmail']['attackers']
+                killID= str(kills['package']['killID'])
+                victim = kills['package']['killmail']['victim']
+                message = "https://zkillboard.com/kill/"+killID+"/"
+                vic = 0
+                print(killID)
+                #Are we tracking any of the groups that are the attackers?
+                for attacker in attackers:
+                    if 'alliance' in attacker and str(attacker['alliance']['id']) in wids['alliances']:
+                        print("Watching Attacker in "+killID)
+                        await killbot.send_message(channel, message)
+                        break
+                    elif 'corporation' in attacker and str(attacker['corporation']['id']) in wids['corps']:
+                        print("Watching Attacker in "+killID)
+                        await killbot.send_message(channel, message)
+                        break
+                    elif 'character' in attacker and str(attacker['character']['id']) in wids['characters']:
+                        print("Watching Attacker in "+killID)
+                        await killbot.send_message(channel, message)
+                        break
+                    else:
+                        vic = 1
 
-            # Victim checking is easy.
-            if vic == 1 and 'alliance' in victim and str(victim['alliance']['id']) in wids['alliances']:
-                print("Watching Victim in "+killID)
-                await killbot.send_message(channel, message)
-            elif vic == 1 and 'corporation' in victim and str(victim['corporation']['id']) in wids['corps']:
-                print("Watching Victim in "+killID)
-                await killbot.send_message(channel, message)
-            elif vic == 1 and 'character' in victim and str(victim['character']['id']) in wids['characters']:
-                print("Watching Victim in "+killID)
-                await killbot.send_message(channel, message)
-            elif vic == 1 and str(victim['shipType']['id']) in wids['shipTypes']:
-                print("Watching Ship Loss in "+killID)
-                await killbot.send_message(channel, message)
+                # Victim checking is easy.
+                if vic == 1 and 'alliance' in victim and str(victim['alliance']['id']) in wids['alliances']:
+                    print("Watching Victim in "+killID)
+                    await killbot.send_message(channel, message)
+                elif vic == 1 and 'corporation' in victim and str(victim['corporation']['id']) in wids['corps']:
+                    print("Watching Victim in "+killID)
+                    await killbot.send_message(channel, message)
+                elif vic == 1 and 'character' in victim and str(victim['character']['id']) in wids['characters']:
+                    print("Watching Victim in "+killID)
+                    await killbot.send_message(channel, message)
+                elif vic == 1 and str(victim['shipType']['id']) in wids['shipTypes']:
+                    print("Watching Ship Loss in "+killID)
+                    await killbot.send_message(channel, message)
+                else:
+                    pass
             else:
                 pass
-        else:
-            pass
 
-        #await killbot.send_message(channel, counter)
-        await asyncio.sleep(5)
+            #await killbot.send_message(channel, counter)
+            await asyncio.sleep(5)
+
+    except:
+        logger.critical("Exception occured in watch_redisq!")
 
 if config.KILLWATCH_ENABLED == "TRUE":
     print(("Watching \nCorps:" + str(', '.join(config.watchids['corps']))+
