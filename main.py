@@ -31,6 +31,7 @@ async def on_ready():
     print(killbot.user.name)
     print(killbot.user.id)
     print('------')
+    await killbot.change_presence(game=discord.Game(type=0,name='|'+config.PREFIX+'help'), afk=False)
 
 #Bot commands go here.
 #---------------------------------------------------------------------
