@@ -16,6 +16,8 @@ Remember to rename `config.py.empty` to `config.py`, and to fill it in.
 * `BOT_TOKEN` : You get this from the discord bot app that you make. More specifically it comes from the bot user you make to go along with your app.
 * `PREFIX` : This is the symbol that you want to have before all the commands. Use something that is easy to type, but not all that common.
   * Default is `]`
+* `msg` is the message that you would like to have in the playing status of your bot.
+  * Default is `''`. In order to show the full message, and help command please limit your message to 12 characters. 
 * `KILLWATCH_ENABLED` : Set this to TRUE to watch zkill for kills!
   * Default is `FALSE`
 * `KILLWATCH_CHANNEL` : This is where you set the channel id that you want to have kills posted in.
