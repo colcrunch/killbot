@@ -12,7 +12,6 @@ import datetime
 import asyncio
 import aiohttp
 import sqlite3
-import re
 import logging
 
 logger = logging.getLogger('discord')
@@ -75,6 +74,7 @@ async def threat_error(error, ctx):
         return await killbot.say("You must specify a character to look up.")
     else:
         print(error)
+        logger.error("There was an error with the threat command!: \n"+error)
         return await killbot.say("Please contact Col Crunch about the following error (make sure to include the exact command that caused it.) \n\n*** Error: ***  "+str(error))
 
 #----------------------------------------------------------------------
@@ -201,8 +201,9 @@ async def watch_redisq(chid, watchids):
             #await killbot.send_message(channel, counter)
             await asyncio.sleep(5)
 
-    except:
+    except Exception as error:
         logger.critical("Exception occured in watch_redisq!")
+        logger.critical(("Exception: ", error))
 
 if config.KILLWATCH_ENABLED == "TRUE":
     print(("Watching \nCorps:" + str(', '.join(config.watchids['corps']))+
