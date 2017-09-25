@@ -35,5 +35,6 @@ async def clear():
     c = conn.cursor()
     c.execute('DELETE FROM k_tmp;')
     c.execute('DELETE FROM j_tmp;')
+    c.execute('VACUUM')
     conn.commit()
     conn.close()
