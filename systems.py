@@ -66,5 +66,4 @@ async def getStats(systemID):
             stats = None
         else:
             stats = [ship_kills[0],npc_kills[0],pod_kills[0],jumps[0]]
-        print(stats)
         await systemp.clear()
