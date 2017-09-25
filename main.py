@@ -143,6 +143,13 @@ async def system(*, system: string)
         logger.Error("Stats not found! Please make sure the bot is configured properly. (DB vs ESI pulls)")
         return await killbot.say("Stats not found! Please make sure the bot is configured properly.")
 
+    if config.system_cmd.lower() == 'db':
+
+    elif config.system_cmd.lower() == 'esi':
+
+    else:
+        logger.error("Config variable system_cmd not properly configured! "+config.system_cmd+" is not a valid option.")
+        return await killbot.say("Config variable system_cmd not properly configured! "+config.system_cmd+" is not a valid option.")
 #----------------------------------------------------------------------
 # Github command
 # Hidden, but will bring up github info
