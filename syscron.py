@@ -18,7 +18,7 @@ for x in kills:
     pkills = x["pod_kills"]
 
     ktotal.append((sys, skills, nkills, pkills))
-    print(sys)
+
 
 
 c.executemany('INSERT INTO kills VALUES (?,?,?,?)',ktotal)
@@ -37,10 +37,11 @@ for x in jumps:
     sjumps = x["ship_jumps"]
 
     jtotal.append((sys, sjumps))
-    print(sys)
+
 
 
 c.executemany('INSERT INTO jumps VALUES (?,?)',jtotal)
 conn.commit()
 conn.close()
 print("Database updated")
+return
