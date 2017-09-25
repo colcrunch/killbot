@@ -130,8 +130,8 @@ async def status():
 # Command to show system stats
 #----------------------------------------------------------------------
 @killbot.command(aliases=['sys'])
-async def system(*, system):
-    await system.getID(system)
+async def system(*, sys):
+    await system.getID(sys)
     sID = system.systemID
     if sID == None :
         return await killbot.say("System Not Found! Please check your spelling and try again!")
