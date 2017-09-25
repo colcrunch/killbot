@@ -2,6 +2,7 @@
 import config
 import kb
 import market
+import system
 
 #Import discord python library
 import discord
@@ -123,6 +124,25 @@ async def status():
         return await killbot.say("Tranquility is currently **ONLINE** with "+str('{:,}'.format(status['players']))+" players.")
     else:
         return await killbot.say("Tranquility is currently **OFFLINE** ")
+
+#----------------------------------------------------------------------
+#System command
+# Command to show system stats
+#----------------------------------------------------------------------
+@killbot.command(aliases=['sys'])
+async def system(*, system: string)
+    await system.getID(system)
+    sID = system.systemID
+    if sID == None :
+        return await killbot.say("System Not Found! Please check your spelling and try again!")
+    else:
+        await system.getStats(sID)
+
+    stats = system.stats
+    if stats == None :
+        logger.Error("Stats not found! Please make sure the bot is configured properly. (DB vs ESI pulls)")
+        return await killbot.say("Stats not found! Please make sure the bot is configured properly.")
+
 #----------------------------------------------------------------------
 # Github command
 # Hidden, but will bring up github info
