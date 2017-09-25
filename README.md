@@ -4,6 +4,7 @@ A discord bot to pull killmails from zkill and maybe more.
 
 # Dependencies
  * discord.py
+ * requests (used for hourly pulling of system info)
 
  # Other Requirements
  * Get the SDE in SQLite format here: https://www.fuzzwork.co.uk/dump/sqlite-latest.sqlite.bz2
