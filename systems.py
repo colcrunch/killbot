@@ -2,6 +2,7 @@ import sqlite3
 import config
 import kb
 import systemp
+import aiohttp
 
 async def getID(system):
     conn = sqlite3.connect('sde.sqlite')
