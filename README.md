@@ -29,4 +29,4 @@ Remember to rename `config.py.empty` to `config.py`, and to fill it in.
   * Note: All IDs should be in string format, and separated with commas. EX: `'corps': ["1234","5678"]`
 * `system_cmd` : This is where you set whether or not you want to pull from the esi for the last hour, or set up a cron job and (in 24 short hours) be able to have info for the past 24 hours.
     * Default is `ESI`
-    * If you would like to use the cron option you will want to use `0 * * * * /usr/bin/python3 /PATH/TO/syscron.py'
+    * If you would like to use the cron option you will want to use `0 * * * * /usr/bin/python3 /PATH/TO/syscron.py`
