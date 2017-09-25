@@ -10,7 +10,7 @@ async def getID(item):
     c.execute('SELECT typeID, groupID FROM invTypes WHERE typeName LIKE ?',i)
     t = c.fetchone()
     print(t)
-    c.close()
+    conn.close()
     global itemID
     if t is None:
         itemID = "None"
