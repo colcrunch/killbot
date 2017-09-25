@@ -130,7 +130,7 @@ async def status():
 # Command to show system stats
 #----------------------------------------------------------------------
 @killbot.command(aliases=['sys'])
-async def system(*, system)
+async def system(*, system: string):
     await system.getID(system)
     sID = system.systemID
     if sID == None :
