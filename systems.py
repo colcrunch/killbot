@@ -4,7 +4,7 @@ import kb
 import systemp
 
 async def getID(system):
-    conn = sqlite3.connect('systems.sqlite')
+    conn = sqlite3.connect('sde.sqlite')
     c = conn.cursor()
     s = (system,)
     c.execute('SELECT solarSystemID FROM mapSolarSystems WHERE solarSystemName LIKE ?',s)
