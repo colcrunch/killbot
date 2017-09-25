@@ -152,7 +152,7 @@ async def system(*, sys: str):
         logger.error("Config variable system_cmd not properly configured! "+config.system_cmd+" is not a valid option.")
         return await killbot.say("Config variable system_cmd not properly configured! "+config.system_cmd+" is not a valid option.")
 
-    return await killbot.say(""+sys_msg+" \n\n :regional_indicator_k: **Ship Kills:** "+str(stats[0])+" **NPC Kills:** "+str(stats[1])+" **Pod Kills:** "+str(stats[2])+"\n :regional_indicator_j: **Jumps:** "+str(stats[3])+"\n\n http://evemaps.dotlan.net/system/"+sys)
+    return await killbot.say(""+sys_msg+" \n\n :regional_indicator_k: **Ship Kills:** "+str(stats[0])+" **NPC Kills:** "+str(stats[1])+" **Pod Kills:** "+str(stats[2])+"\n :regional_indicator_j: **Jumps:** "+str(stats[3])+"\n\n :bookmark: http://evemaps.dotlan.net/system/"+sys)
 
 #----------------------------------------------------------------------
 # Github command
