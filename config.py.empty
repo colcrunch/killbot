@@ -16,8 +16,8 @@ KILLWATCH_CHANNEL = ''
 #All ids should be inside the brackets, separated by commas, and in quotes.
 watchids = {'corps': [], 'alliances': [], 'characters': [], 'groups': [], 'shipTypes': []}
 
-#This sets the method to use for getting system stats. 
+#This sets the method to use for getting system stats.
 #Options are: DB and ESI
 # ESI limits your information to within the last hour
 # DB allows you to get info for the last 24 hours assuming you have set up the proper cronjob.
-system_cmd = "DB"
+system_cmd = "ESI"
