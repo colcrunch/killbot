@@ -9,6 +9,8 @@ A discord bot to pull killmails from zkill and maybe more.
  * Get the SDE in SQLite format here: https://www.fuzzwork.co.uk/dump/sqlite-latest.sqlite.bz2
     * Unpack the archive in the same folder as the rest of the bot files.
     * Rename the sqlite file to sde.sqlite
+  * Get the empty systems database here https://nyc3.digitaloceanspaces.com/colsfiles/systems.sqlite
+    * This should be in the bot's root folder.
 
 # Config
 Remember to rename `config.py.empty` to `config.py`, and to fill it in.
@@ -17,7 +19,7 @@ Remember to rename `config.py.empty` to `config.py`, and to fill it in.
 * `PREFIX` : This is the symbol that you want to have before all the commands. Use something that is easy to type, but not all that common.
   * Default is `]`
 * `msg` is the message that you would like to have in the playing status of your bot.
-  * Default is `''`. In order to show the full message, and help command please limit your message to 12 characters. 
+  * Default is `''`. In order to show the full message, and help command please limit your message to 12 characters.
 * `KILLWATCH_ENABLED` : Set this to TRUE to watch zkill for kills!
   * Default is `FALSE`
 * `KILLWATCH_CHANNEL` : This is where you set the channel id that you want to have kills posted in.

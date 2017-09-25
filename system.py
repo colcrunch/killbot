@@ -21,8 +21,12 @@ async def getStats(systemID)
         conn = sqlite3.connect('systems.sqlite')
         c = conn.cursor
         s = (systemID,)
-        c.execute('SELECT kills FROM kills WHERE system = ? DESC LIMIT 24',s)
-        kills = c.fetchall()
+        c.execute('SELECT ship_kills FROM kills WHERE system = ? DESC LIMIT 24',s)
+        ship_kills = c.fetchall()
+        c.execute('SELECT npc_kills FROM kills WHERE system = ? DESC LIMIT 24',s)
+        npc_kills = c.fetchall()
+        c.execute('SELECT pod_kills FROM kills WHERE system = ? DESC LIMIT 24',s)
+        pod_kills = c.fetchall()
         c.execute('SELECT jumps FROM jumps WHERE system = ? DESC LIMIT 24',s)
         jumps = c.fetchall()
         c.close()
@@ -30,9 +34,11 @@ async def getStats(systemID)
         if kills == None or jumps == None :
             stats = None
         else:
-            kills24 = sum(kills)
+            kills24 = sum(ship_kills)
+            npc = sum(npc_kills)
+            pod = sum (pod_kills)
             jumps24 = sum(jumps)
-            stats = [kills24, jumps24]
+            stats = [kills24, npc, pod, jumps24]
     elif config.system_cmd.lower() == "esi":
         urlk = "https://esi.tech.ccp.is/latest/universe/system_kills/?datasource=tranquility"
         urlj = "https://esi.tech.ccp.is/latest/universe/system_jumps/?datasource=tranquility"

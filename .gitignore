@@ -2,3 +2,4 @@ __pycache__/
 sde.sqlite
 config.py
 *.log
+systems.sqlite
