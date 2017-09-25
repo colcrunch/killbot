@@ -144,12 +144,14 @@ async def system(*, system: string)
         return await killbot.say("Stats not found! Please make sure the bot is configured properly.")
 
     if config.system_cmd.lower() == 'db':
-        return await killbot.say("The following are system stats for the last 24h. \n\n :regional_indicator_k: **Kills:** "+str(stats[0])+"\n :regional_indicator_j: **Jumps:** "+str(stats[1]))
+        sys_msg = "The following are system stats for the last 24h."
     elif config.system_cmd.lower() == 'esi':
-        return await killbot.say("The following are system stats for the last 1h. \n\n :regional_indicator_k: **Kills:** "+str(stats[0])+"\n :regional_indicator_j: **Jumps:** "+str(stats[1]))
+        sys_msg = "The following are system stats for the last 1h."
     else:
         logger.error("Config variable system_cmd not properly configured! "+config.system_cmd+" is not a valid option.")
         return await killbot.say("Config variable system_cmd not properly configured! "+config.system_cmd+" is not a valid option.")
+
+    return await killbot.say(sys_msg+" \n\n :regional_indicator_k: **Ship Kills:** "+str(stats[0])+" **NPC Kills:** "+str(stats[1])+" **Pod Kills:** "str(stats[2])+"\n :regional_indicator_j: **Jumps:** "+str(stats[3]))
 #----------------------------------------------------------------------
 # Github command
 # Hidden, but will bring up github info
