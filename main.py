@@ -2,7 +2,7 @@
 import config
 import kb
 import market
-import system
+import systems
 
 #Import discord python library
 import discord
@@ -131,14 +131,14 @@ async def status():
 #----------------------------------------------------------------------
 @killbot.command(aliases=['sys'])
 async def system(*, sys: str):
-    await system.getID(sys)
-    sID = system.systemID
+    await systems.getID(sys)
+    sID = systems.systemID
     if sID == None :
         return await killbot.say("System Not Found! Please check your spelling and try again!")
     else:
-        await system.getStats(sID)
+        await systems.getStats(sID)
 
-    stats = system.stats
+    stats = systems.stats
     if stats == None :
         logger.Error("Stats not found! Please make sure the bot is configured properly. (DB vs ESI pulls)")
         return await killbot.say("Stats not found! Please make sure the bot is configured properly.")
