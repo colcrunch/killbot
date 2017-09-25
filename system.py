@@ -17,7 +17,7 @@ async def getID(system):
     else:
         systemID = str(t[0])
 
-async def getStats(systemID)
+async def getStats(systemID):
     if config.system_cmd.lower() == "db":
         conn = sqlite3.connect('systems.sqlite')
         c = conn.cursor
@@ -61,6 +61,5 @@ async def getStats(systemID)
         c.execute('SELECT jumps FROM j_tmp WHERE system = ?',s)
         jumps = c.fetchall()
         c.close()
-        global stats
         stats = [ship_kills,npc_kills,pod_kills,jumps]
         await systmp.clear()

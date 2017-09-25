@@ -130,7 +130,7 @@ async def status():
 # Command to show system stats
 #----------------------------------------------------------------------
 @killbot.command(aliases=['sys'])
-async def system(*, system: string):
+async def system(*, system):
     await system.getID(system)
     sID = system.systemID
     if sID == None :
@@ -151,7 +151,8 @@ async def system(*, system: string):
         logger.error("Config variable system_cmd not properly configured! "+config.system_cmd+" is not a valid option.")
         return await killbot.say("Config variable system_cmd not properly configured! "+config.system_cmd+" is not a valid option.")
 
-    return await killbot.say(sys_msg+" \n\n :regional_indicator_k: **Ship Kills:** "+str(stats[0])+" **NPC Kills:** "+str(stats[1])+" **Pod Kills:** "str(stats[2])+"\n :regional_indicator_j: **Jumps:** "+str(stats[3]))
+    return await killbot.say(""+sys_msg+" \n\n :regional_indicator_k: **Ship Kills:** "+str(stats[0])+" **NPC Kills:** "+str(stats[1])+" **Pod Kills:** "+str(stats[2])+"\n :regional_indicator_j: **Jumps:** "+str(stats[3]))
+
 #----------------------------------------------------------------------
 # Github command
 # Hidden, but will bring up github info
