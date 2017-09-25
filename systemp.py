@@ -32,7 +32,8 @@ async def getStats(kills, jumps):
 
 async def clear():
     conn = sqlite3.connect('systems.sqlite')
-    c = conn.cursor
-    c.execute('DELETE FROM k_tmp; DELETE FROM j_tmp')
+    c = conn.cursor()
+    c.execute('DELETE FROM k_tmp;')
+    c.execute('DELETE FROM j_tmp;')
     conn.commit()
     conn.close()

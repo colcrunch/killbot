@@ -14,14 +14,14 @@ async def getID(system):
     c.close()
     global systemID
     if t is None:
-        systemID = "None"
+        systemID = None
     else:
         systemID = str(t[0])
 
 async def getStats(systemID):
     if config.system_cmd.lower() == "db":
         conn = sqlite3.connect('systems.sqlite')
-        c = conn.cursor
+        c = conn.cursor()
         s = (systemID,)
         c.execute('SELECT ship_kills FROM kills WHERE system = ? DESC LIMIT 24',s)
         ship_kills = c.fetchall()
@@ -31,7 +31,7 @@ async def getStats(systemID):
         pod_kills = c.fetchall()
         c.execute('SELECT jumps FROM jumps WHERE system = ? DESC LIMIT 24',s)
         jumps = c.fetchall()
-        c.close()
+        conn.close()
         global stats
         if kills == None or jumps == None :
             stats = None
@@ -51,16 +51,20 @@ async def getStats(systemID):
 
         await systemp.getStats(kills, jumps)
         conn = sqlite3.connect('systems.sqlite')
-        c = conn.cursor
+        c = conn.cursor()
         s = (systemID,)
         c.execute('SELECT ship_kills FROM k_tmp WHERE system = ?',s)
-        ship_kills = c.fetchall()
+        ship_kills = c.fetchone()
         c.execute('SELECT npc_kills FROM k_tmp WHERE system = ?',s)
-        npc_kills = c.fetchall()
+        npc_kills = c.fetchone()
         c.execute('SELECT pod_kills FROM k_tmp WHERE system = ?',s)
-        pod_kills = c.fetchall()
+        pod_kills = c.fetchone()
         c.execute('SELECT jumps FROM j_tmp WHERE system = ?',s)
-        jumps = c.fetchall()
-        c.close()
-        stats = [ship_kills,npc_kills,pod_kills,jumps]
-        await systmp.clear()
+        jumps = c.fetchone()
+        conn.close()
+        if kills == None or jumps == None :
+            stats = None
+        else:
+            stats = [ship_kills[0],npc_kills[0],pod_kills[0],jumps[0]]
+        print(stats)
+        await systemp.clear()
