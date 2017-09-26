@@ -4,7 +4,7 @@ import asyncio
 
 conn = sqlite3.connect('sde.sqlite')
 c = conn.cursor()
-c.execute('SELECT solarSystemID FROM mapSolarSystems')
+c.execute("SELECT solarSystemID from mapSolarSystems WHERE solarSystemName NOT REGEXP '[Jj]([0-9]{6})'")
 sysids = c.fetchall()
 conn.close()
 
