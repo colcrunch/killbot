@@ -14,6 +14,7 @@ import asyncio
 import aiohttp
 import sqlite3
 import logging
+import re
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -132,6 +133,8 @@ async def status():
 @killbot.command(aliases=['sys'])
 async def system(*, sys: str):
     """Prints system stats"""
+    if re.match(r'[Jj]([0-9]{6})', sys) is not None:
+        return await killbot.say("Data not available for Wormhole systems.")
     await systems.getID(sys)
     sID = systems.systemID
     if sID == None :
