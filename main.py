@@ -132,7 +132,7 @@ async def status():
 #----------------------------------------------------------------------
 @killbot.command(aliases=['sys'])
 async def system(*, sys: str):
-    """Prints system stats"""
+    """Prints system stats (Not available for WH systems)"""
     if re.match(r'[Jj]([0-9]{6})', sys) is not None:
         return await killbot.say("Data not available for Wormhole systems.")
     await systems.getID(sys)
