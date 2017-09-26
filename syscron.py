@@ -20,7 +20,6 @@ ktotal = []
 kids = []
 for x in kills:
     sys = x["system_id"]
-    print(type(sys))
     skills = x["ship_kills"]
     nkills = x["npc_kills"]
     pkills = x["pod_kills"]
@@ -34,7 +33,6 @@ for sysid in sysids:
     else:
         pass
 
-print(type(0))
 c.executemany('INSERT INTO kills VALUES (?,?,?,?)',ktotal)
 conn.commit()
 
