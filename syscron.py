@@ -2,10 +2,15 @@ import requests
 import json
 import sqlite3
 
+def regexp(expr, item):
+    reg = re.compile(expr)
+    return reg.search(item) is not None
 
+regg = r'[Jj]([0-9]{6})'
 conn = sqlite3.connect('sde.sqlite')
+conn.create_function("REGEXP", 2, regexp)
 c = conn.cursor()
-c.execute("SELECT solarSystemID from mapSolarSystems WHERE solarSystemName NOT regexp '[Jj]([0-9]{6})'")
+c.execute("SELECT solarSystemID from mapSolarSystems WHERE solarSystemName NOT REGEXP ?", regg)
 sysids = c.fetchall()
 conn.close()
 
