@@ -28,8 +28,8 @@ for x in kills:
     kids.append(sys)
 
 for sysid in sysids:
-    if sysid not in kids:
-        ktotal.append((sysid, 0, 0, 0))
+    if sysid[0] not in kids:
+        ktotal.append((sysid[0], 0, 0, 0))
     else:
         pass
 
@@ -53,8 +53,8 @@ for x in jumps:
     jids.append(sys)
 
 for sysid in sysids:
-    if sysid not in jids:
-        jtotal.append((sysid, 0))
+    if sysid[0] not in jids:
+        jtotal.append((sysid[0], 0))
     else:
         pass
 
