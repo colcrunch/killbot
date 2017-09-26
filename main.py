@@ -141,7 +141,7 @@ async def system(*, sys: str):
 
     stats = systems.stats
     if stats == None :
-        logger.Error("Stats not found! Please make sure the bot is configured properly. (DB vs ESI pulls)")
+        logger.error("Stats not found! Please make sure the bot is configured properly. (DB vs ESI pulls)")
         return await killbot.say("Stats not found! Please make sure the bot is configured properly.")
 
     if config.system_cmd.lower() == 'db':

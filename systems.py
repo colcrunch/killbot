@@ -62,7 +62,7 @@ async def getStats(systemID):
         c.execute('SELECT jumps FROM j_tmp WHERE system = ?',s)
         jumps = c.fetchone()
         conn.close()
-        if kills == None or jumps == None :
+        if kills == None and jumps == None :
             stats = None
         else:
             stats = [ship_kills[0],npc_kills[0],pod_kills[0],jumps[0]]
