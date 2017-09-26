@@ -2,11 +2,18 @@ import sqlite3
 import json
 import asyncio
 
+conn = sqlite3.connect('sde.sqlite')
+c = conn.cursor()
+c.execute('SELECT solarSystemID FROM mapSolarSystems')
+sysids = c.fetchall()
+conn.close()
+
 async def getStats(kills, jumps):
     conn = sqlite3.connect('systems.sqlite')
     c = conn.cursor()
 
     ktotal = []
+    kids = []
     for x in kills:
         sys = x["system_id"]
         skills = x["ship_kills"]
@@ -14,17 +21,32 @@ async def getStats(kills, jumps):
         pkills = x["pod_kills"]
 
         ktotal.append((sys, skills, nkills, pkills))
+        kids.append(sys)
+
+    for sysid in sysids:
+        if sysid[0] not in kids:
+            ktotal.append((sysid[0], 0, 0, 0))
+        else:
+            pass
 
 
     c.executemany('INSERT INTO k_tmp VALUES (?,?,?,?)',ktotal)
     conn.commit()
 
     jtotal = []
+    jids = []
     for x in jumps:
         sys = x["system_id"]
         sjumps = x["ship_jumps"]
 
         jtotal.append((sys, sjumps))
+        jids.append(sys)
+
+    for sysid in sysids:
+        if sysid[0] not in jids:
+            jtotal.append((sysid[0], 0))
+        else:
+            pass
 
     c.executemany('INSERT INTO j_tmp VALUES (?,?)',jtotal)
     conn.commit()
