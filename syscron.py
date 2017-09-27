@@ -1,17 +1,18 @@
 import requests
 import json
 import sqlite3
+import re
 
-def regexp(expr, item):
-    reg = re.compile(expr)
-    return reg.search(item) is not None
+def regexp(pattern, input):
+    return bool(re.match(pattern, input))
 
-regg = r'[Jj]([0-9]{6})'
+regg = '[Jj]([0-9]{6})'
 conn = sqlite3.connect('sde.sqlite')
-conn.create_function("REGEXP", 2, regexp)
+conn.create_function("regexp", 2, regexp)
 c = conn.cursor()
-c.execute("SELECT solarSystemID from mapSolarSystems WHERE solarSystemName NOT REGEXP ?", regg)
+c.execute("SELECT solarSystemID from mapSolarSystems WHERE solarSystemName NOT regexp :pattern", {'pattern': regg})
 sysids = c.fetchall()
+print(len(sysids))
 conn.close()
 
 urlk = "https://esi.tech.ccp.is/latest/universe/system_kills/?datasource=tranquility"

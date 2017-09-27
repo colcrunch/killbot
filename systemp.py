@@ -1,11 +1,18 @@
 import sqlite3
 import json
 import asyncio
+import re
 
+def regexp(pattern, input):
+    return bool(re.match(pattern, input))
+
+regg = '[Jj]([0-9]{6})'
 conn = sqlite3.connect('sde.sqlite')
+conn.create_function("regexp", 2, regexp)
 c = conn.cursor()
-c.execute('SELECT solarSystemID FROM mapSolarSystems')
+c.execute("SELECT solarSystemID from mapSolarSystems WHERE solarSystemName NOT regexp :pattern", {'pattern': regg})
 sysids = c.fetchall()
+print(len(sysids))
 conn.close()
 
 async def getStats(kills, jumps):
