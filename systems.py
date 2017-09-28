@@ -4,6 +4,13 @@ import kb
 import systemp
 import aiohttp
 
+async def sumFetch(tups):
+    out = []
+    for x in tups:
+        out.append(x[0])
+
+    return sum(out)
+
 async def getID(system):
     conn = sqlite3.connect('sde.sqlite')
     c = conn.cursor()
@@ -36,26 +43,10 @@ async def getStats(systemID):
         if kills == None or jumps == None :
             stats = None
         else:
-            add = []
-            for kill in ship_kills:
-                add.append(kill[0])
-
-            kills24 = sum(add)
-            add = []
-            for kill in npc_kills:
-                add.append(kill[0])
-
-            npc24 = sum(add)
-            add = []
-            for kill in pod_kills:
-                add.append(kill[0])
-
-            pod24 = sum (add)
-            add =[]
-            for jump in jumps:
-                add.append(jump[0])
-
-            jumps24 = sum(add)
+            kills24 = await sumFetch(ship_kills)
+            npc24 = await sumFetch(npc_kills)
+            pod24 = await sumFetch(pod_kills)
+            jumps24 = await sumFetch(jumps)
             stats = [kills24, npc24, pod24, jumps24]
 
     elif config.system_cmd.lower() == "esi":
