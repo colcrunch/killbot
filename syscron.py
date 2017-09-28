@@ -39,7 +39,7 @@ for sysid in sysids:
     else:
         pass
 
-c.executemany('INSERT INTO kills VALUES (?,?,?,?)',ktotal)
+c.executemany('INSERT INTO kills (system, ship_kills, npc_kills, pod_kills) VALUES (?,?,?,?)',ktotal)
 conn.commit()
 
 
@@ -64,7 +64,7 @@ for sysid in sysids:
     else:
         pass
 
-c.executemany('INSERT INTO jumps VALUES (?,?)',jtotal)
+c.executemany('INSERT INTO jumps (system, jumps) VALUES (?,?)',jtotal)
 conn.commit()
 conn.close()
 print("Database updated")
