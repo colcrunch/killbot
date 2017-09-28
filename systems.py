@@ -36,11 +36,28 @@ async def getStats(systemID):
         if kills == None or jumps == None :
             stats = None
         else:
-            kills24 = sum(ship_kills)
-            npc24 = sum(npc_kills)
-            pod24 = sum (pod_kills)
-            jumps24 = sum(jumps)
+            add = []
+            for kill in ship_kills:
+                add.append(kill[0])
+
+            kills24 = sum(add)
+            add = []
+            for kill in npc_kills:
+                add.append(kill[0])
+
+            npc24 = sum(add)
+            add = []
+            for kill in pod_kills:
+                add.append(kill[0])
+
+            pod24 = sum (add)
+            add =[]
+            for jump in jumps:
+                add.append(jump[0])
+
+            jumps24 = sum(add)
             stats = [kills24, npc24, pod24, jumps24]
+
     elif config.system_cmd.lower() == "esi":
         urlk = "https://esi.tech.ccp.is/latest/universe/system_kills/?datasource=tranquility"
         urlj = "https://esi.tech.ccp.is/latest/universe/system_jumps/?datasource=tranquility"
