@@ -223,7 +223,7 @@ async def watch_redisq(chid, watchids):
                     print("Watching Victim in "+killID)
                     logger.info("Watching Victim in "+killID)
                     await killbot.send_message(channel, message)
-                elif vic == attacks and str(victim['shipType']['id']) in wids['shipTypes']:
+                elif vic == attacks and str(victim['ship_type_id']) in wids['shipTypes']:
                     print("Watching Ship Loss in "+killID)
                     logger.info("Watching Victim in "+killID)
                     await killbot.send_message(channel, message)
