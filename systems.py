@@ -40,7 +40,7 @@ async def getStats(systemID):
         jumps = c.fetchall()
         conn.close()
         global stats
-        if kills == None or jumps == None :
+        if ship_kills == None or pod_kills == None or npc_kills == None or jumps == None :
             stats = None
         else:
             kills24 = await sumFetch(ship_kills)
