@@ -133,6 +133,14 @@ async def status():
 @killbot.command(aliases=['sys'])
 async def system(*, sys: str):
     """Prints system stats (Not available for WH systems)"""
+    if config.system_cmd.lower() == 'db':
+        sys_msg = "The following are system stats for the last 24h."
+    elif config.system_cmd.lower() == 'esi':
+        sys_msg = "The following are system stats for the last 1h."
+    else:
+        logger.error("Config variable system_cmd not properly configured! "+config.system_cmd+" is not a valid option.")
+        return await killbot.say("Config variable system_cmd not properly configured! "+config.system_cmd+" is not a valid option.")
+
     if re.match(r'[Jj]([0-9]{6})', sys) is not None:
         return await killbot.say("Data not available for Wormhole systems.")
     await systems.getID(sys)
@@ -146,14 +154,6 @@ async def system(*, sys: str):
     if stats == None :
         logger.error("Stats not found! Please make sure the bot is configured properly. (DB vs ESI pulls)")
         return await killbot.say("Stats not found! Please make sure the bot is configured properly.")
-
-    if config.system_cmd.lower() == 'db':
-        sys_msg = "The following are system stats for the last 24h."
-    elif config.system_cmd.lower() == 'esi':
-        sys_msg = "The following are system stats for the last 1h."
-    else:
-        logger.error("Config variable system_cmd not properly configured! "+config.system_cmd+" is not a valid option.")
-        return await killbot.say("Config variable system_cmd not properly configured! "+config.system_cmd+" is not a valid option.")
 
     return await killbot.say(""+sys_msg+" \n\n :regional_indicator_k: **Ship Kills:** "+str(stats[0])+" **NPC Kills:** "+str(stats[1])+" **Pod Kills:** "+str(stats[2])+"\n :regional_indicator_j: **Jumps:** "+str(stats[3])+"\n\n :bookmark: http://evemaps.dotlan.net/system/"+sys)
 
