@@ -34,7 +34,9 @@ for x in kills:
     kids.append(sys)
 
 for sysid in sysids:
-    if sysid[0] not in kids:
+    if sysid[0] == 31000005:
+        pass
+    elif sysid[0] not in kids:
         ktotal.append((sysid[0], 0, 0, 0))
     else:
         pass

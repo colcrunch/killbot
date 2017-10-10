@@ -141,7 +141,7 @@ async def system(*, sys: str):
         logger.error("Config variable system_cmd not properly configured! "+config.system_cmd+" is not a valid option.")
         return await killbot.say("Config variable system_cmd not properly configured! "+config.system_cmd+" is not a valid option.")
 
-    if re.match(r'[Jj]([0-9]{6})', sys) is not None:
+    if re.match(r'[Jj]([0-9]{6})', sys) is not None or sys == "Thera":
         return await killbot.say("Data not available for Wormhole systems.")
     await systems.getID(sys)
     sID = systems.systemID
