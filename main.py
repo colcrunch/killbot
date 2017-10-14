@@ -238,6 +238,7 @@ async def watch_redisq(chid, watchids):
     except Exception as error:
         logger.critical("Exception occured in watch_redisq!")
         logger.critical(("Exception: ", error))
+        killbot.loop.create_task(watch_redisq(config.KILLWATCH_CHANNEL, config.watchids))
 
 if config.KILLWATCH_ENABLED == "TRUE":
     print(("Watching \nCorps:" + str(', '.join(config.watchids['corps']))+
