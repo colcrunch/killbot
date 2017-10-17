@@ -189,20 +189,20 @@ async def watch_redisq(chid, watchids):
                 print(killID)
                 logger.info("KillID: "+killID)
                 attacks = len(attackers)
+                vic = 0
                 #Are we tracking any of the groups that are the attackers?
                 for attacker in attackers:
-                    vic = 0
-                    if 'alliance' in attacker and str(attacker['alliance']['id']) in wids['alliances']:
+                    if 'alliance_id' in attacker and str(attacker['alliance_id']) in wids['alliances']:
                         print("Watching Attacker in "+killID)
                         logger.info("Watching Attacker in "+killID)
                         await killbot.send_message(channel, message)
                         break
-                    elif 'corporation' in attacker and str(attacker['corporation']['id']) in wids['corps']:
+                    elif 'corporation_id' in attacker and str(attacker['corporation_id']) in wids['corps']:
                         print("Watching Attacker in "+killID)
                         logger.info("Watching Attacker in "+killID)
                         await killbot.send_message(channel, message)
                         break
-                    elif 'character' in attacker and str(attacker['character']['id']) in wids['characters']:
+                    elif 'character' in attacker and str(attacker['character_id']) in wids['characters']:
                         print("Watching Attacker in "+killID)
                         logger.info("Watching Attacker in "+killID)
                         await killbot.send_message(channel, message)
@@ -211,15 +211,15 @@ async def watch_redisq(chid, watchids):
                         vic += 1
 
                 # Victim checking is easy.
-                if vic == attacks and 'alliance' in victim and str(victim['alliance']['id']) in wids['alliances']:
+                if vic == attacks and 'alliance_id' in victim and str(victim['alliance_id']) in wids['alliances']:
                     print("Watching Victim in "+killID)
                     logger.info("Watching Victim in "+killID)
                     await killbot.send_message(channel, message)
-                elif vic == attacks and 'corporation' in victim and str(victim['corporation']['id']) in wids['corps']:
+                elif vic == attacks and 'corporation_id' in victim and str(victim['corporation_id']) in wids['corps']:
                     print("Watching Victim in "+killID)
                     logger.info("Watching Victim in "+killID)
                     await killbot.send_message(channel, message)
-                elif vic == attacks and 'character' in victim and str(victim['character']['id']) in wids['characters']:
+                elif vic == attacks and 'character_id' in victim and str(victim['character_id']) in wids['characters']:
                     print("Watching Victim in "+killID)
                     logger.info("Watching Victim in "+killID)
                     await killbot.send_message(channel, message)
