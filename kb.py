@@ -17,6 +17,66 @@ async def fetch(session, url):
         async with session.get(url, headers=headers) as response:
             return await response.json()
 
+async def buildMsg(killmail):
+    attackers = killmail['package']['killmail']['attackers']
+    killID= str(killmail['package']['killID'])
+    victim = killmail['package']['killmail']['victim']
+    solarSystem = killmail['package']['killmail']['solar_system_id']
+    timeStr = killmail['package']['killmail']['killmail_time']
+    timeTime = datetime.datetime.strptime(timeStr, '%Y-%m-%dT%H:%M:%SZ')
+    value = '{:,}'.format(killmail['package']['killmail']['totalValue'])
+    # Find the final blow and get the alliance or corp ID
+    for attacker in attackers:
+        if attacker['final_blow'] is True:
+            if 'alliance_id' in attacker:
+                fb_all = attacker['alliance_id']
+                final = await esiName(final_blow, 'ent')
+            else:
+                final_blow = attacker['corporation_id']
+                final = await esiName(final_blow, 'ent')
+        else:
+            pass
+    vicID = victim['character_id']
+    vicCorpID = victim['corporation_id']
+    vicCorpName = await esiName(vicCorpID, 'ent')
+    vicName = await esiName(vicID, 'char')
+    vicShip = victim['ship_type_id']
+    shipRender = 'https://image.eveonline.com/Render/'+str(vicShip)+'_128.png'
+    shipName = await getShip(vicShip)
+    link = "https://zkillboard.com/kill/"+killID+"/"
+
+    #Actually make the message
+    Msg = discord.Embed(title=vicName+' ('+vicCorpName+') lost their '+shipName+' to '+final, timestamp=timeTime)
+    Msg.set_thumbnail(url=shipRender)
+    Msg.set_author(name="zKillboard", url='http://zkillboard.com', icon_url='https://zkillboard.com/img/wreck.png')
+    return Msg
+
+async def getShip(typeID):
+    tID = str(typeID)
+    conn = sqlite3.connect('sde.sqlite')
+    c = conn.cursor()
+    c.execute("SELECT typeName FROM invTypes WHERE typeID = "+tID)
+    s = c.fetchone()
+    nm = s[0]
+    conn.close()
+    return nm
+
+async def esiName(nID, rl):
+    urlchar = 'https://esi.tech.ccp.is/latest/characters/names/?character_ids='+str(nID)+'&datasource=tranquility'
+    urlent = 'https://esi.tech.ccp.is/latest/alliances/names/?alliance_ids='+str(nID)+'&datasource=tranquility'
+    if rl == "char":
+        url = urlchar
+        nm = 'character_name'
+    elif rl == 'ent':
+        url = urlent
+        nm = 'alliance_name'
+    async with aiohttp.ClientSession() as session:
+        resp = await fetch(session, url)
+    n = resp[0]
+    name = n[nm]
+    return name
+
+
 async def getID(char):
     urlchar = urllib.parse.quote_plus(char)
     async with aiohttp.ClientSession() as session:
