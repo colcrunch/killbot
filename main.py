@@ -177,7 +177,7 @@ async def watch_redisq(chid, watchids):
     channel = discord.Object(id=chid)
     try:
         while not killbot.is_closed:
-            url = "https://redisq.zkillboard.com/listen.php"
+            url = "https://colsfiles.nyc3.digitaloceanspaces.com/mail.json"
             async with aiohttp.ClientSession() as session:
                 kills = await kb.fetch(session, url)
             if kills['package'] is not None :

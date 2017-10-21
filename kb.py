@@ -22,18 +22,27 @@ async def buildMsg(killmail):
     killID= str(killmail['package']['killID'])
     victim = killmail['package']['killmail']['victim']
     solarSystem = killmail['package']['killmail']['solar_system_id']
+    solName = await getSolName(solarSystem)
     timeStr = killmail['package']['killmail']['killmail_time']
     timeTime = datetime.datetime.strptime(timeStr, '%Y-%m-%dT%H:%M:%SZ')
-    value = '{:,}'.format(killmail['package']['killmail']['totalValue'])
+    val = '{:,}'.format(killmail['package']['zkb']['totalValue'])
     # Find the final blow and get the alliance or corp ID
     for attacker in attackers:
         if attacker['final_blow'] is True:
             if 'alliance_id' in attacker:
-                fb_all = attacker['alliance_id']
-                final = await esiName(final_blow, 'ent')
+                fbAlly = attacker['alliance_id']
+                fbAllyName = await esiName(fbAlly, 'ent')
+                fbCorp = attacker['corporation_id']
+                fbCorpName = await esiName(fbCorp, 'ent')
+                fbChar = attacker['character_id']
+                fbCharName = await esiName(fbChar, 'ent')
+                final_blow = [fbAllyName, fbCorpName, fbCharName]
             else:
-                final_blow = attacker['corporation_id']
-                final = await esiName(final_blow, 'ent')
+                fbCorp = attacker['corporation_id']
+                fbCorpName = await esiName(fbCorp, 'ent')
+                fbChar = attacker['character_id']
+                fbCharName = await esiName(fbChar, 'ent')
+                final_blow = [None, fbCorpName, fbCharName]
         else:
             pass
     vicID = victim['character_id']
@@ -41,15 +50,39 @@ async def buildMsg(killmail):
     vicCorpName = await esiName(vicCorpID, 'ent')
     vicName = await esiName(vicID, 'char')
     vicShip = victim['ship_type_id']
-    shipRender = 'https://image.eveonline.com/Render/'+str(vicShip)+'_128.png'
+    shipRender = 'https://image.eveonline.com/Render/'+str(vicShip)+'_64.png'
     shipName = await getShip(vicShip)
     link = "https://zkillboard.com/kill/"+killID+"/"
 
     #Actually make the message
-    Msg = discord.Embed(title=vicName+' ('+vicCorpName+') lost their '+shipName+' to '+final, timestamp=timeTime)
+    Msg = discord.Embed(title=vicName+' ('+vicCorpName+') lost their '+shipName, timestamp=timeTime)
     Msg.set_thumbnail(url=shipRender)
+    if final_blow[0] is not None:
+        #final blow fields
+        corpStr = final_blow[1]+' ('+final_blow[0]+')'
+        Msg.add_field(name="Final Blow", value=final_blow[2], inline=True)
+        Msg.add_field(name="Corp", value=corpStr, inline=True)
+        #Msg.add_field(name=" ", value=" ", inline=True)
+    elif final_blow[0] is None:
+        #final blow feilds
+        Msg.add_field(name="Final Blow", value=final_blow[2], inline=True)
+        Msg.add_field(name="Corp", value=final_blow[1], inline=True)
+        #Msg.add_field(name=" ", value=" ", inline=True)
+    vISK = str(val)+" ISK"
+    Msg.add_field(name="Value", value=vISK, inline=False)
+    Msg.add_field(name="System", value=solName, inline=True)
     Msg.set_author(name="zKillboard", url='http://zkillboard.com', icon_url='https://zkillboard.com/img/wreck.png')
     return Msg
+
+async def getSolName(sysID):
+    sID = str(sysID)
+    conn = sqlite3.connect('sde.sqlite')
+    c = conn.cursor()
+    c.execute("SELECT solarSystemName FROM mapSolarSystems WHERE solarSystemID = "+sID)
+    s = c.fetchone()
+    name = s[0]
+    conn.close()
+    return name
 
 async def getShip(typeID):
     tID = str(typeID)
