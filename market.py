@@ -11,15 +11,29 @@ async def getID(item):
     t = c.fetchone()
     print(t)
     conn.close()
-    global itemID
     if t is None:
         itemID = "None"
     else:
         itemID = str(t[0])
+    return itemID
 
-async def getPrices(itemID):
+async def getRegion(region):
+    conn = sqlite3.connect('sde.sqlite')
+    c = conn.cursor()
+    r = (region,)
+    c.execute('SELECT regionID FROM mapRegions WHERE regionName LIKE ?',r)
+    t = c.fetchone()
+    print(t)
+    conn.close()
+    if t is None:
+        regionID = "None"
+    else:
+        regionID = str(t[0])
+    return regionID
+
+async def getPrices(itemID, region):
     async with aiohttp.ClientSession() as session:
-        price = await kb.fetch(session, "http://api.evemarketer.com/ec/marketstat/json?typeid="+itemID+"&regionlimit=10000002")
+        price = await kb.fetch(session, "http://api.evemarketer.com/ec/marketstat/json?typeid="+itemID+"&regionlimit="+region)
     prices = dict(price[0])
     buy_min = str('{:,}'.format(round(prices['buy']['min'], 2)))
     buy_max = str('{:,}'.format(round(prices['buy']['max'], 2)))
