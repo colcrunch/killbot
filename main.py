@@ -86,7 +86,6 @@ async def threat_error(error, ctx):
 #----------------------------------------------------------------------
 async def flats(item, region_name):
     #Apparantly the name "REGION" is not acceptable as a function name?
-    """ Use this subcommand to specify a region to be checked. """
     print(region_name)
     regionID = await market.getRegion(region_name)
     itemID = await market.getID(item)
@@ -151,6 +150,7 @@ async def price_check(ctx, *item):
 #Not a real "command" as it will never be called as such.
 @price_check.command(name=prefix+"region",aliases = [prefix+'r'])
 async def place_holder():
+    """ Use this subcommand to specify a region to be checked. """
     pass
 
 @price_check.error
