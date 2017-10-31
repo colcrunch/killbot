@@ -85,7 +85,7 @@ async def threat_error(error, ctx):
 # This command checks jita prices for the given item against the eve-central API
 #----------------------------------------------------------------------
 @killbot.group(aliases = ['pc'], pass_context=True)
-async def price_check(ctx, item):
+async def price_check(ctx, *,item):
     """ Checks prices for specified items in a specified region. (Default: The Forge) """
     global item_price
     item_price = item
