@@ -84,13 +84,54 @@ async def threat_error(error, ctx):
 # Price Check command
 # This command checks jita prices for the given item against the eve-central API
 #----------------------------------------------------------------------
+async def flats(item, region_name):
+    #Apparantly the name "REGION" is not acceptable as a function name?
+    """ Use this subcommand to specify a region to be checked. """
+    print(region_name)
+    regionID = await market.getRegion(region_name)
+    itemID = await market.getID(item)
+    if regionID is "None":
+        return await killbot.say("Region not found. Please check your spelling and try again.")
+    else:
+        await market.getPrices(itemID, regionID)
+
+    priceinfo = market.priceinfo
+    plex_msg = ""
+    if item_price.lower() == "plex":
+        buy_avg = str('{:,}'.format(market.avgs[0]*500))
+        sell_avg = str('{:,}'.format(market.avgs[1]*500))
+        plexinfo = [buy_avg, sell_avg]
+        plex_msg = "**Monthly Sub Cost**  \n ***Sell Avg:*** "+plexinfo[1]+"   ***Buy Avg:*** "+plexinfo[0]+"\n\n "
+
+    return await killbot.say(" :chart_with_upwards_trend:  "+ item_price +"  :map: "+region_name.title()+"\n\n "+plex_msg+":regional_indicator_b:     ***Max:*** "+priceinfo[1]+"  ***Min:*** "+priceinfo[0]+"  ***Avg:*** "+priceinfo[2]+" \n :regional_indicator_s:     ***Max:*** "+priceinfo[4]+" ***Min:*** "+priceinfo[3]+" ***Avg:*** "+priceinfo[5]+" \n\n :bookmark: https://evemarketer.com/types/"+itemID )
+
+
 @killbot.group(aliases = ['pc'], pass_context=True)
-async def price_check(ctx, *,item):
+async def price_check(ctx, *item):
     """ Checks prices for specified items in a specified region. (Default: The Forge) """
     global item_price
-    item_price = item
-    if ctx.invoked_subcommand is None:
+
+    item = list(item)
+    if prefix+'r' in item:
+        i = item.index(prefix+'r')
+        item_list = item[:i]
+        region_list = item[i+1:]
+        item = " ".join(item_list)
+        region_name = " ".join(region_list)
+        item_price = item
+        return await flats(item, region_name)
+    elif prefix+'region' in item:
+        i = item.index(prefix+'region')
+        item_list = item[:i]
+        region_list = item[i+1:]
+        item = " ".join(item_list)
+        region_name = " ".join(region_list)
+        item_price = item
+        return await flats(item, region_name)
+    else:
         region = '10000002'
+        it = " ".join(item)
+        item = it
         print(item)
         itemID = await market.getID(item)
         if itemID == "None":
@@ -107,36 +148,20 @@ async def price_check(ctx, *,item):
             plex_msg = "**Monthly Sub Cost**  \n ***Sell Avg:*** "+plexinfo[1]+"   ***Buy Avg:*** "+plexinfo[0]+"\n\n "
 
         return await killbot.say(" :chart_with_upwards_trend:  "+ item +" :map: The Forge\n\n "+plex_msg+":regional_indicator_b:     ***Max:*** "+priceinfo[1]+"  ***Min:*** "+priceinfo[0]+"  ***Avg:*** "+priceinfo[2]+" \n :regional_indicator_s:     ***Max:*** "+priceinfo[4]+" ***Min:*** "+priceinfo[3]+" ***Avg:*** "+priceinfo[5]+" \n\n :bookmark: https://evemarketer.com/types/"+itemID )
-
+#Not a real "command" as it will never be called as such.
 @price_check.command(name=prefix+"region",aliases = [prefix+'r'])
-async def region(*, region_name):
-    """ Use this subcommand to specify a region to be checked. """
-    print(region_name)
-    regionID = await market.getRegion(region_name)
-    itemID = await market.getID(item_price)
-    if regionID is "None":
-        return await killbot.say("Region not found. Please check your spelling and try again.")
-    else:
-        await market.getPrices(itemID, regionID)
-
-    priceinfo = market.priceinfo
-    plex_msg = ""
-    if item_price.lower() == "plex":
-        buy_avg = str('{:,}'.format(market.avgs[0]*500))
-        sell_avg = str('{:,}'.format(market.avgs[1]*500))
-        plexinfo = [buy_avg, sell_avg]
-        plex_msg = "**Monthly Sub Cost**  \n ***Sell Avg:*** "+plexinfo[1]+"   ***Buy Avg:*** "+plexinfo[0]+"\n\n "
-
-    return await killbot.say(" :chart_with_upwards_trend:  "+ item_price +"  :map: "+region_name.title()+"\n\n "+plex_msg+":regional_indicator_b:     ***Max:*** "+priceinfo[1]+"  ***Min:*** "+priceinfo[0]+"  ***Avg:*** "+priceinfo[2]+" \n :regional_indicator_s:     ***Max:*** "+priceinfo[4]+" ***Min:*** "+priceinfo[3]+" ***Avg:*** "+priceinfo[5]+" \n\n :bookmark: https://evemarketer.com/types/"+itemID )
+async def place_holder():
+    pass
 
 @price_check.error
 async def pc_error(error, ctx):
     if isinstance(error, discord.ext.commands.MissingRequiredArgument):
         return await killbot.say("You must specify an item to look up!")
     else:
-        logger.error("There was an error with the price check command!: \n"+error)
+        logger.error("There was an error with the price check command!:")
+        logger.error(error)
         print(error)
-        return await killbot.say("Please contact Col Crunch about the following error (make sure to include the exact command that caused it.) \n\n *** Error: ***  "+error)
+        return await killbot.say("Please contact Col Crunch about the following error (make sure to include the exact command that caused it.) \n\n *** Error: ***  "+ str(error))
 
 # -----------------------------------------------------------------------
 # Status command
