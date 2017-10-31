@@ -85,7 +85,7 @@ async def threat_error(error, ctx):
 #----------------------------------------------------------------------
 @killbot.command(aliases = ['pc'])
 async def price_check(*, item):
-    """ Checks prices for specified items in Jita """
+    """ Checks prices for specified items in The Forge """
     print(item)
     await market.getID(item)
     if market.itemID == "None":
