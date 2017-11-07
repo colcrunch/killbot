@@ -142,7 +142,10 @@ async def get_stats():
     if 'months' in select:
         months = select['months']
         if top in months:
-            kills_mo = select["months"][top]["shipsDestroyed"]
+            if 'shipsDestroyed' in top:
+                kills_mo = select["months"][top]["shipsDestroyed"]
+            else:
+                kills_mo = "No Kills Yet"
         else:
             kills_mo = "No Kills Yet"
     else:

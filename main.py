@@ -77,7 +77,7 @@ async def threat_error(error, ctx):
         return await killbot.say("You must specify a character to look up.")
     else:
         print(error)
-        logger.error("There was an error with the threat command!: \n"+error)
+        logger.error("There was an error with the threat command!: \n"+str(error))
         return await killbot.say("Please contact Col Crunch about the following error (make sure to include the exact command that caused it.) \n\n*** Error: ***  "+str(error))
 
 #----------------------------------------------------------------------
