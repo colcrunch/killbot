@@ -3,6 +3,7 @@ import config
 import kb
 import market
 import systems
+import guess
 
 #Import discord python library
 import discord
@@ -88,7 +89,18 @@ async def flats(item, region_name):
     #Apparantly the name "REGION" is not acceptable as a function name?
     print(region_name)
     regionID = await market.getRegion(region_name)
-    itemID = await market.getID(item)
+    shortcut = guess.shortcuts
+
+    if item == '':
+        return await killbot.say("You must specify an item to look up!")
+
+    print(item)
+    if item.lower() in shortcut:
+        itemID = await market.getID(shortcut[item.lower()])
+        item = shortcut[item.lower()]
+    else:
+        itemID = await market.getID(item)
+
     if regionID is "None":
         return await killbot.say("Region not found. Please check your spelling and try again.")
     else:
@@ -96,13 +108,13 @@ async def flats(item, region_name):
 
     priceinfo = market.priceinfo
     plex_msg = ""
-    if item_price.lower() == "plex":
+    if item.lower() == "plex":
         buy_avg = str('{:,}'.format(market.avgs[0]*500))
         sell_avg = str('{:,}'.format(market.avgs[1]*500))
         plexinfo = [buy_avg, sell_avg]
         plex_msg = "**Monthly Sub Cost**  \n ***Sell Avg:*** "+plexinfo[1]+"   ***Buy Avg:*** "+plexinfo[0]+"\n\n "
 
-    return await killbot.say(" :chart_with_upwards_trend:  "+ item_price +"  :map: "+region_name.title()+"\n\n "+plex_msg+":regional_indicator_b:     ***Max:*** "+priceinfo[1]+"  ***Min:*** "+priceinfo[0]+"  ***Avg:*** "+priceinfo[2]+" \n :regional_indicator_s:     ***Max:*** "+priceinfo[4]+" ***Min:*** "+priceinfo[3]+" ***Avg:*** "+priceinfo[5]+" \n\n :bookmark: https://evemarketer.com/types/"+itemID )
+    return await killbot.say(" :chart_with_upwards_trend:  "+ item +"  :map: "+region_name.title()+"\n\n "+plex_msg+":regional_indicator_b:     ***Max:*** "+priceinfo[1]+"  ***Min:*** "+priceinfo[0]+"  ***Avg:*** "+priceinfo[2]+" \n :regional_indicator_s:     ***Max:*** "+priceinfo[4]+" ***Min:*** "+priceinfo[3]+" ***Avg:*** "+priceinfo[5]+" \n\n :bookmark: https://evemarketer.com/types/"+itemID )
 
 
 @killbot.group(aliases = ['pc'], pass_context=True)
@@ -117,7 +129,6 @@ async def price_check(ctx, *item):
         region_list = item[i+1:]
         item = " ".join(item_list)
         region_name = " ".join(region_list)
-        item_price = item
         return await flats(item, region_name)
     elif prefix+'region' in item:
         i = item.index(prefix+'region')
@@ -125,28 +136,13 @@ async def price_check(ctx, *item):
         region_list = item[i+1:]
         item = " ".join(item_list)
         region_name = " ".join(region_list)
-        item_price = item
         return await flats(item, region_name)
     else:
-        region = '10000002'
+        region_name = 'The Forge'
         it = " ".join(item)
         item = it
-        print(item)
-        itemID = await market.getID(item)
-        if itemID == "None":
-            return await killbot.say("Item not found. Please check your spelling and try again.")
-        else:
-            await market.getPrices(itemID, region)
+        return await flats(item, region_name)
 
-        priceinfo = market.priceinfo
-        plex_msg = ""
-        if item.lower() == "plex":
-            buy_avg = str('{:,}'.format(market.avgs[0]*500))
-            sell_avg = str('{:,}'.format(market.avgs[1]*500))
-            plexinfo = [buy_avg, sell_avg]
-            plex_msg = "**Monthly Sub Cost**  \n ***Sell Avg:*** "+plexinfo[1]+"   ***Buy Avg:*** "+plexinfo[0]+"\n\n "
-
-        return await killbot.say(" :chart_with_upwards_trend:  "+ item +" :map: The Forge\n\n "+plex_msg+":regional_indicator_b:     ***Max:*** "+priceinfo[1]+"  ***Min:*** "+priceinfo[0]+"  ***Avg:*** "+priceinfo[2]+" \n :regional_indicator_s:     ***Max:*** "+priceinfo[4]+" ***Min:*** "+priceinfo[3]+" ***Avg:*** "+priceinfo[5]+" \n\n :bookmark: https://evemarketer.com/types/"+itemID )
 #Not a real "command" as it will never be called as such.
 @price_check.command(name=prefix+"region",aliases = [prefix+'r'])
 async def place_holder():
