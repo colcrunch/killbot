@@ -101,6 +101,8 @@ async def flats(item, region_name):
         item = shortcut[item.lower()]
     else:
         itemID = await market.getID(item)
+        if itemID is "None":
+            return await killbot.say("Item not found, please check your spelling and try again.")
 
     if regionID is "None":
         return await killbot.say("Region not found. Please check your spelling and try again.")

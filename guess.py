@@ -11,6 +11,4 @@ shortcuts = {
     'mtu': 'Mobile Tractor Unit',
     'lsi': 'Large Skill Injector',
     'ssi': 'Small Skill Injector',
-
-
 }
