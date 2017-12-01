@@ -87,6 +87,7 @@ async def threat_error(error, ctx):
 #----------------------------------------------------------------------
 async def flats(item, region_name):
     #Apparantly the name "REGION" is not acceptable as a function name?
+    #Actual logic for price checking... maybe just move to market.py?
     print(region_name)
     regionID = await market.getRegion(region_name)
     shortcut = guess.shortcuts
