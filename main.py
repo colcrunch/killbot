@@ -26,6 +26,8 @@ logger.addHandler(handler)
 killbot = Bot(command_prefix=config.PREFIX)
 prefix = config.PREFIX
 
+start_time = datetime.datetime.utcnow()
+
 @killbot.event
 async def on_ready():
     print("Bot online")
@@ -47,6 +49,44 @@ async def  ping():
     message = "PONG"
     return await killbot.say("Pong!")
 
+#---------------------------------------------------------------------
+#   Bot Stats Command
+#   Displays various statistics about the currnet bot.
+#---------------------------------------------------------------------
+@killbot.command(aliases=['bs'], pass_context=True)
+async def botStats(ctx):
+    """ Displpays various statistic about the bot"""
+    servers = []
+    for server in killbot.servers:
+        servers.append(server)
+
+    now = datetime.datetime.utcnow()
+
+    uptime = now - start_time
+
+    embed = discord.Embed(title="Bot Statistics", colour=discord.Colour.green())
+    embed.set_author(name=killbot.user.name, icon_url=killbot.user.avatar_url)
+    embed.set_thumbnail(url=killbot.user.avatar_url)
+    embed.add_field(name="Servers", value=len(servers),inline=True)
+    embed.add_field(name="Uptime", value=await strftdelta(uptime), inline=True)
+
+    return await killbot.send_message(ctx.message.channel, embed=embed)
+
+async def strftdelta(tdelta):
+    d = dict(days=tdelta.days)
+    d['hrs'], rem = divmod(tdelta.seconds, 3600)
+    d['min'], d['sec'] = divmod(rem, 60)
+
+    if d['min'] is 0:
+        fmt = '{sec} sec'
+    elif d['hrs'] is 0:
+        fmt = '{min} min {sec} sec'
+    elif d['days'] is 0:
+        fmt = '{hrs} hr(s) {min} min {sec} sec'
+    else:
+        fmt = '{days} day(s) {hrs} hr(s) {min} min {sec} sec'
+
+    return fmt.format(**d)
 #---------------------------------------------------------------------
 # Eve Time command
 # Returns the current EVE/UTC Time.
