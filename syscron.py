@@ -61,7 +61,9 @@ for x in jumps:
     jids.append(sys)
 
 for sysid in sysids:
-    if sysid[0] not in jids:
+    if sysid[0] == 31000005:
+        pass
+    elif sysid[0] not in jids:
         jtotal.append((sysid[0], 0))
     else:
         pass

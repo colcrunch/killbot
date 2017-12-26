@@ -17,16 +17,17 @@ import sqlite3
 import logging
 import re
 
+
+start_time = datetime.datetime.utcnow()
+
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename='logs/discord'+datetime.datetime.utcnow().strftime("%Y%m%d%H%M")+'.log', encoding='utf-8', mode='w')
+handler = logging.FileHandler(filename='logs/discord'+start_time.strftime("%Y%m%d%H%M")+'.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s ::: %(levelname)s ::: %(name)s :::  %(message)s'))
 logger.addHandler(handler)
 
 killbot = Bot(command_prefix=config.PREFIX)
 prefix = config.PREFIX
-
-start_time = datetime.datetime.utcnow()
 
 @killbot.event
 async def on_ready():
@@ -55,7 +56,7 @@ async def  ping():
 #---------------------------------------------------------------------
 @killbot.command(aliases=['bs'], pass_context=True)
 async def botStats(ctx):
-    """ Displpays various statistic about the bot"""
+    """ Displpays various statistics about the bot"""
     servers = []
     for server in killbot.servers:
         servers.append(server)
@@ -69,6 +70,7 @@ async def botStats(ctx):
     embed.set_thumbnail(url=killbot.user.avatar_url)
     embed.add_field(name="Servers", value=len(servers),inline=True)
     embed.add_field(name="Uptime", value=await strftdelta(uptime), inline=True)
+    embed.add_field(name="Killmails Processed", value=counter, inline=False)
 
     return await killbot.send_message(ctx.message.channel, embed=embed)
 
@@ -263,6 +265,7 @@ async def watch_redisq(chid, watchids):
     logger.info(" Killboard watching started")
     wids = config.watchids
     await killbot.wait_until_ready()
+    global counter
     counter = 0
     channel = discord.Object(id=chid)
     try:
@@ -332,6 +335,7 @@ async def watch_redisq(chid, watchids):
                 pass
 
             #await killbot.send_message(channel, counter)
+            counter += 1
             await asyncio.sleep(5)
 
     except Exception as error:
