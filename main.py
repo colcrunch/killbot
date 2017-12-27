@@ -17,7 +17,7 @@ import sqlite3
 import logging
 import re
 
-
+counter = 0
 start_time = datetime.datetime.utcnow()
 
 logger = logging.getLogger('discord')
@@ -47,7 +47,6 @@ async def on_ready():
 @killbot.command()
 async def  ping():
     """PONG!"""
-    message = "PONG"
     return await killbot.say("Pong!")
 
 #---------------------------------------------------------------------
@@ -96,8 +95,8 @@ async def strftdelta(tdelta):
 @killbot.command(aliases = ['eve_time', 'evetime', 'et'])
 async def time():
     """Displays EVE/UTC time."""
-    time = datetime.datetime.utcnow()
-    return await killbot.say("Current EVE (UTC) Time: " + time.strftime("%H:%M"))
+    time = datetime.datetime.utcnow().strftime("%H:%M")
+    return await killbot.say("Current EVE (UTC) Time: " + time)
 
 #--------------------------------------------------------------------
 #   Threat command
@@ -264,9 +263,8 @@ async def github():
 async def watch_redisq(chid, watchids):
     logger.info(" Killboard watching started")
     wids = config.watchids
-    await killbot.wait_until_ready()
     global counter
-    counter = 0
+    await killbot.wait_until_ready()
     channel = discord.Object(id=chid)
     try:
         while not killbot.is_closed:
