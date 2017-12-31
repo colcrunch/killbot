@@ -206,7 +206,7 @@ async def alliance(ctx, *, ally: str):
     embed.set_author(name=killbot.user.name, icon_url=killbot.user.avatar_url)
     embed.set_thumbnail(url="https://imageserver.eveonline.com/Alliance/{}_128.png".format(eid))
     embed.add_field(name="Ticker", value=inf[1], inline=True)
-    embed.add_field(name="Exec Corp", value=inf[2], inline=True)
+    embed.add_field(name="Exec Corp", value=exe, inline=True)
     embed.add_field(name="Founded", value=inf[3], inline=False)
 
     return await killbot.send_message(ctx.message.channel, embed=embed)
