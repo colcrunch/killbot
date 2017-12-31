@@ -190,6 +190,28 @@ async def corporation(ctx, *, corp: str):
 
     return await killbot.send_message(ctx.message.channel, embed=embed)
 
+# Subcommand for Alliance info
+@info.command(name="alliance", aliases=['a', 'ally'], pass_context=True)
+async def alliance(ctx, *, ally: str):
+    """ Returns public info for an alliance from ESI """
+    eid = await esinfo.esiID(ally, 'ally')
+    if eid == '0':
+        return await killbot.say("Alliance not found, please check your spelling and try again.")
+
+    inf = await esinfo.esiAlly(eid)
+
+    exe = await kb.esiName(inf[2], 'ent')
+
+    embed = discord.Embed(title="{} Alliance Info".format(inf[0]), colour=discord.Colour.blue())
+    embed.set_author(name=killbot.user.name, icon_url=killbot.user.avatar_url)
+    embed.set_thumbnail(url="https://imageserver.eveonline.com/Alliance/{}_128.png".format(eid))
+    embed.add_field(name="Ticker", value=inf[1], inline=True)
+    embed.add_field(name="Exec Corp", value=inf[2], inline=True)
+    embed.add_field(name="Founded", value=inf[3], inline=False)
+
+    return await killbot.send_message(ctx.message.channel, embed=embed)
+
+
 #----------------------------------------------------------------------
 # Price Check command
 # This command checks jita prices for the given item against the eve-central API

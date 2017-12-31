@@ -43,10 +43,10 @@ async def getStats(systemID):
         if ship_kills == None or pod_kills == None or npc_kills == None or jumps == None :
             stats = None
         else:
-            kills24 = await sumFetch(ship_kills)
-            npc24 = await sumFetch(npc_kills)
-            pod24 = await sumFetch(pod_kills)
-            jumps24 = await sumFetch(jumps)
+            kills24 = sum(ship_kills)
+            npc24 = sum(npc_kills)
+            pod24 = sum(pod_kills)
+            jumps24 = sum(jumps)
             stats = [kills24, npc24, pod24, jumps24]
 
     elif config.system_cmd.lower() == "esi":
