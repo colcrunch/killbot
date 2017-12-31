@@ -4,6 +4,7 @@ import kb
 import market
 import systems
 import guess
+import esinfo
 
 #Import discord python library
 import discord
@@ -16,6 +17,7 @@ import aiohttp
 import sqlite3
 import logging
 import re
+import urllib
 
 counter = 0
 start_time = datetime.datetime.utcnow()
@@ -121,6 +123,72 @@ async def threat_error(error, ctx):
         print(error)
         logger.error("There was an error with the threat command!: \n"+str(error))
         return await killbot.say("Please contact Col Crunch about the following error (make sure to include the exact command that caused it.) \n\n*** Error: ***  "+str(error))
+#----------------------------------------------------------------------
+# Info command
+# This command returns public info from ESI.
+#----------------------------------------------------------------------
+@killbot.group(aliases=['i', 'inf'], pass_context=True)
+async def info(ctx):
+    """ Returns public info from ESI """
+    pass
+
+# Subcommand for character info
+@info.command(name="character", aliases=['char', 'ch'], pass_context=True)
+async def character(ctx, *, char: str):
+    """ Returns public info for a character from ESI """
+    eid = await esinfo.esiID(char, 'char')
+    if eid == '0':
+        return await killbot.say("Character not found, please check your spelling and try again.")
+
+    inf = await esinfo.esiChar(eid)
+    corpName = await kb.esiName(inf[0], 'ent')
+    urlChar = urllib.parse.quote_plus(char)
+
+    kbUrl = "https://zkillboard.com/character/{}/".format(eid)
+    ewUrl = "https://evewho.com/pilot/{}".format(urlChar)
+
+    embed = discord.Embed(title="{} Character Info".format(inf[2]), colour=discord.Colour.dark_blue())
+    embed.set_author(name=killbot.user.name, icon_url=killbot.user.avatar_url)
+    embed.set_thumbnail(url="https://imageserver.eveonline.com/Character/{}_128.jpg".format(eid))
+    embed.add_field(name="Corporation", value=corpName, inline=True)
+    if inf[3] is not None:
+        allyName = await kb.esiName(inf[3], 'ent')
+        embed.add_field(name="Alliance", value=allyName, inline=True)
+    embed.add_field(name="Birthdate", value=inf[1], inline=False)
+    embed.add_field(name="Additional Information", value=kbUrl+"\n"+ewUrl, inline= False)
+
+    return await killbot.send_message(ctx.message.channel, embed=embed)
+
+# Subcommand for Corp info
+@info.command(name="corporation", aliases=['corp', 'co'], pass_context=True)
+async def corporation(ctx, *, corp: str):
+    """ Returns public info for a corp from ESI """
+    eid = await esinfo.esiID(corp, 'corp')
+    if eid == '0':
+        return await killbot.say("Corporation not found, please check your spelling and try again.")
+
+    inf = await esinfo.esiCorp(eid)
+
+    zkb = "https://zkillboard.com/corporation/{}/".format(eid)
+    dotlan = "https://evemaps.dotlan.net/corp/{}".format(eid)
+
+    ceo = await kb.esiName(inf[3], 'char')
+
+    embed = discord.Embed(title="{} Corporation Info".format(inf[0]), colour=discord.Colour.green())
+    embed.set_author(name=killbot.user.name, icon_url=killbot.user.avatar_url)
+    embed.set_thumbnail(url="https://imageserver.eveonline.com/Corporation/{}_128.png".format(eid))
+    embed.add_field(name="Ticker", value='[{}]'.format(inf[1]), inline=True)
+    embed.add_field(name="Member Count", value=inf[2], inline=True)
+    embed.add_field(name="Founded", value=inf[4], inline=True)
+    if inf[5] is not None:
+        allyName = await kb.esiName(inf[5], 'ent')
+        embed.add_field(name="Alliance", value=allyName, inline=True)
+
+    if inf[6] is not None:
+        embed.add_field(name="Website", value=inf[6], inline=False)
+    embed.add_field(name="Additional Info", value=zkb+"\n"+dotlan, inline=False)
+
+    return await killbot.send_message(ctx.message.channel, embed=embed)
 
 #----------------------------------------------------------------------
 # Price Check command
