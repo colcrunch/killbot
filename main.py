@@ -179,7 +179,7 @@ async def corporation(ctx, *, corp: str):
     embed.set_thumbnail(url="https://imageserver.eveonline.com/Corporation/{}_128.png".format(eid))
     embed.add_field(name="Ticker", value='[{}]'.format(inf[1]), inline=True)
     embed.add_field(name="Member Count", value=inf[2], inline=True)
-    embed.add_field(name="CEO", value=inf[3], inline=True)
+    embed.add_field(name="CEO", value=ceo, inline=True)
     embed.add_field(name="Founded", value=inf[4], inline=True)
     if inf[5] is not None:
         allyName = await kb.esiName(inf[5], 'ent')
