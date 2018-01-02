@@ -5,6 +5,7 @@ import config
 import sqlite3
 import urllib
 import kb
+import re
 
 import aiohttp
 import async_timeout
@@ -76,3 +77,6 @@ async def esiAlly(eid):
     founded = resp['date_founded']
     inf = [name, ticker, exe, founded]
     return inf
+
+async def unWebp(url):
+    return re.sub(r'(.webp)', '.png', url)

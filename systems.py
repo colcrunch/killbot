@@ -19,11 +19,12 @@ async def getID(system):
     t = c.fetchone()
     print(t)
     c.close()
-    global systemID
     if t is None:
         systemID = None
     else:
         systemID = str(t[0])
+
+    return systemID
 
 async def getStats(systemID):
     if config.system_cmd.lower() == "db":
@@ -39,7 +40,6 @@ async def getStats(systemID):
         c.execute('SELECT jumps FROM jumps WHERE system = ? ORDER BY id DESC LIMIT 24',s)
         jumps = c.fetchall()
         conn.close()
-        global stats
         if ship_kills == None or pod_kills == None or npc_kills == None or jumps == None :
             stats = None
         else:
@@ -48,6 +48,7 @@ async def getStats(systemID):
             pod24 = await sumFetch(pod_kills)
             jumps24 = await sumFetch(jumps)
             stats = [kills24, npc24, pod24, jumps24]
+        return stats
 
     elif config.system_cmd.lower() == "esi":
         urlk = "https://esi.tech.ccp.is/latest/universe/system_kills/?datasource=tranquility"
@@ -73,3 +74,4 @@ async def getStats(systemID):
 
         stats = [ship_kills[0],npc_kills[0],pod_kills[0],jumps[0]]
         await systemp.clear()
+        return stats

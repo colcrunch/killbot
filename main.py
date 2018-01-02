@@ -67,8 +67,8 @@ async def botStats(ctx):
     uptime = now - start_time
 
     embed = discord.Embed(title="Bot Statistics", colour=discord.Colour.green())
-    embed.set_author(name=killbot.user.name, icon_url=killbot.user.avatar_url)
-    embed.set_thumbnail(url=killbot.user.avatar_url)
+    embed.set_author(name=killbot.user.name, icon_url=await esinfo.unWebp(killbot.user.avatar_url))
+    embed.set_thumbnail(url=await esinfo.unWebp(killbot.user.avatar_url))
     embed.add_field(name="Servers", value=len(servers),inline=True)
     embed.add_field(name="Uptime", value=await strftdelta(uptime), inline=True)
     embed.add_field(name="Killmails Processed", value=counter, inline=False)
@@ -107,13 +107,13 @@ async def time():
 @killbot.command(aliases = ['t'])
 async def threat(*, char: str):
     """ Gets stats for a character from zKill"""
-    await kb.getID(char)
-    if kb.cid == "0":
+    cid = await esinfo.esiID(char, 'char')
+    if cid == "0":
         return await killbot.say("Character not found. Please check your spelling and try again.")
     else:
-        await kb.get_stats()
+        stats = await kb.get_stats(cid)
 
-    return await killbot.say(":alien: "+char+" \n\n :skull_crossbones: "+str(kb.stats[0])+"  :children_crossing:"+str(kb.stats[1])+" :knife: "+str(kb.stats[2])+" :calendar:"+str(kb.stats[3])+"\n\n\n :bookmark: "+kb.kburl)
+    return await killbot.say(":alien: "+char+" \n\n :skull_crossbones: "+str(stats[0])+"  :children_crossing:"+str(stats[1])+" :knife: "+str(stats[2])+" :calendar:"+str(stats[3])+"\n\n\n :bookmark: "+stats[4])
 
 @threat.error
 async def threat_error(error, ctx):
@@ -147,8 +147,8 @@ async def character(ctx, *, char: str):
     kbUrl = "https://zkillboard.com/character/{}/".format(eid)
     ewUrl = "https://evewho.com/pilot/{}".format(urlChar)
 
-    embed = discord.Embed(title="{} Character Info".format(inf[2]), colour=discord.Colour.dark_blue())
-    embed.set_author(name=killbot.user.name, icon_url=killbot.user.avatar_url)
+    embed = discord.Embed(title="{} Character Info".format(inf[2]),description="‌‌ ", colour=discord.Colour.dark_blue())
+    embed.set_author(name=killbot.user.name, icon_url=await esinfo.unWebp(killbot.user.avatar_url))
     embed.set_thumbnail(url="https://imageserver.eveonline.com/Character/{}_128.jpg".format(eid))
     embed.add_field(name="Corporation", value=corpName, inline=True)
     if inf[3] is not None:
@@ -174,8 +174,8 @@ async def corporation(ctx, *, corp: str):
 
     ceo = await kb.esiName(inf[3], 'char')
 
-    embed = discord.Embed(title="{} Corporation Info".format(inf[0]), colour=discord.Colour.green())
-    embed.set_author(name=killbot.user.name, icon_url=killbot.user.avatar_url)
+    embed = discord.Embed(title="{} Corporation Info".format(inf[0]),description="‌‌ ", colour=discord.Colour.green())
+    embed.set_author(name=killbot.user.name, icon_url=await esinfo.unWebp(killbot.user.avatar_url))
     embed.set_thumbnail(url="https://imageserver.eveonline.com/Corporation/{}_128.png".format(eid))
     embed.add_field(name="Ticker", value='[{}]'.format(inf[1]), inline=True)
     embed.add_field(name="Member Count", value=inf[2], inline=True)
@@ -200,10 +200,13 @@ async def alliance(ctx, *, ally: str):
 
     inf = await esinfo.esiAlly(eid)
 
+    zkb = "https://zkillboard.com/alliance/{}/".format(eid)
+    dotlan = "https://evemaps.dotlan.net/alliance/{}".format(eid)
+
     exe = await kb.esiName(inf[2], 'ent')
 
-    embed = discord.Embed(title="{} Alliance Info".format(inf[0]), colour=discord.Colour.blue())
-    embed.set_author(name=killbot.user.name, icon_url=killbot.user.avatar_url)
+    embed = discord.Embed(title="{} Alliance Info".format(inf[0]), description="‌‌ ", colour=discord.Colour.blue())
+    embed.set_author(name=killbot.user.name, icon_url=await esinfo.unWebp(killbot.user.avatar_url))
     embed.set_thumbnail(url="https://imageserver.eveonline.com/Alliance/{}_128.png".format(eid))
     embed.add_field(name="Ticker", value=inf[1], inline=True)
     embed.add_field(name="Exec Corp", value=exe, inline=True)
@@ -238,13 +241,14 @@ async def flats(item, region_name):
     if regionID is "None":
         return await killbot.say("Region not found. Please check your spelling and try again.")
     else:
-        await market.getPrices(itemID, regionID)
+        info = await market.getPrices(itemID, regionID)
 
-    priceinfo = market.priceinfo
+    priceinfo = info[0]
+    avgs = info[1]
     plex_msg = ""
     if item.lower() == "plex":
-        buy_avg = str('{:,}'.format(market.avgs[0]*500))
-        sell_avg = str('{:,}'.format(market.avgs[1]*500))
+        buy_avg = str('{:,}'.format(avgs[0]*500))
+        sell_avg = str('{:,}'.format(avgs[1]*500))
         plexinfo = [buy_avg, sell_avg]
         plex_msg = "**Monthly Sub Cost**  \n ***Sell Avg:*** "+plexinfo[1]+"   ***Buy Avg:*** "+plexinfo[0]+"\n\n "
 
@@ -254,7 +258,6 @@ async def flats(item, region_name):
 @killbot.group(aliases = ['pc'], pass_context=True)
 async def price_check(ctx, *item):
     """ Checks prices for specified items in a specified region. (Default: The Forge) """
-    global item_price
 
     item = list(item)
     if prefix+'r' in item:
@@ -324,14 +327,12 @@ async def system(*, sys: str):
 
     if re.match(r'[Jj]([0-9]{6})', sys) is not None or sys == "Thera":
         return await killbot.say("Data not available for Wormhole systems.")
-    await systems.getID(sys)
-    sID = systems.systemID
+    sysid = await systems.getID(sys)
     if sID == None :
         return await killbot.say("System Not Found! Please check your spelling and try again!")
     else:
-        await systems.getStats(sID)
+        stats = await systems.getStats(sID)
 
-    stats = systems.stats
     if stats == None :
         logger.error("Stats not found! Please make sure the bot is configured properly. (DB vs ESI pulls)")
         return await killbot.say("Stats not found! Please make sure the bot is configured properly.")

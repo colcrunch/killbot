@@ -109,20 +109,7 @@ async def esiName(nID, rl):
     name = n[nm]
     return name
 
-
-async def getID(char):
-    urlchar = urllib.parse.quote_plus(char)
-    async with aiohttp.ClientSession() as session:
-        json = await fetch(session, "https://esi.tech.ccp.is/latest/search/?categories=character&datasource=tranquility&language=en-us&search="+urlchar+"&strict=true")
-        print(json)
-    global cid
-    if 'character' in json:
-        idlist = json['character']
-        cid = str(idlist[0])
-    else:
-        cid = "0"
-
-async def get_stats():
+async def get_stats(cid):
     time = datetime.datetime.utcnow()
     top = time.strftime("%Y%m")
     async with aiohttp.ClientSession() as session:
@@ -150,7 +137,6 @@ async def get_stats():
             kills_mo = "No Kills Yet"
     else:
         kills_mo = "No Kills Yet"
-    global stats
-    stats = [danger, gang, kills_all, kills_mo]
-    global kburl
     kburl = ("http://zkillboard.com/character/"+cid)
+    stats = [danger, gang, kills_all, kills_mo, kburl]
+    return stats
