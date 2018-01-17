@@ -4,6 +4,10 @@ BOT_TOKEN = ""
 #The symbol to be used before a command is entered
 PREFIX = "]"
 
+#Header Information
+APP = "killbot"
+CONTACT = ""
+
 #What do you want the bot's "Playing" message to be? Limit: 12 Chars including spaces
 msg = ""
 

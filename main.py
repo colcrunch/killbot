@@ -20,6 +20,8 @@ import re
 import urllib
 
 counter = 0
+kcounter = 0
+lcounter = 0
 start_time = datetime.datetime.utcnow()
 
 logger = logging.getLogger('discord')
@@ -52,8 +54,30 @@ async def  ping():
     return await killbot.say("Pong!")
 
 #---------------------------------------------------------------------
+#   About Command
+#   Displays general information about the bot.
+#---------------------------------------------------------------------
+@killbot.command(aliases=['a'], pass_context=True)
+async def about(ctx):
+    """Displays general information about the bot."""
+    info = await killbot.application_info()
+    owner = "{0}#{1}".format(info.owner.name, info.owner.discriminator)
+    link = "https://github.com/colcrunch/killbot"
+    about = ("Killbot is a general use discord bot for use with EVE Online."
+    "The aim of Killbot is to make it easy to get public info from the game and"
+    "to easily monitor zkillboard for kills that are interesting to you.")
+
+    embed = discord.Embed(title="About {}".format(killbot.user.name), description=about)
+    embed.set_author(name=killbot.user.name, icon_url=await esinfo.unWebp(killbot.user.avatar_url))
+    embed.set_thumbnail(url=await esinfo.unWebp(killbot.user.avatar_url))
+    embed.add_field(name="Bot Owner", value=owner, inline=False)
+    embed.add_field(name="GitHub", value=link, inline=False)
+
+    return await killbot.send_message(ctx.message.channel, embed=embed)
+
+#---------------------------------------------------------------------
 #   Bot Stats Command
-#   Displays various statistics about the currnet bot.
+#   Displays various statistics about the current bot.
 #---------------------------------------------------------------------
 @killbot.command(aliases=['bs'], pass_context=True)
 async def botStats(ctx):
@@ -71,7 +95,8 @@ async def botStats(ctx):
     embed.set_thumbnail(url=await esinfo.unWebp(killbot.user.avatar_url))
     embed.add_field(name="Servers", value=len(servers),inline=True)
     embed.add_field(name="Uptime", value=await strftdelta(uptime), inline=True)
-    embed.add_field(name="Killmails Processed", value=counter, inline=False)
+    embed.add_field(name="Killmails Processed", value=counter, inline=True)
+    embed.add_field(name="Posted", value="**Kills:** {0} \n**Losses:** {1} \n**Total:** {2}".format(kcounter, lcounter, (kcounter+lcounter)), inline=True)
 
     return await killbot.send_message(ctx.message.channel, embed=embed)
 
@@ -356,6 +381,8 @@ async def watch_redisq(chid, watchids):
     logger.info(" Killboard watching started")
     wids = config.watchids
     global counter
+    global kcounter
+    global lcounter
     await killbot.wait_until_ready()
     channel = discord.Object(id=chid)
     try:
@@ -382,18 +409,21 @@ async def watch_redisq(chid, watchids):
                         logger.info("Watching Attacker in "+killID)
                         embed = await kb.buildMsg(kills)
                         await killbot.send_message(channel, content=message, embed=embed)
+                        kcounter += 1
                         break
                     elif 'corporation_id' in attacker and str(attacker['corporation_id']) in wids['corps']:
                         print("Watching Attacker in "+killID)
                         logger.info("Watching Attacker in "+killID)
                         embed = await kb.buildMsg(kills)
                         await killbot.send_message(channel, content=message, embed=embed)
+                        kcounter += 1
                         break
                     elif 'character' in attacker and str(attacker['character_id']) in wids['characters']:
                         print("Watching Attacker in "+killID)
                         logger.info("Watching Attacker in "+killID)
                         embed = await kb.buildMsg(kills)
                         await killbot.send_message(channel, content=message, embed=embed)
+                        kcounter += 1
                         break
                     else:
                         vic += 1
@@ -404,21 +434,25 @@ async def watch_redisq(chid, watchids):
                     logger.info("Watching Victim in "+killID)
                     embed = await kb.buildMsg(kills)
                     await killbot.send_message(channel, content=message, embed=embed)
+                    lcounter += 1
                 elif vic == attacks and 'corporation_id' in victim and str(victim['corporation_id']) in wids['corps']:
                     print("Watching Victim in "+killID)
                     logger.info("Watching Victim in "+killID)
                     embed = await kb.buildMsg(kills)
                     await killbot.send_message(channel, content=message, embed=embed)
+                    lcounter += 1
                 elif vic == attacks and 'character_id' in victim and str(victim['character_id']) in wids['characters']:
                     print("Watching Victim in "+killID)
                     logger.info("Watching Victim in "+killID)
                     embed = await kb.buildMsg(kills)
                     await killbot.send_message(channel, content=message, embed=embed)
+                    lcounter += 1
                 elif vic == attacks and str(victim['ship_type_id']) in wids['shipTypes']:
                     print("Watching Ship Loss in "+killID)
                     logger.info("Watching Victim in "+killID)
                     embed = await kb.buildMsg(kills)
                     await killbot.send_message(channel, content=message, embed=embed)
+                    lcounter += 1
                 else:
                     pass
             else:

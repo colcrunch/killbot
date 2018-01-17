@@ -12,7 +12,7 @@ import discord
 from discord.ext.commands import Bot
 
 async def fetch(session, url):
-    headers = {'user-agent': 'application: https://github.com/colcrunch/killbot contact: rhartnett35@gmail.com','content-type': 'application/json'}
+    headers = {'user-agent': 'application: {0} contact: {1}'.format(config.APP, config.CONTACT),'content-type': 'application/json'}
     with async_timeout.timeout(15):
         async with session.get(url, headers=headers) as response:
             return await response.json()

@@ -16,7 +16,7 @@ print(len(sysids))
 conn.close()
 
 urlk = "https://esi.tech.ccp.is/latest/universe/system_kills/?datasource=tranquility"
-headers = {'user-agent': 'application: https://github.com/colcrunch/killbot contact: rhartnett35@gmail.com','content-type': 'application/json'}
+headers = {'user-agent': 'application: {0} contact: {1}'.format(config.APP, config.CONTACT),'content-type': 'application/json'}
 r = requests.get(urlk, headers=headers)
 kills = r.json()
 conn = sqlite3.connect('systems.sqlite')
