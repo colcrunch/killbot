@@ -1,0 +1,20 @@
+# Killbot Config
+#
+#
+#
+# --------------
+
+#--------------------------
+# Addons
+addons = []
+
+#--------------------------
+
+# Your bot token
+token = ''
+
+# The symbol that you would like to use as the prefix for commands.
+prefix = '/'
+
+# The message to display as the bot's "Playing" status on start up.
+msg = ''
