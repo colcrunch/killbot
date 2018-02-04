@@ -1,14 +1,15 @@
 from bot import killbot
 import sys
 import utils.sdeutils as sde
-import os
+import shutil
+
 
 def main():
     bot = killbot()
     killbot.run(bot)
 
-def setup():
-    print('Only use this command on first install.')
+
+def update():
     print('Downloading latest SDE... \n'
           'This might take a few mins.')
     file = sde.getfile('https://www.fuzzwork.co.uk/dump/sqlite-latest.sqlite.bz2')
@@ -21,23 +22,35 @@ def setup():
         extract = sde.extract(file)
         if extract == True:
             print('Files Extracted.')
-            print('Ensuring SDE file name is correct.')
-
+            print('Moving SDE files.')
+            mv = sde.move()
+            if mv == True:
+                print('SDE Download complete.')
         else:
             print('Something went wrong when extracting the file.')
-            return print('Set Up Failed.')
+            return print('SDE Update Failed.')
 
-def test():
-    print(os.getcwd())
-    return
+
+def setup():
+    print('Only run this set up command once! '
+          'Running it after configuring your bot will likely cause issues with your config file.')
+    # First get the SDE... we can use the update() function above for this.
+    update()
+
+    # Now we will copy the config file for editing.
+    shutil.copy('utils/config.py.example', 'utils/config.py')
+    return print('Bot ready for configuration.')
+
 
 if __name__ == '__main__':
-    if sys.argv[1] == None:
+    if len(sys.argv) == 1:
         main()
     elif sys.argv[1] == 'setup':
         setup()
     elif sys.argv[1] == 'test':
         test()
+    elif sys.argv[1] == 'update':
+        update()
     else:
         print(sys.argv[1]+' is not a valid argument. Starting bot.')
         main()

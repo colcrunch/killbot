@@ -19,6 +19,7 @@ def extract(file):
             newfile.write(decompressor.decompress(data))
     return True
 
-def rename():
-    mv = shutil.move('sqlite-latest.sqlite', '../db/sde.sqlite')
-    return mv
+def move():
+    os.remove('sqlite-latest.sqlite.bz2')
+    mv = shutil.move('sde.sqlite', 'db/sde.sqlite')
+    return True

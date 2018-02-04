@@ -4,7 +4,7 @@ from utils import config
 
 class killbot(commands.Bot):
     def __init__(self, *args, **kwargs):
-        self.token  = config.token
+        self.token = config.token
         self.prefix = config.prefix
         self.playing = config.msg
         self.description = 'Killbot is a bot written in py3 for general use with EVE Online.'
@@ -22,12 +22,13 @@ class killbot(commands.Bot):
         for addon in self.addons:
             try:
                 self.load_extension(f'extensions.{addon}')
-            except:
+            except Exception as e:
+                # TODO: Log exception when we actually do logging.
                 print(f'{addon} FAIL')
             else:
                 print(f'{addon} Loaded')
 
-        print('Logged In')
+        print('\nLogged In')
         print(self.user.name)
         print(self.user.id)
         print('------------')
