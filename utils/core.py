@@ -1,5 +1,6 @@
 from utils.importsfile import *
 
+# Cause strftime, or the timelibrary in general does not have a real way to deal with time delta objects.
 def strftdelta(tdelta):
     d = dict(days=tdelta.days)
     d['hrs'], rem = divmod(tdelta.seconds, 3600)
@@ -15,3 +16,11 @@ def strftdelta(tdelta):
         fmt = '{days} day(s) {hrs} hr(s) {min} min {sec} sec'
 
     return fmt.format(**d)
+
+
+async def get_json(session, url):
+    headers = {'user-agent': 'application: {0} contact: {1}'.format(config.app, config.contact),
+               'content-type': 'application/json'}
+    with async_timeout.timeout(15):
+        async with session.get(url, headers=headers) as response:
+            return await response.json()

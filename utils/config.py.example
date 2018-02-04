@@ -18,3 +18,9 @@ prefix = '/'
 
 # The message to display as the bot's "Playing" status on start up.
 msg = ''
+
+# Application and Contact info in case CCP or zKill need to contact you.
+# Should be the name of the bot and/or a link to code on github if you have made modifications.
+app = ''
+# Either an email address or your main character in eve. (and/or tweetfleet slack account information)
+contact = ''
