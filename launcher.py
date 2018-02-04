@@ -42,6 +42,9 @@ def setup():
     return print('Bot ready for configuration.')
 
 
+def test():
+    pass
+
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         main()
