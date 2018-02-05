@@ -10,7 +10,7 @@ class AdminCommands:
     async def ping(self, ctx):
         return await ctx.send('PONG!')
 
-    @commands.command(hidden=True)
+    @commands.command(aliases=['ul'], hidden=True)
     @commands.is_owner()
     async def unload(self, ctx, ext):
         """ Unload an extension. """
@@ -26,8 +26,7 @@ class AdminCommands:
         except Exception as e:
             return print(e)
 
-
-    @commands.command(hidden=True)
+    @commands.command(aliases=['l'], hidden=True)
     @commands.is_owner()
     async def load(self, ctx, ext):
         """Load an Extension. """
@@ -43,8 +42,7 @@ class AdminCommands:
         except Exception as e:
             return print(e)
 
-
-    @commands.command(hidden=True)
+    @commands.command(aliases=['rl'],hidden=True)
     @commands.is_owner()
     async def reload(self, ctx, ext):
         """ Reload an extension. """

@@ -47,7 +47,7 @@ class BotCommands:
 
         return await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['et'])
     async def evetime(self, ctx):
         """ Returns the current EVE (UTC) time. """
         return await ctx.send(f'The current EVE (UTC) time is: **{datetime.datetime.utcnow().strftime("%H:%M")}**')

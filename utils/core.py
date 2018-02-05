@@ -1,7 +1,7 @@
 from utils.importsfile import *
 import async_timeout
 
-# Cause strftime, or the timelibrary in general does not have a real way to deal with time delta objects.
+# Cause strftime, or the time library in general does not have a real way to deal with time delta objects.
 def strftdelta(tdelta):
     d = dict(days=tdelta.days)
     print(str(tdelta))

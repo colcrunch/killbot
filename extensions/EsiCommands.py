@@ -6,7 +6,7 @@ class EsiCommands:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(aliases=['co'])
     async def corp(self, ctx, *, corp: str):
         """ Displays public information about a corporation."""
         eid = await esi.get_id(corp, 'corp')
@@ -35,7 +35,7 @@ class EsiCommands:
 
             return await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['a'])
     async def ally(self, ctx, *, ally: str):
         """ Displays public information for an alliance."""
         eid = await esi.get_id(ally, 'ally')
@@ -63,7 +63,7 @@ class EsiCommands:
             embed.add_field(name='Additional Information', value=f'{urls["zkb"]}\n{urls["dotlan"]}', inline=False)
             return await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['ch'])
     async def char(self, ctx, *, char: str):
         eid = await esi.get_id(char, 'char')
         if eid is None:
