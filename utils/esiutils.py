@@ -90,3 +90,14 @@ async def esi_ally(eid):
     }
 
     return inf
+
+
+async def esi_status():
+    url = "https://esi.tech.ccp.is/latest/status/?datasource=tranquility"
+    async with aiohttp.ClientSession() as session:
+        resp = await get(session, url)
+    if 'players' in resp:
+        return resp['players']
+    else:
+        return None
+

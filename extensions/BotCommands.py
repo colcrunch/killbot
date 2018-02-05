@@ -47,6 +47,11 @@ class BotCommands:
 
         return await ctx.send(embed=embed)
 
+    @commands.command()
+    async def evetime(self, ctx):
+        """ Returns the current EVE (UTC) time. """
+        return await ctx.send(f'The current EVE (UTC) time is: **{datetime.datetime.utcnow().strftime("%H:%M")}**')
+
 
 def setup(killbot):
     killbot.add_cog(BotCommands(killbot))

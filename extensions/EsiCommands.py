@@ -92,6 +92,14 @@ class EsiCommands:
 
             return await ctx.send(embed=embed)
 
+    @commands.command()
+    async def status(self, ctx):
+        players = await esi.esi_status()
+        if players is None:
+            return await ctx.send("Tranquility is currently **OFFLINE**.")
+        else:
+            return await ctx.send(f'Tranquility is currently **ONLINE** with {str("{:,}".format(players))} players.')
+
 
 def setup(killbot):
     killbot.add_cog(EsiCommands(killbot))
