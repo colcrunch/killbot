@@ -1,6 +1,7 @@
 from utils.importsfile import *
 from pathlib import Path as path
 
+
 class AdminCommands:
     def __init__(self, bot):
         self.bot = bot
@@ -42,7 +43,7 @@ class AdminCommands:
         except Exception as e:
             return print(e)
 
-    @commands.command(aliases=['rl'],hidden=True)
+    @commands.command(aliases=['rl'], hidden=True)
     @commands.is_owner()
     async def reload(self, ctx, ext):
         """ Reload an extension. """
@@ -60,8 +61,27 @@ class AdminCommands:
         except Exception as e:
             print(e)
 
+    @commands.command(aliases=['pr'], hidden=True)
+    @commands.is_owner()
+    async def presence(self, ctx, state, *, pres: str):
+        """ Sets bot presence. """
+        statuses = {'online': discord.Status.online,
+                    'dnd': discord.Status.dnd,
+                    'idle': discord.Status.idle,
+                    'offline': discord.Status.offline,
+                    'invisible': discord.Status.invisible}
+
+        game = discord.Game(name=pres)
+        if state in statuses:
+            status = statuses[state]
+            return await self.bot.change_presence(status=status, game=game)
+        elif state not in statuses or state is None:
+            return await self.bot.change_presence(game=game)
+
+
 def setup(killbot):
     killbot.add_cog(AdminCommands(killbot))
+
 
 def teardown(killbot):
     killbot.remove_cog(AdminCommands)

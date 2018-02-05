@@ -2,6 +2,8 @@ from bot import killbot
 import sys
 import utils.sdeutils as sde
 import shutil
+import discord
+from utils.config import msg
 
 
 def main():

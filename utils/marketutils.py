@@ -2,10 +2,14 @@ from utils.importsfile import *
 
 
 async def get_price(item, region):
-    url = f'http://api.evemarketer.com/ec/marketstat/json?typeid={item}&regionlimit={region}'
+    if region is None:
+        url = f'http://api.evemarketer.com/ec/marketstat/json?typeid={item}'
+    else:
+        url = f'http://api.evemarketer.com/ec/marketstat/json?typeid={item}&regionlimit={region}'
 
     async with aiohttp.ClientSession() as session:
         resp = await core.get_json(session, url)
+
     respi = dict(resp[0])
     sell = respi['sell']
     buy = respi['buy']

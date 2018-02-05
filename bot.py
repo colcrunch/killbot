@@ -28,6 +28,7 @@ class killbot(commands.Bot):
             else:
                 print(f'{addon} Loaded')
 
+        await self.change_presence(game=discord.Game(name=self.playing))
         print('\nLogged In')
         print(self.user.name)
         print(self.user.id)
