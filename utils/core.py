@@ -1,8 +1,10 @@
 from utils.importsfile import *
+import async_timeout
 
 # Cause strftime, or the timelibrary in general does not have a real way to deal with time delta objects.
 def strftdelta(tdelta):
     d = dict(days=tdelta.days)
+    print(str(tdelta))
     d['hrs'], rem = divmod(tdelta.seconds, 3600)
     d['min'], d['sec'] = divmod(rem, 60)
 

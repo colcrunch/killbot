@@ -50,3 +50,7 @@ class BotCommands:
 
 def setup(killbot):
     killbot.add_cog(BotCommands(killbot))
+
+
+def teardown(killbot):
+    killbot.remove_cog(BotCommands)
