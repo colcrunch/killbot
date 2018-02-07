@@ -6,15 +6,21 @@ class LinkListener:
     def __init__(self, bot):
         self.bot = bot
 
+    def passed(self, check):
+        message = msg
+        return check.id == message.id
 
     async def on_message(self, message):
         match = re.match(r'http[s]?://([A-Za-z]*).[a-zA-z/]*([0-9]*)[a-zA-Z/]?', message.content)
         channel = message.channel
+        global msg
+        msg = message
         if match:
             if match[1] == 'evemarketer':
                 typeid = match[2]
                 item = sdeutils.type_name(typeid)
                 info = await marketutils.get_price(typeid, None)
+                content = f'{message.author.mention} shared {message.content}'
 
                 embed = discord.Embed(title=f'{item} Market Information')
                 embed.set_author(name='EveMarketer', icon_url='https://evemarketer.com/static/img/logo_32.png',
@@ -37,9 +43,9 @@ class LinkListener:
                 else:
                     embed.add_field(name='Sell Avg', value=info['bAvg'], inline=True)
 
-                #await message.edit(content=f'<{match}>')
+                await channel.purge(check=self.passed)
 
-                return await channel.send(embed=embed)
+                return await channel.send(content=content, embed=embed)
             else:
                 return
 
