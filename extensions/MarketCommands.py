@@ -12,9 +12,13 @@ class MarketCommands:
         item_id = sdeutils.type_id(item)
 
         if region_id is None:
-            return await ctx.send('Region not found.')
+            region_id = await esiutils.get_id(region, 'region')
+            if region_id is None:
+                return await ctx.send('Region not found.')
         if item_id is None:
-            return await ctx.send('Item not found.')
+            item_id = await esiutils.get_id(item, 'itype')
+            if item_id is None:
+                return await ctx.send('Item not found.')
 
         info = await market.get_price(item_id, region_id)
 

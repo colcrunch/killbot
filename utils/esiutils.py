@@ -6,8 +6,16 @@ async def get_id(name, ref):
     urlName = urllib.parse.quote_plus(name)
     defs = {'ally': 'alliance',
             'corp': 'corporation',
-            'char': 'character'}
-    url = f'https://esi.tech.ccp.is/v2/search/?categories={defs[ref]}&datasource=tranquility&search={urlName}&strict=true'
+            'char': 'character',
+            'itype': 'inventory_type',
+            'solsystem': 'solar_system',
+            'region': 'region',
+            'faction': 'faction',
+            'agent': 'agent',
+            'con': 'constellation',
+            'station': 'station'}
+    url = f'https://esi.tech.ccp.is/v2/search/?categories={defs[ref]}&datasource=tranquility&search={urlName}' \
+          f'&strict=true'
 
     async with aiohttp.ClientSession() as session:
         resp = await get(session, url)

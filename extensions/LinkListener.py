@@ -11,13 +11,22 @@ class LinkListener:
         return check.id == message.id
 
     async def on_message(self, message):
-        match = re.match(r'http[s]?://([A-Za-z]*).[a-zA-z/]*([0-9]*)[a-zA-Z/]?', message.content)
+        match = re.match(r'(.*)(http[s]?://([A-Za-z]*).[a-zA-z/]*([0-9]*)[a-zA-Z/]?)', message.content)
+        """
+         Match Groups:
+         Group 1 (match[1]): anything preceding the link.
+         Group 2 (match[2]): The link in its entirety
+         Group 3 (match[3]): The domain of the URL. This is how we determine if/how to process it.
+         Group 4 (match[4]): The ID we will need for processing. We know that all the services we want to process use 
+                             only numeric IDs, so this is fine. (Though probably not the best if we wanted to add 
+                             dscan.me support or something.
+        """
         channel = message.channel
         global msg
         msg = message
-        if match:
-            if match[1] == 'evemarketer':
-                typeid = match[2]
+        if match and (message.author != self.bot.user):
+            if match[3] == 'evemarketer':
+                typeid = match[4]
                 item = sdeutils.type_name(typeid)
                 info = await marketutils.get_price(typeid, None)
                 content = f'{message.author.mention} shared {message.content}'
@@ -41,11 +50,13 @@ class LinkListener:
                     embed.add_field(name='Monthly Sub Buy Avg', value='{:,}'.format(round(info['plex'][1] * 500, 2)),
                                     inline=True)
                 else:
-                    embed.add_field(name='Sell Avg', value=info['bAvg'], inline=True)
+                    embed.add_field(name='Buy Avg', value=info['bAvg'], inline=True)
+                if match[1] is not '':
+                    return await channel.send(embed=embed)
+                else:
+                    await channel.purge(check=self.passed)
 
-                await channel.purge(check=self.passed)
-
-                return await channel.send(content=content, embed=embed)
+                    return await channel.send(content=content, embed=embed)
             else:
                 return
 
