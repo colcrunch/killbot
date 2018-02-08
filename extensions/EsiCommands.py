@@ -27,7 +27,8 @@ class EsiCommands:
             embed.add_field(name='Ticker', value=f'[{inf["ticker"]}]', inline=True)
             embed.add_field(name='Member Count', value=f'{inf["member"]}', inline=True)
             embed.add_field(name='CEO', value=f'{ceo["name"]}', inline=True)
-            embed.add_field(name='Founded', value=inf["dob"].strftime("%a %d %b, %Y"), inline=True)
+            if inf['dob'] is not None:
+                embed.add_field(name='Founded', value=inf["dob"].strftime("%a %d %b, %Y"), inline=True)
             if inf['ally'] is not None:
                 ally = await esi.esi_ally(inf['ally'])
                 embed.add_field(name='Alliance', value=f'{ally["name"]} [{ally["ticker"]}]', inline=False)
