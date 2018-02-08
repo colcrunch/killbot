@@ -11,7 +11,7 @@ class LinkListener:
         return check.id == message.id
 
     async def on_message(self, message):
-        match = re.match(r'(.*)(http[s]?://([A-Za-z]*).[a-zA-z]*(/[a-zA-z]*/)?([0-9]*)[a-zA-Z/]?)', message.content)
+        match = re.match(r'(.*)(http[s]?://([A-Za-z]*).[a-zA-z]*(/[a-zA-z]*/?)([0-9]*)[a-zA-Z/]?)', message.content)
         """
          Match Groups:
          Group 1 (match[1]): anything preceding the link.
@@ -65,7 +65,10 @@ class LinkListener:
                     content = f'{message.author.mention} shared {message.content}'
 
                     vic = km['victim']
-                    vicChar = await esiutils.esi_char(vic['character_id'])
+                    if 'character_id' not in vic:
+                        vicChar = None
+                    else:
+                        vicChar = await esiutils.esi_char(vic['character_id'])
                     vicShip = sdeutils.type_name(vic['ship_type_id'])
                     vicCorp = await esiutils.esi_corp(vic['corporation_id'])
                     if 'alliance_id' in vic:
@@ -84,7 +87,13 @@ class LinkListener:
                                 attAlly = None
                             attShip = sdeutils.type_name(attacker['ship_type_id'])
 
-                    embed = discord.Embed(title=f'{vicChar["name"]}({vicCorp["name"]}) lost their {vicShip}',
+                    if vicChar is None:
+                        if vicAlly is None:
+                            embed = discord.Embed(title=f'{vicCorp["name"]} lost their {vicShip}')
+                        else:
+                            embed = discord.Embed(title=f'{vicCorp["name"]} ({vicAlly["name"]}) lost their {vicShip}')
+                    else:
+                        embed = discord.Embed(title=f'{vicChar["name"]} ({vicCorp["name"]}) lost their {vicShip}',
                                           timestamp=km['time'])
                     embed.set_author(name='zKillboard', icon_url='https://zkillboard.com/img/wreck.png',
                                      url=f'http://zkillboard.com/kill/{killid}/')

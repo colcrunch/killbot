@@ -60,8 +60,11 @@ async def esi_corp(eid):
         ally = resp['alliance_id']
     else:
         ally = None
-    dob = datetime.datetime.strptime(resp['date_founded'], '%Y-%m-%dT%H:%M:%SZ')
-    if resp['url'] == 'http://' or resp['url'] == '' or resp['url'] == 'https://':
+    if 'date_founded' in resp:
+        dob = datetime.datetime.strptime(resp['date_founded'], '%Y-%m-%dT%H:%M:%SZ')
+    else:
+        dob = None
+    if 'url' not in resp or resp['url'] == 'http://' or resp['url'] == '' or resp['url'] == 'https://':
         url = None
     else:
         url = resp['url']
