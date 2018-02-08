@@ -41,7 +41,7 @@ class EsiCommands:
         """ Displays public information for an alliance."""
         eid = await esi.get_id(ally, 'ally')
         if eid is None:
-            return ctx.send('Alliance not found, please check your spelling and try again.')
+            return await ctx.send('Alliance not found, please check your spelling and try again.')
         else:
             inf = await esi.esi_ally(eid)
             ecorp = await esi.esi_corp(inf['exec'])

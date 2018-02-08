@@ -39,7 +39,7 @@ class MarketCommands:
             embed.add_field(name='Buy Avg', value=info['bAvg'], inline=True)
             embed.add_field(name='Monthly Sub Buy Avg', value='{:,}'.format(round(info['plex'][1]*500, 2)), inline=True)
         else:
-            embed.add_field(name='Sell Avg', value=info['bAvg'], inline=True)
+            embed.add_field(name='Buy Avg', value=info['bAvg'], inline=True)
 
         return await ctx.send(embed=embed)
 
