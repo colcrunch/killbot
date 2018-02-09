@@ -103,14 +103,6 @@ async def build_threat(stats, char, cid):
     iskD = '{:,}'.format(stats['iskDestroyed'])
     iskL = '{:,}'.format(stats['iskLost'])
 
-    # If the character is too new/has no kills or losses, we wont be able to get much useful info from the api.
-    if all(value is None for value in stats.values()):
-        if 'extensions.EsiCommands' in self.bot.extensions:
-            return await ctx.send(f'This character has no killboard stats. Please use the `{config.prefix}char '
-                                  f'command` to display information on this character.')
-        else:
-            return await ctx.send('This character has no killboard stats.')
-
     embed = discord.Embed(title=f'{char["name"]} Threat Analysis')
     embed.set_author(name='zKillboard', url=f'http://zkillboard.com/character/{cid}/',
                      icon_url='http://zkillboard.com/img/wreck.png')

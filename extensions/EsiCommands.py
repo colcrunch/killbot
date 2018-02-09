@@ -76,7 +76,7 @@ class EsiCommands:
             urln = urllib.parse.quote_plus(inf['name'])
 
             urls = {
-                'zkb': f'https://zkillboards.com/character/{eid}/',
+                'zkb': f'https://zkillboard.com/character/{eid}/',
                 'who': f'https://evehwo.com/pilot/{urln}'
             }
 

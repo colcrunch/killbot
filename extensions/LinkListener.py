@@ -97,6 +97,14 @@ class LinkListener:
 
                     stats = await kbutils.get_stats(cid)
 
+                    if all(value is None for value in stats.values()):
+                        if 'extensions.EsiCommands' in self.bot.extensions:
+                            return await channel.send(
+                                f'This character has no killboard stats. Please use the `{config.prefix}char '
+                                f'command` to display information on this character.')
+                        else:
+                            return await channel.send('This character has no killboard stats.')
+
                     embed = await kbutils.build_threat(stats, char, cid)
 
                     return await channel.send(embed=embed)
