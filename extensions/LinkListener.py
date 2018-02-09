@@ -32,26 +32,8 @@ class LinkListener:
                 info = await marketutils.get_price(typeid, None)
                 content = f'{message.author.mention} shared {message.content}'
 
-                embed = discord.Embed(title=f'{item} Market Information')
-                embed.set_author(name='EveMarketer', icon_url='https://evemarketer.com/static/img/logo_32.png',
-                                 url=f'https://evemarketer.com/types/{typeid}')
-                embed.set_thumbnail(url=f'https://imageserver.eveonline.com/Type/{typeid}_64.png')
-                embed.add_field(name="Sell Min", value=info['sMin'], inline=True)
-                embed.add_field(name="Sell Max", value=info['sMax'], inline=True)
-                if item.lower() == 'plex':
-                    embed.add_field(name='Sell Avg', value=info['sAvg'], inline=True)
-                    embed.add_field(name='Monthly Sub Sell Avg', value='{:,}'.format(round(info['plex'][0] * 500, 2)),
-                                    inline=True)
-                else:
-                    embed.add_field(name='Sell Avg', value=info['sAvg'], inline=False)
-                embed.add_field(name='Buy Min', value=info['bMin'], inline=True)
-                embed.add_field(name='Buy Max', value=info['bMax'], inline=True)
-                if item.lower() == 'plex':
-                    embed.add_field(name='Buy Avg', value=info['bAvg'], inline=True)
-                    embed.add_field(name='Monthly Sub Buy Avg', value='{:,}'.format(round(info['plex'][1] * 500, 2)),
-                                    inline=True)
-                else:
-                    embed.add_field(name='Buy Avg', value=info['bAvg'], inline=True)
+                embed = await marketutils.build(info, item, typeid, None)
+
                 if match[1] is not '':
                     return await channel.send(embed=embed)
                 else:
@@ -87,25 +69,21 @@ class LinkListener:
                                 attAlly = None
                             attShip = sdeutils.type_name(attacker['ship_type_id'])
 
-                    if vicChar is None:
-                        if vicAlly is None:
-                            embed = discord.Embed(title=f'{vicCorp["name"]} lost their {vicShip}')
-                        else:
-                            embed = discord.Embed(title=f'{vicCorp["name"]} ({vicAlly["name"]}) lost their {vicShip}')
-                    else:
-                        embed = discord.Embed(title=f'{vicChar["name"]} ({vicCorp["name"]}) lost their {vicShip}',
-                                          timestamp=km['time'])
-                    embed.set_author(name='zKillboard', icon_url='https://zkillboard.com/img/wreck.png',
-                                     url=f'http://zkillboard.com/kill/{killid}/')
-                    embed.set_thumbnail(url=f'https://imageserver.eveonline.com/Type/{vic["ship_type_id"]}_64.png')
-                    embed.add_field(name='Final Blow', value=attChar['name'], inline=True)
-                    if attAlly is None:
-                        embed.add_field(name='Corp', value=f'{attCorp["name"]}', inline=True)
-                    else:
-                        embed.add_field(name='Corp', value=f'{attCorp["name"]}({attAlly["name"]})', inline=True)
-                    embed.add_field(name='Value', value=f'{km["value"]} ISK', inline=True)
-                    embed.add_field(name='Damage Taken', value=vicDam, inline=True)
-                    embed.add_field(name='System', value=loc, inline=False)
+                    dict_km = {'vicChar': vicChar,
+                               'vicShip': vicShip,
+                               'vicCorp': vicCorp,
+                               'vicAlly': vicAlly,
+                               'vicDam': vicDam,
+                               'time': km['time'],
+                               'vicST': vic['ship_type_id'],
+                               'attChar': attChar,
+                               'attCorp': attCorp,
+                               'attAlly': attAlly,
+                               'value': km['value'],
+                               'loc': loc,
+                               'kid': killid}
+
+                    embed = await kbutils.build_kill(dict_km)
 
                     if match[1] is not '':
                         return await channel.send(embed=embed)
@@ -113,6 +91,15 @@ class LinkListener:
                         await channel.purge(check=self.passed)
 
                         return await channel.send(content=content, embed=embed)
+                elif match[4] == '/character/':
+                    cid = match[5]
+                    char = await esiutils.esi_char(cid)
+
+                    stats = await kbutils.get_stats(cid)
+
+                    embed = await kbutils.build_threat(stats, char, cid)
+
+                    return await channel.send(embed=embed)
 
         else:
             return

@@ -57,3 +57,73 @@ async def get_stats(cid):
             'month': month}
 
     return data
+
+async def build_kill(km):
+    vicChar = km['vicChar']
+    vicAlly = km['vicAlly']
+    vicCorp = km['vicCorp']
+    vicShip = km['vicShip']
+    vicST = km['vicST']
+    killid = km['kid']
+    loc = km['loc']
+    attChar = km['attChar']
+    attCorp = km['attCorp']
+    attAlly = km['attAlly']
+    vicDam = km['vicDam']
+
+
+    if vicChar is None:
+        if vicAlly is None:
+            embed = discord.Embed(title=f'{vicCorp["name"]} lost their {vicShip}')
+        else:
+            embed = discord.Embed(title=f'{vicCorp["name"]} ({vicAlly["name"]}) lost their {vicShip}')
+    else:
+        embed = discord.Embed(title=f'{vicChar["name"]} ({vicCorp["name"]}) lost their {vicShip}',
+                              timestamp=km['time'])
+    embed.set_author(name='zKillboard', icon_url='https://zkillboard.com/img/wreck.png',
+                     url=f'http://zkillboard.com/kill/{killid}/')
+    embed.set_thumbnail(url=f'https://imageserver.eveonline.com/Type/{vicST}_64.png')
+    embed.add_field(name='Final Blow', value=attChar['name'], inline=True)
+    if attAlly is None:
+        embed.add_field(name='Corp', value=f'{attCorp["name"]}', inline=True)
+    else:
+        embed.add_field(name='Corp', value=f'{attCorp["name"]}({attAlly["name"]})', inline=True)
+    embed.add_field(name='Value', value=f'{km["value"]} ISK', inline=True)
+    embed.add_field(name='Damage Taken', value=vicDam, inline=True)
+    embed.add_field(name='System', value=loc, inline=False)
+
+    return embed
+
+
+async def build_threat(stats, char, cid):
+    kdrAll = round(stats['kills'] / stats['losses'], 2)
+    if stats['month'] is not None:
+        kdrMonth = round(stats['month']['kills'] / stats['month']['losses'], 2)
+    iskEff = round((1.0 - (stats['iskLost'] / stats['iskDestroyed'])) * 100, 1)
+    iskD = '{:,}'.format(stats['iskDestroyed'])
+    iskL = '{:,}'.format(stats['iskLost'])
+
+    # If the character is too new/has no kills or losses, we wont be able to get much useful info from the api.
+    if all(value is None for value in stats.values()):
+        if 'extensions.EsiCommands' in self.bot.extensions:
+            return await ctx.send(f'This character has no killboard stats. Please use the `{config.prefix}char '
+                                  f'command` to display information on this character.')
+        else:
+            return await ctx.send('This character has no killboard stats.')
+
+    embed = discord.Embed(title=f'{char["name"]} Threat Analysis')
+    embed.set_author(name='zKillboard', url=f'http://zkillboard.com/character/{cid}/',
+                     icon_url='http://zkillboard.com/img/wreck.png')
+    embed.set_thumbnail(url=f'https://imageserver.eveonline.com/Character/{cid}_128.jpg')
+    embed.add_field(name='Gang Ratio', value=f'{stats["gangRatio"]}%')
+    embed.add_field(name='Danger Ratio', value=f'{stats["dangerRatio"]}%')
+    embed.add_field(name='KDR All Time', value=f'Kills: {stats["kills"]} \nLosses: {stats["losses"]} \n'
+                                               f'KDR: {kdrAll}')
+    if stats['month'] is not None:
+        embed.add_field(name='KDR Month', value=f'Kills: {stats["month"]["kills"]} \n'
+                                                f'Losses: {stats["month"]["losses"]} \nKDR: {kdrMonth}')
+    else:
+        embed.add_field(name='KDR Month', value='No Kills Yet')
+    embed.add_field(name='ISK Efficiency', value=f'ISK Killed: {iskD} \nISK Lost: {iskL} \nEfficiency: {iskEff}%')
+
+    return embed
