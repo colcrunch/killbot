@@ -66,6 +66,7 @@ class EsiCommands:
 
     @commands.command(aliases=['ch'])
     async def char(self, ctx, *, char: str):
+        """ Displays public information for a character. """
         eid = await esi.get_id(char, 'char')
         if eid is None:
             return await ctx.send('Character not found. please check your spelling and try again.')
@@ -95,6 +96,7 @@ class EsiCommands:
 
     @commands.command()
     async def status(self, ctx):
+        """ Displays the current status of Tranquility. """
         players = await esi.esi_status()
         if players is None:
             return await ctx.send("Tranquility is currently **OFFLINE**.")
