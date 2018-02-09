@@ -14,3 +14,46 @@ async def get_mail(kid):
     attack = km['attackers']
 
     return {'time': time, 'victim': victim, 'location': loc, 'value': value, 'attackers': attack}
+
+async def get_stats(cid):
+    url = f'http://zkillboard.com/api/stats/characterID/{cid}/'
+    async with aiohttp.ClientSession() as session:
+        resp = await core.get_json(session, url)
+
+    stats = resp
+    if 'shipsDestroyed' in stats:
+        gRatio = stats['gangRatio']
+        dRatio = stats['dangerRatio']
+        iskD = stats['iskDestroyed']
+        iskL = stats['iskLost']
+        kills = stats['shipsDestroyed']
+        losses = stats['shipsLost']
+    else:
+        gRatio = None
+        dRatio = None
+        iskD = None
+        iskL = None
+        kills = None
+        losses = None
+    month = datetime.datetime.utcnow().strftime('%Y%m')
+
+    if 'months' in stats:
+        months = stats['months']
+        if month in months:
+            kMonth = months[month]['shipsDestroyed']
+            lMonth = months[month]['shipsLost']
+            month = {'kills': kMonth, 'losses': lMonth}
+        else:
+            month = None
+    else:
+        month = None
+
+    data = {'kills': kills,
+            'losses': losses,
+            'gangRatio': gRatio,
+            'dangerRatio': dRatio,
+            'iskDestroyed': iskD,
+            'iskLost': iskL,
+            'month': month}
+
+    return data

@@ -4,11 +4,16 @@ import async_timeout
 # Cause strftime, or the time library in general does not have a real way to deal with time delta objects.
 def strftdelta(tdelta):
     d = dict(days=tdelta.days)
-    print(str(tdelta))
+    if d['days'] >= 365:
+        d['yrs'], rem = divmod(d['days'], 365)
+        d['mos'], rem = divmod(rem, 30)
+        d['days'] = rem
     d['hrs'], rem = divmod(tdelta.seconds, 3600)
     d['min'], d['sec'] = divmod(rem, 60)
 
-    if d['min'] is 0:
+    if 'yrs' in d:
+        fmt = '{yrs} yrs {mos} mos {days} days {hrs} hrs {min} min'
+    elif d['min'] is 0:
         fmt = '{sec} sec'
     elif d['hrs'] is 0:
         fmt = '{min} min {sec} sec'
