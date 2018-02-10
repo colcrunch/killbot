@@ -61,7 +61,10 @@ class LinkListener:
                     loc = sdeutils.system_name(km['location'])
                     for attacker in km['attackers']:
                         if attacker['final_blow'] is True:
-                            attChar = await esiutils.esi_char(attacker['character_id'])
+                            if 'character_id' in attacker:
+                                attChar = await esiutils.esi_char(attacker['character_id'])
+                            else:
+                                attChar = None
                             attCorp = await esiutils.esi_corp(attacker['corporation_id'])
                             if 'alliance_id' in attacker:
                                 attAlly = await esiutils.esi_ally(attacker['alliance_id'])
@@ -83,7 +86,7 @@ class LinkListener:
                                'loc': loc,
                                'kid': killid}
 
-                    embed = await kbutils.build_kill(dict_km)
+                    embed = await kbutils.build_kill(dict_km, 'api')
 
                     if match[1] is not '':
                         return await channel.send(embed=embed)

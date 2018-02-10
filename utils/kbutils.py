@@ -60,36 +60,78 @@ async def get_stats(cid):
     return data
 
 
-async def build_kill(km):
-    vicChar = km['vicChar']
-    vicAlly = km['vicAlly']
-    vicCorp = km['vicCorp']
-    vicShip = km['vicShip']
-    vicST = km['vicST']
-    killid = km['kid']
-    loc = km['loc']
-    attChar = km['attChar']
-    attCorp = km['attCorp']
-    attAlly = km['attAlly']
-    vicDam = km['vicDam']
+async def build_kill(km, type):
+
+    if type == 'api':
+        vicChar = km['vicChar']
+        vicAlly = km['vicAlly']
+        vicCorp = km['vicCorp']
+        vicShip = km['vicShip']
+        vicST = km['vicST']
+        killid = km['kid']
+        loc = km['loc']
+        attChar = km['attChar']
+        attCorp = km['attCorp']
+        attAlly = km['attAlly']
+        vicDam = km['vicDam']
+        value = km['value']
+        killTime = km['time']
+    elif type == 'esi':
+        vic = km['killmail']['victim']
+        if 'character_id' in vic:
+            vicChar = await esiutils.esi_char(vic['character_id'])
+        else:
+            vicChar = None
+        if 'corporation_id' in vic:
+            vicCorp = await esiutils.esi_corp(vic['corporation_id'])
+        else:
+            vicCorp = None
+        if 'alliance_id' in vic:
+            vicAlly = await esiutils.esi_ally(vic['alliance_id'])
+        else:
+            vicAlly = None
+        vicDam = '{:,}'.format(vic['damage_taken'])
+        vicST = vic['ship_type_id']
+        vicShip = sdeutils.type_name(vicST)
+        attackers = km['killmail']['attackers']
+        for attacker in attackers:
+            if attacker['final_blow'] is True:
+                if 'character_id' in attacker:
+                    attChar = await esiutils.esi_char(attacker['character_id'])
+                else:
+                    attChar = None
+                attCorp = await esiutils.esi_corp(attacker['corporation_id'])
+                if 'alliance_id' in attacker:
+                    attAlly = await esiutils.esi_ally(attacker['alliance_id'])
+                else:
+                    attAlly = None
+                attShip = sdeutils.type_name(attacker['ship_type_id'])
+        loc = sdeutils.system_name(km['killmail']['solar_system_id'])
+        value = '{:,}'.format(km['zkb']['totalValue'])
+        killid = km['killID']
+        killTime = datetime.datetime.strptime(km['killmail']['killmail_time'], '%Y-%m-%dT%H:%M:%SZ')
+
 
     if vicChar is None:
         if vicAlly is None:
-            embed = discord.Embed(title=f'{vicCorp["name"]} lost their {vicShip}')
+            embed = discord.Embed(title=f'{vicCorp["name"]} lost their {vicShip}', timestamp=killTime)
         else:
-            embed = discord.Embed(title=f'{vicCorp["name"]} ({vicAlly["name"]}) lost their {vicShip}')
+            embed = discord.Embed(title=f'{vicCorp["name"]} ({vicAlly["name"]}) lost their {vicShip}', timestamp=killTime)
     else:
         embed = discord.Embed(title=f'{vicChar["name"]} ({vicCorp["name"]}) lost their {vicShip}',
-                              timestamp=km['time'])
+                              timestamp=killTime)
     embed.set_author(name='zKillboard', icon_url='https://zkillboard.com/img/wreck.png',
                      url=f'http://zkillboard.com/kill/{killid}/')
     embed.set_thumbnail(url=f'https://imageserver.eveonline.com/Type/{vicST}_64.png')
-    embed.add_field(name='Final Blow', value=attChar['name'], inline=True)
+    if attChar is not None:
+        embed.add_field(name='Final Blow', value=attChar['name'], inline=True)
+    else:
+        embed.add_field(name='Final Blow', value=attShip, inline=True)
     if attAlly is None:
         embed.add_field(name='Corp', value=f'{attCorp["name"]}', inline=True)
     else:
         embed.add_field(name='Corp', value=f'{attCorp["name"]}({attAlly["name"]})', inline=True)
-    embed.add_field(name='Value', value=f'{km["value"]} ISK', inline=True)
+    embed.add_field(name='Value', value=f'{value} ISK', inline=True)
     embed.add_field(name='Damage Taken', value=vicDam, inline=True)
     embed.add_field(name='System', value=loc, inline=False)
 

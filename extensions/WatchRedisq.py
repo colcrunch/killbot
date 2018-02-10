@@ -1,4 +1,5 @@
 from utils.importsfile import *
+from utils import kbutils
 
 class WatchRedisq:
     def __init__(self, bot):
@@ -31,15 +32,30 @@ class WatchRedisq:
                 if resp['package'] is not None:
                     km = resp['package']['killmail']
                     attackers = km['attackers']
+                    yes = None
                     for attacker in attackers:
                         for key in keys:
                             if key in attacker:
                                 if str(attacker[key]) in ids[key]:
-                                    print(f"{key} YES")
-                                else:
-                                    print(f"{key} No")
-                            else:
-                                print(f"{key} Not present")
+                                    #If we get to this point, then the KM will be posted. No need to continue.
+                                    embed = await kbutils.build_kill(resp['package'], 'esi')
+                                    await channel.send(embed=embed)
+                                    # Set yes to true to trigger the breaking of the attacker loop.
+                                    yes = True
+                                    break
+                        if yes == True:
+                            #Break the attacker loop
+                            break
+                    if yes is not True:
+                        # if the attackers don't post anything then we will look at the victim.
+                        vic = km['victim']
+                        for key in keys:
+                            if str(vic[key]) in ids[key]:
+                                embed = await kbutils.build_kill(resp['package'], 'esi')
+                                await channel.send(embed=embed)
+                                print(f"{key} YES (VIC)")
+                                break
+
 
                 await asyncio.sleep(10)
 
