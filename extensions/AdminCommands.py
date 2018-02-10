@@ -78,6 +78,20 @@ class AdminCommands:
         elif state not in statuses or state is None:
             return await self.bot.change_presence(game=game)
 
+    @commands.command(aliases=['ld'], hidden=True)
+    @commands.is_owner()
+    async def loaded(self, ctx):
+        exts = '\n'.join(list(self.bot.extensions))
+        cogs = '\n'.join(list(self.bot.cogs))
+
+        ext_num = len(self.bot.extensions)
+        cog_num = len(self.bot.cogs)
+
+        return await ctx.send(f'```\n'
+                              f'Extensions: {ext_num} Extensions Loaded with {cog_num} Cogs \n\n{exts} \n\n'
+                              f'Cogs: {cog_num} Loaded \n\n{cogs}'
+                              f'```')
+
 
 def setup(killbot):
     killbot.add_cog(AdminCommands(killbot))

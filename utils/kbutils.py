@@ -15,6 +15,7 @@ async def get_mail(kid):
 
     return {'time': time, 'victim': victim, 'location': loc, 'value': value, 'attackers': attack}
 
+
 async def get_stats(cid):
     url = f'http://zkillboard.com/api/stats/characterID/{cid}/'
     async with aiohttp.ClientSession() as session:
@@ -58,6 +59,7 @@ async def get_stats(cid):
 
     return data
 
+
 async def build_kill(km):
     vicChar = km['vicChar']
     vicAlly = km['vicAlly']
@@ -70,7 +72,6 @@ async def build_kill(km):
     attCorp = km['attCorp']
     attAlly = km['attAlly']
     vicDam = km['vicDam']
-
 
     if vicChar is None:
         if vicAlly is None:

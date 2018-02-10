@@ -1,4 +1,5 @@
 import aiohttp
+import asyncio
 import os
 import discord
 import urllib

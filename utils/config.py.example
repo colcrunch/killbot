@@ -24,3 +24,13 @@ msg = ''
 app = ''
 # Either an email address or your main character in eve. (and/or tweetfleet slack account information)
 contact = ''
+
+# ----------
+# Killboard Watching Settings
+# ----------
+
+# The channel to post the kills to.
+kill_channel = ''
+
+# IDs to watch for.
+kill_ids = {'alliance_id': [], 'corporation_id': [], 'character_id': [], 'ship_type_id': []}
