@@ -4,6 +4,8 @@ This branch is for development with discord.py-1.0.
 
 ## Major Dependencies
 
+* python3.6
+  * f-strings are not supported on earlier versions.
 * discord.py 1.0.0a0 (rewrite)
 * aiohttp
 * requests
@@ -23,14 +25,21 @@ Most linux distros should have a memcache package on their package manager.
 
 ### Bot
 Firstly, the bot does not ship with a copy of the Static Data Export. Secondly, the config file has to be copied and edited.
+You will need to copy `config.py.example` in `utils` to `config.py` and fill it out.
 
-Using the setup command `python3 launcher.py setup` will download the SDE and copy the config file for editing.
-(In the future I might allow editing the config file through launcher commands.) This command will also make the log directory.
+#### Do `git pull` before setup to get a minor bug fix so you can use the setup command.
+
+Using the setup command `python3 launcher.py setup` will download the SDE and make the log directory.
+(In the future I might allow editing the config file through launcher commands.)
 
 If the SDE is out of date, and you need to update it, run `python3 launcher.py update` and the launcher will fetch and unzip the SDE for you.
 
 ## The Config File
 
+* `addons` this is where you list all the addons you would like to use.
+  * Default is `[]`
+  * Add `'extensions.extension',` where extension is one of the extensions listed in the extensions directory.
+  * Recommended minimum extensions are `'extensions.AdminCommands',` and `'extensions.BotCommands'` 
 * `token` is your bot token from the discord site.
 * `prefix` is the symbol that will come before all your commands.
   * Default is `/`
