@@ -27,7 +27,6 @@ Most linux distros should have a memcache package on their package manager.
 Firstly, the bot does not ship with a copy of the Static Data Export. Secondly, the config file has to be copied and edited.
 You will need to copy `config.py.example` in `utils` to `config.py` and fill it out.
 
-#### Do `git pull` before setup to get a minor bug fix so you can use the setup command.
 
 Using the setup command `python3 launcher.py setup` will download the SDE and make the log directory.
 (In the future I might allow editing the config file through launcher commands.)
