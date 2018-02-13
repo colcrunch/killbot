@@ -2,13 +2,16 @@ from utils.importsfile import *
 from utils import config
 from utils.config import logginglevel
 
-level = logginglevel
-logger = logging.getLogger('discord')
-logger.setLevel(level)
-handler = logging.FileHandler(filename=f'logs/discord{datetime.datetime.utcnow().strftime("%Y%m%d%H%M")}.log',
-                              encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s ::: %(levelname)s ::: %(name)s :::  %(message)s'))
-logger.addHandler(handler)
+if os.path.exists('logs'):
+    level = logginglevel
+    logger = logging.getLogger('discord')
+    logger.setLevel(level)
+    handler = logging.FileHandler(filename=f'logs/discord{datetime.datetime.utcnow().strftime("%Y%m%d%H%M")}.log',
+                                  encoding='utf-8', mode='w')
+    handler.setFormatter(logging.Formatter('%(asctime)s ::: %(levelname)s ::: %(name)s :::  %(message)s'))
+    logger.addHandler(handler)
+else:
+    logger = None
 
 class killbot(commands.Bot):
     def __init__(self, *args, **kwargs):
