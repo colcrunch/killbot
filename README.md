@@ -13,7 +13,7 @@ This branch is for development with discord.py-1.0.
 There are a few things that have to be done to setup the bot before it can be used.
 
 ### Cache
-You will need to set up memcache so the bot to cache esi requests. 
+You will need to set up memcache so the bot can cache esi requests. 
 
 More info can be found here:
 * **Memcache project page:** http://memcached.org/
@@ -25,7 +25,7 @@ Most linux distros should have a memcache package on their package manager.
 Firstly, the bot does not ship with a copy of the Static Data Export. Secondly, the config file has to be copied and edited.
 
 Using the setup command `python3 launcher.py setup` will download the SDE and copy the config file for editing.
-(In the future I might allow editing the config file through launcher commands.)
+(In the future I might allow editing the config file through launcher commands.) This command will also make the log directory.
 
 If the SDE is out of date, and you need to update it, run `python3 launcher.py update` and the launcher will fetch and unzip the SDE for you.
 
@@ -41,4 +41,12 @@ If the SDE is out of date, and you need to update it, run `python3 launcher.py u
   * Default is `''`
 * `contact` is your contact information to be sent in HTTP headers to CCP and zKillboard in case something goes wrong and they need to contact you.
   * Default is `''`
-  * Good options are discord tag, tweetfleet slack id, email, and eve name. 
+  * Good options are discord tag, tweetfleet slack id, email, and eve name.
+* `logginglevel` is the level of information to log.
+    * Default is `'DEBUG'`
+    * Options are `CRITICAL`, `ERROR`, `WARNING`, `INFO`, and `DEBUG`
+* `kill_channel` is the channel to post the kills into.
+    * Default is `''`. When set remove the `''`
+* `kill_ids` is the list of ids to watch for.
+    * Default is `{'alliance_id': [], 'corporation_id': [], 'character_id': [], 'ship_type_id': []}`
+    * Example `{'alliance_id': ['12345', '12234'], 'corporation_id': [], 'character_id': [], 'ship_type_id': []}`

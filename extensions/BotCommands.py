@@ -39,11 +39,12 @@ class BotCommands:
         embed.set_thumbnail(url=self.bot.user.avatar_url_as(format='png'))
         embed.add_field(name="Servers", value=len(servers), inline=True)
         embed.add_field(name="Uptime", value=core.strftdelta(uptime), inline=True)
-        # embed.add_field(name="Killmails Processed", value=counter, inline=True)
-        # embed.add_field(name="Posted",
-        #                 value="**Kills:** {0} \n**Losses:** {1} \n**Total:** {2}".format(kcounter, lcounter,
-        #                                                                                  (kcounter + lcounter)),
-        #                 inline=True)
+        if 'WatchRedisq' in self.bot.cogs:
+            embed.add_field(name="Killmails Processed", value=self.bot.counter, inline=True)
+            embed.add_field(name="Posted",
+                            value="**Kills:** {0} \n**Losses:** {1} \n**Total:** {2}".format(self.bot.kcounter, self.bot.lcounter,
+                                                                                             (self.bot.kcounter + self.bot.lcounter)),
+                            inline=True)
 
         return await ctx.send(embed=embed)
 

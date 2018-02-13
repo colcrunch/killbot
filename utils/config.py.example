@@ -1,3 +1,5 @@
+import logging
+
 # Killbot Config
 #
 #
@@ -24,6 +26,10 @@ msg = ''
 app = ''
 # Either an email address or your main character in eve. (and/or tweetfleet slack account information)
 contact = ''
+
+
+# Options for logging level: CRITICAL, ERROR, WARNING, INFO, and DEBUG
+logginglevel = logging.DEBUG
 
 # ----------
 # Killboard Watching Settings

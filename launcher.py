@@ -3,7 +3,9 @@ import sys
 import utils.sdeutils as sde
 import shutil
 import discord
+import logging
 from utils.config import msg
+import os
 
 
 def main():
@@ -39,6 +41,11 @@ def setup():
     # First get the SDE... we can use the update() function above for this.
     update()
 
+    print("Creating Log Directory")
+    try:
+        os.makedirs('./logs', exist_ok=False)
+    except OSError:
+        pass
     # Now we will copy the config file for editing.
     shutil.copy('utils/config.py.example', 'utils/config.py')
     return print('Bot ready for configuration.')

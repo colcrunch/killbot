@@ -6,6 +6,7 @@ class MarketCommands:
     def __init__(self, bot):
         self.bot = bot
         self.prefix = bot.prefix
+        self.logger = self.bot.logger
 
     async def process_item(self, ctx, item, region):
         region_id = sdeutils.region_id(region)
@@ -20,6 +21,8 @@ class MarketCommands:
             if item_id is None:
                 return await ctx.send('Item not found.')
             else:
+                self.logger.warning("It appears that the SDE may be out of date. Please run the launcher update"
+                                        " command")
                 item = esiutils.esi_type(item_id)
         else:
             item = sdeutils.type_name(item_id)

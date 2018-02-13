@@ -4,9 +4,6 @@ from utils import kbutils
 class WatchRedisq:
     def __init__(self, bot):
         self.bot = bot
-        self.counter = 0
-        self.lcounter = 0
-        self.kcounter = 0
         self.ids = config.kill_ids
         print(f'--------------------------------------\n'
               f'Watching:\n'
@@ -15,6 +12,13 @@ class WatchRedisq:
               f'Alliances: {", ".join(self.ids["alliance_id"])}\n'
               f'Ship Types: {", ".join(self.ids["ship_type_id"])}\n'
               f'--------------------------------------')
+        self.bot.logger.info(
+              f'Watching | '
+              f'Characters: {", ".join(self.ids["character_id"])} | '
+              f'Corps: {", ".join(self.ids["corporation_id"])} | '
+              f'Alliances: {", ".join(self.ids["alliance_id"])} | '
+              f'Ship Types: {", ".join(self.ids["ship_type_id"])}'
+              )
 
         self.bg_task = self.bot.loop.create_task(self.watch())
 
@@ -30,6 +34,7 @@ class WatchRedisq:
                 async with aiohttp.ClientSession() as session:
                     resp = await core.get_json(session, url)
                 if resp['package'] is not None:
+                    self.bot.counter += 1
                     km = resp['package']['killmail']
                     attackers = km['attackers']
                     yes = None
@@ -40,6 +45,7 @@ class WatchRedisq:
                                     #If we get to this point, then the KM will be posted. No need to continue.
                                     embed = await kbutils.build_kill(resp['package'], 'esi')
                                     await channel.send(embed=embed)
+                                    self.bot.kcounter += 1
                                     # Set yes to true to trigger the breaking of the attacker loop.
                                     yes = True
                                     break
@@ -50,20 +56,22 @@ class WatchRedisq:
                         # if the attackers don't post anything then we will look at the victim.
                         vic = km['victim']
                         for key in keys:
-                            if str(vic[key]) in ids[key]:
-                                embed = await kbutils.build_kill(resp['package'], 'esi')
-                                await channel.send(embed=embed)
-                                print(f"{key} YES (VIC)")
-                                break
+                            if key in vic:
+                                if str(vic[key]) in ids[key]:
+                                    embed = await kbutils.build_kill(resp['package'], 'esi')
+                                    await channel.send(embed=embed)
+                                    self.bot.lcounter += 1
+                                    print(f"{key} YES (VIC)")
+                                    break
 
 
-                await asyncio.sleep(10)
+                await asyncio.sleep(5)
 
 
 
         except Exception as e:
-            print(e)
-            pass
+            self.bot.logger.critical(f"Something went wrong with WatchRedisq! {e}")
+            self.bot.logger.critical(traceback.print_exc())
 
 
 def setup(killbot):
