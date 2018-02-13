@@ -10,7 +10,6 @@ class MarketCommands:
     async def process_item(self, ctx, item, region):
         region_id = sdeutils.region_id(region)
         item_id = sdeutils.type_id(item)
-        item = sdeutils.type_name(item_id)
 
         if region_id is None:
             region_id = await esiutils.get_id(region, 'region')
@@ -20,6 +19,10 @@ class MarketCommands:
             item_id = await esiutils.get_id(item, 'itype')
             if item_id is None:
                 return await ctx.send('Item not found.')
+            else:
+                item = esiutils.esi_type(item_id)
+        else:
+            item = sdeutils.type_name(item_id)
 
         info = await market.get_price(item_id, region_id)
 

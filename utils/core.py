@@ -1,6 +1,8 @@
 from utils.importsfile import *
 import async_timeout
 
+mc = memcache.Client(['127.0.0.1:11211'], debug=1)
+
 # Cause strftime, or the time library in general does not have a real way to deal with time delta objects.
 def strftdelta(tdelta):
     d = dict(days=tdelta.days)
@@ -24,10 +26,20 @@ def strftdelta(tdelta):
 
     return fmt.format(**d)
 
-
 async def get_json(session, url):
     headers = {'user-agent': 'application: {0} contact: {1}'.format(config.app, config.contact),
                'content-type': 'application/json'}
     with async_timeout.timeout(15):
         async with session.get(url, headers=headers) as response:
             return await response.json()
+
+async def get_esi(session, url):
+    headers = {'user-agent': 'application: {0} contact: {1}'.format(config.app, config.contact),
+               'content-type': 'application/json'}
+    with async_timeout.timeout(15):
+        async with session.get(url, headers=headers) as response:
+            now  = datetime.datetime.utcnow()
+            exp = datetime.datetime.strptime(response.headers['Expires'], "%a, %d %b %Y %H:%M:%S %Z")
+            exp_time = exp - now
+            json = await response.json()
+            return {'resp': json, 'exp': exp_time}

@@ -6,6 +6,7 @@ import urllib
 import json
 import datetime
 import requests
+import memcache
 from utils import config
 from utils import core
 from utils import esiutils

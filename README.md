@@ -7,10 +7,21 @@ This branch is for development with discord.py-1.0.
 * discord.py 1.0.0a0 (rewrite)
 * aiohttp
 * requests
+* python-memcached (and a memcache server)
 
 ## Setup and Launcher Commands
 There are a few things that have to be done to setup the bot before it can be used.
 
+### Cache
+You will need to set up memcache so the bot to cache esi requests. 
+
+More info can be found here:
+* **Memcache project page:** http://memcached.org/
+* **Installing Memcache on Windows:** https://commaster.net/content/installing-memcached-windows
+
+Most linux distros should have a memcache package on their package manager.
+
+### Bot
 Firstly, the bot does not ship with a copy of the Static Data Export. Secondly, the config file has to be copied and edited.
 
 Using the setup command `python3 launcher.py setup` will download the SDE and copy the config file for editing.
