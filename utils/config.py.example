@@ -1,0 +1,42 @@
+import logging
+
+# Killbot Config
+#
+#
+#
+# --------------
+
+#--------------------------
+# Addons
+addons = []
+
+#--------------------------
+
+# Your bot token
+token = ''
+
+# The symbol that you would like to use as the prefix for commands.
+prefix = '/'
+
+# The message to display as the bot's "Playing" status on start up.
+msg = ''
+
+# Application and Contact info in case CCP or zKill need to contact you.
+# Should be the name of the bot and/or a link to code on github if you have made modifications.
+app = ''
+# Either an email address or your main character in eve. (and/or tweetfleet slack account information)
+contact = ''
+
+
+# Options for logging level: CRITICAL, ERROR, WARNING, INFO, and DEBUG
+logginglevel = logging.DEBUG
+
+# ----------
+# Killboard Watching Settings
+# ----------
+
+# The channel to post the kills to.
+kill_channel = ''
+
+# IDs to watch for.
+kill_ids = {'alliance_id': [], 'corporation_id': [], 'character_id': [], 'ship_type_id': []}

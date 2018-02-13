@@ -1,36 +1,52 @@
-# killbot
+# killbot - Rewrite
 
-A discord bot to pull killmails from zkill and maybe more.
+This branch is for development with discord.py-1.0. 
 
-# Dependencies
- * discord.py
- * requests (used for hourly pulling of system info)
+## Major Dependencies
 
- # Other Requirements
- * Get the SDE in SQLite format here: https://www.fuzzwork.co.uk/dump/sqlite-latest.sqlite.bz2
-    * Unpack the archive in the same folder as the rest of the bot files.
-    * Rename the sqlite file to sde.sqlite
-  * Get the empty systems database here https://nyc3.digitaloceanspaces.com/colsfiles/systems.sqlite
-    * This should be in the bot's root folder.
+* discord.py 1.0.0a0 (rewrite)
+* aiohttp
+* requests
+* python-memcached (and a memcache server)
 
-    # Config
-    Remember to rename `config.py.empty` to `config.py`, and to fill it in.
+## Setup and Launcher Commands
+There are a few things that have to be done to setup the bot before it can be used.
 
-    * `BOT_TOKEN` : You get this from the discord bot app that you make. More specifically it comes from the bot user you make to go along with your app.
-    * `PREFIX` : This is the symbol that you want to have before all the commands. Use something that is easy to type, but not all that common.
-      * Default is `]`
-    * `APP` is the name you want to use in the header that is sent out with HTTP requests.
-      * Default is `killbot`
-    * `CONTACT` is your contact information sent with HTTP requests (i.e email, eve character name, tweetfleet slack tag) in case something goes wrong and CCP or zkill need to contact you.
-      * Default is `''`
-    * `msg` is the message that you would like to have in the playing status of your bot.
-      * Default is `''`. In order to show the full message, and help command please limit your message to 12 characters.
-    * `KILLWATCH_ENABLED` : Set this to TRUE to watch zkill for kills!
-      * Default is `FALSE`
-    * `KILLWATCH_CHANNEL` : This is where you set the channel id that you want to have kills posted in.
-      * Default is `''` however when you set it there should be no quotes. EX: `KILLWATCH_CHANNEL = 1234546`
-    * `watchids` : This is a dict of lists of IDs for the bot to watch for on zkill.
-      * Note: All IDs should be in string format, and separated with commas. EX: `'corps': ["1234","5678"]`
-    * `system_cmd` : This is where you set whether or not you want to pull from the esi for the last hour, or set up a cron job and (in 24 short hours) be able to have info for the past 24 hours.
-        * Default is `ESI`
-        * If you would like to use the cron option you will want to use `0 * * * * cd /PATH/TO/killbot && /usr/bin/python3 /PATH/TO/syscron.py > /PATH/TO/killbot/logs/syscron.log 2>&1`
+### Cache
+You will need to set up memcache so the bot can cache esi requests. 
+
+More info can be found here:
+* **Memcache project page:** http://memcached.org/
+* **Installing Memcache on Windows:** https://commaster.net/content/installing-memcached-windows
+
+Most linux distros should have a memcache package on their package manager.
+
+### Bot
+Firstly, the bot does not ship with a copy of the Static Data Export. Secondly, the config file has to be copied and edited.
+
+Using the setup command `python3 launcher.py setup` will download the SDE and copy the config file for editing.
+(In the future I might allow editing the config file through launcher commands.) This command will also make the log directory.
+
+If the SDE is out of date, and you need to update it, run `python3 launcher.py update` and the launcher will fetch and unzip the SDE for you.
+
+## The Config File
+
+* `token` is your bot token from the discord site.
+* `prefix` is the symbol that will come before all your commands.
+  * Default is `/`
+* `msg` this is the message that you would like to see in the bot's "playing" status.
+  * Default is `''`. 
+  * This can also be set after the bot has been started with the `/presence` command by the bot owner.
+* `app` is the name of your bot. (include a link to your github if you made any changes.)
+  * Default is `''`
+* `contact` is your contact information to be sent in HTTP headers to CCP and zKillboard in case something goes wrong and they need to contact you.
+  * Default is `''`
+  * Good options are discord tag, tweetfleet slack id, email, and eve name.
+* `logginglevel` is the level of information to log.
+    * Default is `'DEBUG'`
+    * Options are `CRITICAL`, `ERROR`, `WARNING`, `INFO`, and `DEBUG`
+* `kill_channel` is the channel to post the kills into.
+    * Default is `''`. When set remove the `''`
+* `kill_ids` is the list of ids to watch for.
+    * Default is `{'alliance_id': [], 'corporation_id': [], 'character_id': [], 'ship_type_id': []}`
+    * Example `{'alliance_id': ['12345', '12234'], 'corporation_id': [], 'character_id': [], 'ship_type_id': []}`

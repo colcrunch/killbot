@@ -3,3 +3,5 @@ sde.sqlite
 config.py
 *.log
 systems.sqlite
+
+\.idea/
