@@ -146,16 +146,87 @@ async def esi_type(eid):
         print(f'Getting type info for {ed} from cache.')
         return mc.get(ed)
 
+async def esi_system(eid):
+    if mc.get(f'{eid}') is None:
+        url = f'https://esi.tech.ccp.is/v3/universe/systems/{eid}/?datasource=tranquility'
+        async with aiohttp.ClientSession() as session:
+            respo = await get(session, url)
+        resp = respo['resp']
+        exp = respo['exp']
+
+        name = resp['name']
+        star = resp['star_id']
+        sec = round(resp['security_status'], 2)
+        constellation = resp['constellation_id']
+        planets = len(resp['planets'])
+        listlen = []
+        for planet in resp['planets']:
+            if 'moons' in planet:
+                listlen.append(len(planet['moons']))
+
+        moons = sum(listlen)
+        secClass = resp['security_class']
+        gates = len(resp['stargates'])
+        if 'stations' in resp:
+            stations = len(resp['stations'])
+        else:
+            stations = None
+
+        inf = {'name': name,
+               'star': star,
+               'sec': sec,
+               'secClass': secClass,
+               'const': constellation,
+               'planets': planets,
+               'moons': moons,
+               'gates': gates,
+               'stations': stations}
+        mc.set(f'{eid}', inf, exp.seconds)
+        return inf
+    else:
+        print(f"Getting system information for {eid} from cache.")
+        return mc.get(f'{eid}')
+
+async def esi_sysKills():
+    if mc.get('sysKills') is None:
+        url = 'https://esi.tech.ccp.is/v2/universe/system_kills/'
+        async with aiohttp.ClientSession() as session:
+            respo = await get(session, url)
+        resp = respo['resp']
+        exp = respo['exp']
+        mc.set('sysKills', resp, exp.seconds)
+        return resp
+    else:
+        print("Getting system kill information from cache.")
+        return mc.get('sysKills')
+
+async def esi_sysJumps():
+    if mc.get('sysJumps') is None:
+        url = 'https://esi.tech.ccp.is/v1/universe/system_jumps/'
+        async with aiohttp.ClientSession() as session:
+            respo = await get(session, url)
+        resp = respo['resp']
+        exp = respo['exp']
+        mc.set('sysJumps', resp, exp.seconds)
+        return resp
+    else:
+        print("Getting system jump information from cache.")
+        return mc.get('sysJumps')
 
 async def esi_status():
-    # We don't want to cache this request... its only cached server side for 30 seconds.
-    url = "https://esi.tech.ccp.is/latest/status/?datasource=tranquility"
-    async with aiohttp.ClientSession() as session:
-        respo = await get(session, url)
-    resp = respo['resp']
-    exp = respo['exp']
-    if 'players' in resp:
-        return resp['players']
+    if mc.get('status') is None:
+        url = "https://esi.tech.ccp.is/latest/status/?datasource=tranquility"
+        async with aiohttp.ClientSession() as session:
+            respo = await get(session, url)
+        resp = respo['resp']
+        exp = respo['exp']
+        if 'players' in resp:
+            print(exp.seconds)
+            mc.set('status', resp['players'], exp.seconds)
+            return resp['players']
+        else:
+            return None
     else:
-        return None
+        print('Getting status from cache')
+        return mc.get('status')
 

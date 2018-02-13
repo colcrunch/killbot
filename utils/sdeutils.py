@@ -73,6 +73,33 @@ def region_id(name):
     else:
         return str(t[0])
 
+def region_name(rid):
+    db = 'db/sde.sqlite'
+    conn = sqlite.connect(db)
+    c = conn.cursor()
+    n = (rid,)
+    c.execute('SELECT regionName FROM mapRegions WHERE regionID = ?', n)
+    t = c.fetchone()
+    conn.close()
+
+    if t is None:
+        return None
+    else:
+        return str(t[0])
+
+def constellation(cid):
+    db = 'db/sde.sqlite'
+    conn = sqlite.connect(db)
+    c = conn.cursor()
+    n = (cid,)
+    c.execute('SELECT constellationName, regionID FROM mapConstellations WHERE constellationID = ?', n)
+    t = c.fetchone()
+    conn.close()
+
+    if t is None:
+        return None
+    else:
+        return {'name': str(t[0]), 'regionID': t[1]}
 
 def system_id(name):
     db = 'db/sde.sqlite'
@@ -95,6 +122,20 @@ def system_name(sid):
     c = conn.cursor()
     n = (sid,)
     c.execute('SELECT solarSystemName FROM mapSolarSystems WHERE solarSystemID = ?', n)
+    t = c.fetchone()
+    conn.close()
+
+    if t is None:
+        return None
+    else:
+        return str(t[0])
+
+def system_star(sid):
+    db = 'db/sde.sqlite'
+    conn = sqlite.connect(db)
+    c = conn.cursor()
+    n = (sid,)
+    c.execute('SELECT sunTypeID FROM mapSolarSystems WHERE solarSystemID = ?', n)
     t = c.fetchone()
     conn.close()
 
