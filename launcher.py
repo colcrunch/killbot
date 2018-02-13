@@ -46,8 +46,7 @@ def setup():
         os.makedirs('./logs', exist_ok=False)
     except OSError:
         pass
-    # Now we will copy the config file for editing.
-    shutil.copy('utils/config.py.example', 'utils/config.py')
+
     return print('Bot ready for configuration.')
 
 
