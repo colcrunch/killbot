@@ -41,8 +41,14 @@ async def get_stats(cid):
     if 'months' in stats:
         months = stats['months']
         if month in months:
-            kMonth = months[month]['shipsDestroyed']
-            lMonth = months[month]['shipsLost']
+            if 'shipsDestroyed' in months[month]:
+                kMonth = months[month]['shipsDestroyed']
+            else:
+                kMonth = 0
+            if 'shipsLost' in months[month]:
+                lMonth = months[month]['shipsLost']
+            else:
+                lMonth = 0
             month = {'kills': kMonth, 'losses': lMonth}
         else:
             month = None
