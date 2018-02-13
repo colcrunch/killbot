@@ -147,7 +147,10 @@ async def build_kill(km, type):
 async def build_threat(stats, char, cid):
     kdrAll = round(stats['kills'] / stats['losses'], 2)
     if stats['month'] is not None:
-        kdrMonth = round(stats['month']['kills'] / stats['month']['losses'], 2)
+        if stats['month']['losses'] is not 0:
+            kdrMonth = round(stats['month']['kills'] / stats['month']['losses'], 2)
+        else:
+            kdrMonth = stats['month']['kills']
     iskEff = round((1.0 - (stats['iskLost'] / stats['iskDestroyed'])) * 100, 1)
     iskD = '{:,}'.format(stats['iskDestroyed'])
     iskL = '{:,}'.format(stats['iskLost'])
