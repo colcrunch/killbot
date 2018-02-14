@@ -71,7 +71,8 @@ class WatchRedisq:
 
         except Exception as e:
             self.bot.logger.critical(f"Something went wrong with WatchRedisq! {e}")
-            self.bot.logger.critical(traceback.print_exc())
+            self.bot.logger.critical(e)
+            self.bg_task = self.bot.loop.create_task(self.watch())
 
 
 def setup(killbot):
