@@ -5,7 +5,7 @@ from utils.core import mc
 
 async def get_id(name, ref):
     key_name = name.replace(' ', '')
-    if mc.get(key_name) is None:
+    if mc.get(f'{ref}_{key_name}') is None:
         urlName = urllib.parse.quote_plus(name)
         defs = {'ally': 'alliance',
                 'corp': 'corporation',
@@ -28,11 +28,11 @@ async def get_id(name, ref):
             eid = str(resp[defs[ref]][0])
         else:
             eid = None
-        mc.set(key_name, f'{eid}', exp.seconds)
+        mc.set(f'{ref}_{key_name}', f'{eid}', exp.seconds)
         return eid
     else:
         print(f'Getting id for {name} from cache.')
-        return mc.get(key_name)
+        return mc.get(f'{ref}_{key_name}')
 
 
 async def esi_char(eid):
@@ -94,6 +94,8 @@ async def esi_corp(eid):
                'url': url,
                'ally': ally}
         mc.set(f'{eid}', inf, exp.seconds)
+        mc.set(f'corp_{ticker}', eid, exp.seconds)
+        mc.set(f'corp_{name}', eid, exp.seconds)
         return inf
     else:
         print(f'Getting corp info for {eid} from cache.')
@@ -123,6 +125,8 @@ async def esi_ally(eid):
             'exec': exec_corp
         }
         mc.set(f'{eid}', inf, exp.seconds)
+        mc.set(f'ally_{ticker}', eid, exp.seconds)
+        mc.set(f'ally_{name}', eid, exp.seconds)
         return inf
     else:
         print(f'Getting alliance info for {eid} from cache.')

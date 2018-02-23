@@ -7,6 +7,7 @@ This branch is for development with discord.py-1.0.
 * python3.6
   * f-strings are not supported on earlier versions.
 * discord.py 1.0.0a0 (rewrite)
+  * **NOTE:** discord.py 1.0.0a0 is NOT in requiremenst.txt. You will have to install it using the following command: `python3 -m pip install -U git+https://github.com/Rapptz/discord.py@rewrite`
 * aiohttp
 * requests
 * python-memcached (and a memcache server)
