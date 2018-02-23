@@ -95,6 +95,7 @@ async def esi_corp(eid):
                'ally': ally}
         mc.set(f'{eid}', inf, exp.seconds)
         mc.set(f'corp_{ticker}', eid, exp.seconds)
+        name = name.replace(' ','')
         mc.set(f'corp_{name}', eid, exp.seconds)
         return inf
     else:
@@ -126,6 +127,7 @@ async def esi_ally(eid):
         }
         mc.set(f'{eid}', inf, exp.seconds)
         mc.set(f'ally_{ticker}', eid, exp.seconds)
+        name = name.replace(' ','')
         mc.set(f'ally_{name}', eid, exp.seconds)
         return inf
     else:
