@@ -40,3 +40,15 @@ kill_channel = ''
 
 # IDs to watch for.
 kill_ids = {'alliance_id': [], 'corporation_id': [], 'character_id': [], 'ship_type_id': []}
+
+# ---------
+# News Watching Settings
+# ---------
+
+# The channel to post news articles to.
+news_channel = ''
+
+# Change the different types to "True" to enable posting them.
+news = False
+dev-blogs = False
+patch-notes = False

@@ -1,5 +1,6 @@
 from utils.importsfile import *
 import async_timeout
+import sqlite3 as sql
 
 mc = memcache.Client(['127.0.0.1:11211'], debug=1)
 
@@ -43,3 +44,10 @@ async def get_esi(session, url):
             exp_time = exp - now
             json = await response.json()
             return {'resp': json, 'exp': exp_time}
+
+def botDB_create():
+    conn = sql.connect('db/killbot.db')
+    c = conn.cursor()
+    c.execute('CREATE TABLE news (id integer PRIMARY KEY AUTOINCREMENT UNIQUE, nid, title, url, pubDate, category, author)')
+    conn.close()
+    return

@@ -13,6 +13,7 @@ if os.path.exists('logs'):
 else:
     logger = None
 
+
 class killbot(commands.Bot):
     def __init__(self, *args, **kwargs):
         self.token = config.token
