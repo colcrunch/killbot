@@ -2,6 +2,9 @@ from utils.importsfile import *
 import re
 from utils import marketutils, kbutils
 
+# TODO: Logging
+
+
 class LinkListener:
     def __init__(self, bot):
         self.bot = bot

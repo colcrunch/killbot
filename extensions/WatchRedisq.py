@@ -1,6 +1,7 @@
 from utils.importsfile import *
 from utils import kbutils
 
+
 class WatchRedisq:
     def __init__(self, bot):
         self.bot = bot

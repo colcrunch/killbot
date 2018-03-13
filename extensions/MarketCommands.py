@@ -2,6 +2,9 @@ from utils.importsfile import *
 import utils.marketutils as market
 from utils.config import prefix as prefix
 
+# TODO: Logging
+
+
 class MarketCommands:
     def __init__(self, bot):
         self.bot = bot
