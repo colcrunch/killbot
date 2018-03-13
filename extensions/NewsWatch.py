@@ -51,6 +51,13 @@ class NewsWatch:
                             conn.commit()
 
                             # Build Embed
+                            if self.patch is False and article['category'] is "patch-notes":
+                                continue
+                            elif self.dev is False and article['category'] is "dev-blogs":
+                                continue
+                            elif self.news is False and article['category'] is "news":
+                                continue
+
                             if article['publishingDate'].endswith("Z"):
                                 time = datetime.datetime.strptime(article['publishingDate'], '%Y-%m-%dT%H:%M:%SZ')
                             else:
@@ -67,9 +74,10 @@ class NewsWatch:
 
                 await asyncio.sleep(300)
 
-            except Exception as e:
-                print(e)
-                self.bg_task = self.bot.loop.create_task(self.newss())
+        except Exception as e:
+            print(e)
+            self.bg_task = self.bot.loop.create_task(self.newss())
+
 
 
 
