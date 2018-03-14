@@ -81,9 +81,9 @@ class AdminCommands:
         game = discord.Game(name=pres)
         if state in statuses:
             status = statuses[state]
-            return await self.bot.change_presence(status=status, game=game)
+            return await self.bot.change_presence(status=status, activity=game)
         elif state not in statuses or state is None:
-            return await self.bot.change_presence(game=game)
+            return await self.bot.change_presence(activity=game)
 
     @commands.command(aliases=['ld'], hidden=True)
     @commands.is_owner()
