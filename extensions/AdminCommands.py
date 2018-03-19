@@ -102,7 +102,7 @@ class AdminCommands:
                               f'```')
 
     @commands.command(aliases=['ad'], hidden=True)
-    @commands.is_owner()
+    @checks.guild_owner()
     async def admin(self, ctx, user: discord.Member):
         """ Promotes a user to admin permissions in the current guild. (Only bot owners can promote users to admins) """
         try:
@@ -116,7 +116,7 @@ class AdminCommands:
             return await ctx.send(f'{user.name}#{user.discriminator} is already an admin in this guild.')
 
     @commands.command(aliases=['rad'], hidden=True)
-    @commands.is_owner()
+    @checks.guild_owner()
     async def remove_admin(self, ctx, user: discord.Member):
         """ Demotes a member out of admin permissions in the current guild. (Owner Only)"""
         try:
@@ -133,7 +133,7 @@ class AdminCommands:
     async def list_admin(self, ctx):
         """ Lists all bot admins in the current guild. """
         admins = mc.get(f'{ctx.guild.id}_admin')
-        if len(admins) is 0:
+        if len(admins) is 0 or admins is None:
             return await ctx.send('There are no admins set for this guild yet.')
         adminis = []
         for admin in admins:

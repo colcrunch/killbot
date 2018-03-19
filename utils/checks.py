@@ -12,3 +12,13 @@ def is_admin():
         return user in admins
 
     return commands.check(predicate)
+
+def guild_owner():
+    """ Checks if a user is the owner of the guild. """
+    async def predicate(ctx):
+        if await ctx.bot.is_owner(ctx.author):
+            return True
+        if ctx.author is ctx.guild.owner:
+            return True
+
+    return commands.check(predicate)
