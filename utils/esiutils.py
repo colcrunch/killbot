@@ -4,7 +4,7 @@ from utils.core import mc
 
 
 async def get_id(name, ref):
-    key_name = name.replace(' ', '')
+    key_name = name.replace(' ', '+')
     if mc.get(f'{ref}_{key_name}') is None:
         urlName = urllib.parse.quote_plus(name)
         defs = {'ally': 'alliance',
@@ -94,7 +94,8 @@ async def esi_corp(eid):
                'url': url,
                'ally': ally}
         mc.set(f'{eid}', inf, exp.seconds)
-        mc.set(f'corp_{ticker}', eid, exp.seconds)
+        sanitized_ticker = ticker.replace(" ", "+")
+        mc.set(f'corp_{sanitized_ticker}', eid, exp.seconds)
         name = name.replace(' ','')
         mc.set(f'corp_{name}', eid, exp.seconds)
         return inf

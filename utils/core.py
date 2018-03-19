@@ -49,5 +49,30 @@ def botDB_create():
     conn = sql.connect('db/killbot.db')
     c = conn.cursor()
     c.execute('CREATE TABLE news (id integer PRIMARY KEY AUTOINCREMENT UNIQUE, nid, title, url, pubDate, category, author)')
+    c.execute('CREATE TABLE botAdmins (id integer PRIMARY KEY AUTOINCREMENT UNIQUE, uid, sid, idstr UNIQUE)')
     conn.close()
     return
+
+def promote(uid, sid):
+    conn = sql.connect('db/killbot.db')
+    c = conn.cursor()
+    query = f'INSERT INTO botAdmins VALUES (NULL, {uid}, {sid}, {uid}{sid})'
+    c.execute(query)
+    conn.commit()
+    conn.close()
+    return 1
+
+def updateadmin(sid):
+    if mc.get(f'{sid}_admin') is not None:
+        mc.delete(f'{sid}_admin')
+    conn = sql.connect('db/killbot.db')
+    c = conn.cursor()
+    query = f'SELECT * FROM botAdmins WHERE sid = {sid}'
+    c.execute(query)
+    t = c.fetchall()
+    conn.close()
+    admins = []
+    for ent in t:
+        admins.append(ent[1])
+    mc.set(f'{sid}_admin', admins)
+

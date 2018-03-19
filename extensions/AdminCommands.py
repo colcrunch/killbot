@@ -1,6 +1,8 @@
 from utils.importsfile import *
 from pathlib import Path as path
 from bot import logger as logger
+from utils.core import mc
+import sqlite3
 
 
 class AdminCommands:
@@ -99,6 +101,40 @@ class AdminCommands:
                               f'Cogs: {cog_num} Loaded \n\n{cogs}'
                               f'```')
 
+    @commands.command(aliases=['ad'], hidden=True)
+    @commands.is_owner()
+    async def admin(self, ctx, user: discord.Member):
+        """ Promotes a user to admin permissions in the current guild. (Only bot owners can promote users to admins) """
+        try:
+            uid = user.id
+            sid = ctx.guild.id
+            core.promote(uid, sid)
+            core.updateadmin(sid)
+            logger.info(f'{ctx.author.name} promoted {user.name}{user.discriminator} to admin in {sid}.')
+            return await ctx.send(f'{user.name}#{user.discriminator} has been promoted to an admin in this guild.')
+        except sqlite3.IntegrityError:
+            return await ctx.send(f'{user.name}#{user.discriminator} is already an admin in this guild.')
+
+    @commands.command(aliases=['lad'], hidden=True)
+    @checks.is_admin()
+    async def list_admin(self, ctx):
+        """ Lists all bot admins in the current guild. """
+        admins = mc.get(f'{ctx.guild.id}_admin')
+        if admins is None:
+            return await ctx.send('There are no admins set for this guild yet.')
+        adminis = []
+        for admin in admins:
+            admini = discord.Guild.get_member(ctx.guild, user_id=admin)
+            if admini.nick is None:
+                name = admini.name
+            else:
+                name = admini.nick
+            adminis.append(f'{name} ({admini.name}#{admini.discriminator})')
+        admins = "\n".join(adminis)
+        return await ctx.send(f'```\n'
+                              f'Admins: \n'
+                              f'{admins}'
+                              f'```')
 
 def setup(killbot):
     killbot.add_cog(AdminCommands(killbot))
