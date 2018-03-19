@@ -149,6 +149,26 @@ class AdminCommands:
                               f'{admins}'
                               f'```')
 
+    @commands.command(aliases=['cstats'], hidden=True)
+    @checks.guild_owner()
+    async def cache_stats(self, ctx):
+        stat = mc.get_stats()
+        stats = stat[0][1]
+        maxmib = float(stats["limit_maxbytes"])/1048576
+        msg = f'```' \
+              f'Memcache Stats: \n-------------------\n' \
+              f'Up Time (in seconds): {stats["uptime"]}\n' \
+              f'Connections: Current: {stats["curr_connections"]} | Total: {stats["total_connections"]}\n' \
+              f'Threads: {stats["threads"]}\n' \
+              f'Max Size: {stats["limit_maxbytes"]} bytes | {str(maxmib)} MiB\n' \
+              f'Total Size: {stats["bytes"]} bytes \n' \
+              f'Cache Items: Current: {stats["curr_items"]} | Total: {stats["total_items"]}\n\n' \
+              f'Hits and Misses:\n-------------------\n' \
+              f'Get: {stats["get_hits"]} / {stats["get_misses"]}\n' \
+              f'Del: {stats["delete_hits"]} / {stats["delete_misses"]}\n' \
+              f'```'
+        return await ctx.send(msg)
+
 def setup(killbot):
     killbot.add_cog(AdminCommands(killbot))
 
