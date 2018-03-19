@@ -56,11 +56,25 @@ def botDB_create():
 def promote(uid, sid):
     conn = sql.connect('db/killbot.db')
     c = conn.cursor()
-    query = f'INSERT INTO botAdmins VALUES (NULL, {uid}, {sid}, {uid}{sid})'
+    query = f'INSERT INTO botAdmins VALUES (NULL, {uid}, {sid}, "{uid}{sid}")'
     c.execute(query)
     conn.commit()
     conn.close()
-    return 1
+    return
+
+def demote(uid, sid):
+    admins = mc.get(f'{sid}_admin')
+    if uid not in admins:
+        # sqlite3 doesn't raise an error when you try to delete a record that doesn't exist, so we will check first,
+        # then raise it if we need to. (using this error for convenience)
+        raise sql.IntegrityError
+    conn = sql.connect('db/killbot.db')
+    c = conn.cursor()
+    query = f'DELETE FROM botAdmins WHERE idstr = "{uid}{sid}"'
+    c.execute(query)
+    conn.commit()
+    conn.close()
+    return
 
 def updateadmin(sid):
     if mc.get(f'{sid}_admin') is not None:
@@ -75,4 +89,5 @@ def updateadmin(sid):
     for ent in t:
         admins.append(ent[1])
     mc.set(f'{sid}_admin', admins)
+    return
 

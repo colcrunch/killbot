@@ -115,12 +115,25 @@ class AdminCommands:
         except sqlite3.IntegrityError:
             return await ctx.send(f'{user.name}#{user.discriminator} is already an admin in this guild.')
 
+    @commands.command(aliases=['rad'], hidden=True)
+    @commands.is_owner()
+    async def remove_admin(self, ctx, user: discord.Member):
+        """ Demotes a member out of admin permissions in the current guild. (Owner Only)"""
+        try:
+            uid = user.id
+            sid = ctx.guild.id
+            core.demote(uid, sid)
+            core.updateadmin(sid)
+            return await ctx.send(f'{user.name}#{user.discriminator} has been demoted in this guild.')
+        except sqlite3.IntegrityError:
+            return await ctx.send(f'{user.name}#{user.discriminator} is not an admin in this guild.')
+
     @commands.command(aliases=['lad'], hidden=True)
     @checks.is_admin()
     async def list_admin(self, ctx):
         """ Lists all bot admins in the current guild. """
         admins = mc.get(f'{ctx.guild.id}_admin')
-        if admins is None:
+        if len(admins) is 0:
             return await ctx.send('There are no admins set for this guild yet.')
         adminis = []
         for admin in admins:
