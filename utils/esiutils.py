@@ -135,6 +135,7 @@ async def esi_ally(eid):
         print(f'Getting alliance info for {eid} from cache.')
         return mc.get(f'{eid}')
 
+
 async def esi_type(eid):
     ed = f'{eid}'
     if mc.get(ed) is None:
@@ -152,6 +153,7 @@ async def esi_type(eid):
     else:
         print(f'Getting type info for {ed} from cache.')
         return mc.get(ed)
+
 
 async def esi_system(eid):
     if mc.get(f'{eid}') is None:
@@ -194,6 +196,7 @@ async def esi_system(eid):
         print(f"Getting system information for {eid} from cache.")
         return mc.get(f'{eid}')
 
+
 async def esi_sysKills():
     if mc.get('sysKills') is None:
         url = 'https://esi.tech.ccp.is/v2/universe/system_kills/'
@@ -206,6 +209,7 @@ async def esi_sysKills():
     else:
         print("Getting system kill information from cache.")
         return mc.get('sysKills')
+
 
 async def esi_sysJumps():
     if mc.get('sysJumps') is None:
@@ -220,6 +224,7 @@ async def esi_sysJumps():
         print("Getting system jump information from cache.")
         return mc.get('sysJumps')
 
+
 async def esi_status():
     if mc.get('status') is None:
         url = "https://esi.tech.ccp.is/latest/status/?datasource=tranquility"
@@ -229,6 +234,7 @@ async def esi_status():
             return None
         resp = respo['resp']
         exp = respo['exp']
+        print(exp)
         if 'players' in resp:
             mc.set('status', resp['players'], exp.seconds)
             return resp['players']
