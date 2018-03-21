@@ -1,6 +1,8 @@
 from utils.importsfile import *
+import bot
 import async_timeout
 import sqlite3 as sql
+
 
 mc = memcache.Client(['127.0.0.1:11211'], debug=1)
 
@@ -44,6 +46,10 @@ async def get_esi(session, url):
             now = datetime.datetime.utcnow()
             if 'Expires' not in response.headers:
                 exp_time = now - now
+                bot.logger.error(f'ESI returned a response without an expiry header! HTTP Code: {response.status} | '
+                             f'Request URL: {url}')
+                bot.logger.error(response.headers)
+                bot.logger.error(await response.json())
             else:
                 exp = datetime.datetime.strptime(response.headers['Expires'], "%a, %d %b %Y %H:%M:%S %Z")
                 exp_time = exp - now
