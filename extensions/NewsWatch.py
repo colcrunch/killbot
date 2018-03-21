@@ -8,7 +8,7 @@ class NewsWatch:
         print("Watching for news from CCP.")
         self.bg_task = self.bot.loop.create_task(self.newss())
         self.bot.logger.info("NewsWatch Extension loaded.")
-        self.channel = config.news_channel
+        self.channel = self.bot.get_channel(config.news_channel)
         self.news = config.news
         self.patch = config.patchnotes
         self.dev = config.devblogs
@@ -49,11 +49,11 @@ class NewsWatch:
                             conn.commit()
 
                             # Build Embed
-                            if self.patch is False and article['category'] is "patch-notes":
+                            if self.patch is False and article['category'] == "patch-notes":
                                 continue
-                            elif self.dev is False and article['category'] is "dev-blogs":
+                            elif self.dev is False and article['category'] == "dev-blogs":
                                 continue
-                            elif self.news is False and article['category'] is "news":
+                            elif self.news is False and article['category'] == "news":
                                 continue
 
                             if article['publishingDate'].endswith("Z"):
