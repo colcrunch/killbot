@@ -41,10 +41,10 @@ async def get_esi(session, url):
                'content-type': 'application/json'}
     with async_timeout.timeout(15):
         async with session.get(url, headers=headers) as response:
+            now = datetime.datetime.utcnow()
             if 'Expires' not in response.headers:
-                exp_time = 0
+                exp_time = now - now
             else:
-                now  = datetime.datetime.utcnow()
                 exp = datetime.datetime.strptime(response.headers['Expires'], "%a, %d %b %Y %H:%M:%S %Z")
                 exp_time = exp - now
             json = await response.json()
