@@ -1,6 +1,5 @@
 from utils.importsfile import *
 
-# TODO: Logging
 
 class BotCommands:
     def __init__(self, bot):

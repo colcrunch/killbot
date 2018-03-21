@@ -225,10 +225,11 @@ async def esi_status():
         url = "https://esi.tech.ccp.is/latest/status/?datasource=tranquility"
         async with aiohttp.ClientSession() as session:
             respo = await get(session, url)
+        if respo['code'] is not 200:
+            return None
         resp = respo['resp']
         exp = respo['exp']
         if 'players' in resp:
-            print(exp.seconds)
             mc.set('status', resp['players'], exp.seconds)
             return resp['players']
         else:

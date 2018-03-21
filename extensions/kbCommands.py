@@ -1,8 +1,6 @@
 from utils.importsfile import *
 from utils import kbutils
 
-# TODO: Logging
-
 
 class kbCommands:
     def __init__(self, bot):

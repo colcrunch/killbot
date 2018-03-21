@@ -1,8 +1,6 @@
 from utils.importsfile import *
 import sqlite3 as sql
 
-# TODO: Logging
-
 
 class NewsWatch:
     def __init__(self, bot):
@@ -27,7 +25,7 @@ class NewsWatch:
                     respn = await core.get_json(session, urln)
                     respp = await core.get_json(session, urlp)
 
-                resp = [respd, respn, respp]
+                resp = [respd['resp'], respn['resp'], respp['resp']]
                 conn = sql.connect('db/killbot.db')
                 c = conn.cursor()
                 c.execute('SELECT nid FROM news')

@@ -5,7 +5,7 @@ async def get_mail(kid):
     url = f'http://zkillboard.com/api/killID/{kid}/'
     async with aiohttp.ClientSession() as session:
         resp = await core.get_json(session, url)
-
+    resp = resp['resp']
     km = resp[0]
     time = datetime.datetime.strptime(km['killmail_time'], '%Y-%m-%dT%H:%M:%SZ')
     victim = km['victim']
@@ -21,7 +21,7 @@ async def get_stats(cid):
     async with aiohttp.ClientSession() as session:
         resp = await core.get_json(session, url)
 
-    stats = resp
+    stats = resp['resp']
     if 'shipsDestroyed' in stats:
         gRatio = stats['gangRatio']
         dRatio = stats['dangerRatio']

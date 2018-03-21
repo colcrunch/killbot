@@ -28,22 +28,28 @@ def strftdelta(tdelta):
     return fmt.format(**d)
 
 async def get_json(session, url):
-    headers = {'user-agent': 'application: {0} contact: {1}'.format(config.app, config.contact),
+    headers = {'user-agent': f'application: {config.app} contact: {config.contact}',
                'content-type': 'application/json'}
     with async_timeout.timeout(15):
         async with session.get(url, headers=headers) as response:
-            return await response.json()
+            json = await response.json()
+            resp_code = response.status
+            return {'resp': json, 'code': resp_code}
 
 async def get_esi(session, url):
-    headers = {'user-agent': 'application: {0} contact: {1}'.format(config.app, config.contact),
+    headers = {'user-agent': f'application: {config.app} contact: {config.contact}',
                'content-type': 'application/json'}
     with async_timeout.timeout(15):
         async with session.get(url, headers=headers) as response:
-            now  = datetime.datetime.utcnow()
-            exp = datetime.datetime.strptime(response.headers['Expires'], "%a, %d %b %Y %H:%M:%S %Z")
-            exp_time = exp - now
+            if 'Expires' not in response.headers:
+                exp_time = 0
+            else:
+                now  = datetime.datetime.utcnow()
+                exp = datetime.datetime.strptime(response.headers['Expires'], "%a, %d %b %Y %H:%M:%S %Z")
+                exp_time = exp - now
             json = await response.json()
-            return {'resp': json, 'exp': exp_time}
+            resp_code = response.status
+            return {'resp': json, 'exp': exp_time, "code": resp_code}
 
 def botDB_create():
     conn = sql.connect('db/killbot.db')

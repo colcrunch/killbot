@@ -34,6 +34,7 @@ class WatchRedisq:
             while 'WatchRedisq' in self.bot.cogs:
                 async with aiohttp.ClientSession() as session:
                     resp = await core.get_json(session, url)
+                resp = resp['resp']
                 if resp['package'] is not None:
                     self.bot.counter += 1
                     km = resp['package']['killmail']
