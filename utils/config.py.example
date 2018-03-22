@@ -52,3 +52,20 @@ news_channel = ''
 news = False
 dev-blogs = False
 patch-notes = False
+
+# ---------
+# Jabber Settings
+# ---------
+
+# The url of the jabber server.
+server = ''
+
+# This is the jid that pings should come from.
+broadcast_jid = ''
+
+# This is the user information for the bot to log in using.
+user_jid = ''
+user_password = ''
+
+# The channel that you want to post the pings to.
+ping_channel = ''
