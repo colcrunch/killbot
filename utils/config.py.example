@@ -63,6 +63,9 @@ server = ''
 # This is the jid that pings should come from.
 broadcast_jid = ''
 
+# Logo Link. This will display your corp/alliance logo on pings (or any image you want really)
+logo_url = ''
+
 # This is the user information for the bot to log in using.
 user_jid = ''
 user_password = ''
