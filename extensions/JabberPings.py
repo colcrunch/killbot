@@ -15,15 +15,17 @@ class JabberPings:
         self.bg_task = self.bot.loop.create_task(self.jabber(self.jid, self.password))
 
     async def jabber(self, jid, password):
+        await self.bot.wait_until_ready()
+        print('Waiting for pings from Jabber.')
         client = aioxmpp.PresenceManagedClient(jid, aioxmpp.make_security_layer(password, no_verify=True))
 
         icon_url = self.icon_url
         bot = self.bot
+
         def message_recieved(msg):
             if not msg.body:
                 # We dont want to do anything with an empty message.
                 return
-            print(msg.from_.bare())
 
             if msg.from_.bare() == aioxmpp.JID.fromstr(self.target).bare():
                 # Take the message and pass it to an async task so we can post it.
@@ -35,13 +37,13 @@ class JabberPings:
 
         async def post(msg):
             body = msg.body[list(msg.body.keys())[0]]
-            print(body)
+            bot.logger.info('Ping Received.')
             urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', body)
             if len(urls) == 0:
                 urlstr = ''
             else:
                 urlstr = "**PING CONTAINS THE FOLLOWING URLS** \n> " + ' \n> '.join(urls) + "\n\n"
-            time = datetime.datetime.utcnow().isoformat()
+            time = datetime.datetime.utcnow()
             embed = discord.Embed(description=f'```\n{body}```\n '
                                               f'{urlstr}'
                                               f'***THIS IS PING HAS BEEN AUTOMATICALLY FORWARDED FROM JABBER***',

@@ -47,7 +47,7 @@ async def get_esi(session, url):
             if 'Expires' not in response.headers:
                 exp_time = now - now
                 bot.logger.error(f'ESI returned a response without an expiry header! HTTP Code: {response.status} | '
-                             f'Request URL: {url}')
+                                 f'Request URL: {url}')
                 bot.logger.error(response.headers)
                 bot.logger.error(await response.json())
             else:
