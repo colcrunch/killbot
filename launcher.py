@@ -60,6 +60,13 @@ def test():
     core.botDB_create()
     pass
 
+
+def migrate():
+    print('Updating bot database.')
+    core.botDB_update()
+    return print('Database up to date.')
+
+
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         main()
@@ -69,6 +76,8 @@ if __name__ == '__main__':
         test()
     elif sys.argv[1] == 'update':
         update()
+    elif sys.argv[1] == 'migrate':
+        migrate()
     else:
         print(sys.argv[1]+' is not a valid argument. Starting bot.')
         main()

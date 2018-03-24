@@ -6,6 +6,8 @@ def is_admin():
     async def predicate(ctx):
         if await ctx.bot.is_owner(ctx.author):
             return True
+        elif ctx.author is ctx.guild.owner:
+            return True
         sid = ctx.guild.id
         user = ctx.author.id
         admins = mc.get(f'{sid}_admin')
@@ -22,3 +24,4 @@ def guild_owner():
             return True
 
     return commands.check(predicate)
+
