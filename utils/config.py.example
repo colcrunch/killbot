@@ -1,5 +1,3 @@
-import logging
-
 # Killbot Config
 #
 #
@@ -29,7 +27,7 @@ contact = ''
 
 
 # Options for logging level: CRITICAL, ERROR, WARNING, INFO, and DEBUG
-logginglevel = logging.DEBUG
+logginglevel = 'DEBUG'
 
 # ----------
 # Killboard Watching Settings
