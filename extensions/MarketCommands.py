@@ -23,8 +23,11 @@ class MarketCommands:
                 return await ctx.send('Item not found.')
             else:
                 self.logger.warning("It appears that the SDE may be out of date. Please run the launcher update"
-                                        " command")
-                item = esiutils.esi_type(item_id)
+                                    " command")
+                appinf = await self.bot.application_info()
+                owner = self.bot.get_user(appinf.owner.id)
+                await owner.send("It appears the SDE is out of date, please run the launcher update.")
+                item = await esiutils.esi_type(item_id)
         else:
             item = sdeutils.type_name(item_id)
 

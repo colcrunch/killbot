@@ -53,6 +53,10 @@ class JabberPings:
             embed.set_footer(icon_url=bot.user.avatar_url_as(format='png'), text=f"Service provided by {bot.user.name}")
             return await self.channel.send(embed=embed)
 
+        @aioxmpp.service.iq_handler()
+        async def iq_handle():
+            pass
+
         async with client.connected():
             while 'JabberPings' in self.bot.cogs:
                 await asyncio.sleep(1)
