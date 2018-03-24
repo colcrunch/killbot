@@ -59,9 +59,10 @@ class killbot(commands.Bot):
             else:
                 print(f'{addon} Loaded')
 
-        # Load admin lists into cache.
+        # Load database config lists into cache.
         for guild in super().guilds:
             core.updateadmin(guild.id)
+            core.load_ignore(guild.id)
 
         await self.change_presence(activity=discord.Game(name=self.playing))
         print('\nLogged In')
