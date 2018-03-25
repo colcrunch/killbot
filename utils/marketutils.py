@@ -9,7 +9,7 @@ async def get_price(item, region):
 
     async with aiohttp.ClientSession() as session:
         resp = await core.get_json(session, url)
-
+    resp = resp['resp']
     respi = dict(resp[0])
     sell = respi['sell']
     buy = respi['buy']

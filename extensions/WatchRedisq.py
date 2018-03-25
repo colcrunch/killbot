@@ -1,6 +1,7 @@
 from utils.importsfile import *
 from utils import kbutils
 
+
 class WatchRedisq:
     def __init__(self, bot):
         self.bot = bot
@@ -33,6 +34,7 @@ class WatchRedisq:
             while 'WatchRedisq' in self.bot.cogs:
                 async with aiohttp.ClientSession() as session:
                     resp = await core.get_json(session, url)
+                resp = resp['resp']
                 if resp['package'] is not None:
                     self.bot.counter += 1
                     km = resp['package']['killmail']
@@ -71,7 +73,8 @@ class WatchRedisq:
 
         except Exception as e:
             self.bot.logger.critical(f"Something went wrong with WatchRedisq! {e}")
-            self.bot.logger.critical(traceback.print_exc())
+            self.bot.logger.critical(e)
+            self.bg_task = self.bot.loop.create_task(self.watch())
 
 
 def setup(killbot):

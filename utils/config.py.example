@@ -1,5 +1,3 @@
-import logging
-
 # Killbot Config
 #
 #
@@ -8,7 +6,7 @@ import logging
 
 #--------------------------
 # Addons
-addons = []
+addons = ['AdminCommands',]
 
 #--------------------------
 
@@ -29,7 +27,7 @@ contact = ''
 
 
 # Options for logging level: CRITICAL, ERROR, WARNING, INFO, and DEBUG
-logginglevel = logging.DEBUG
+logginglevel = 'DEBUG'
 
 # ----------
 # Killboard Watching Settings
@@ -40,3 +38,52 @@ kill_channel = ''
 
 # IDs to watch for.
 kill_ids = {'alliance_id': [], 'corporation_id': [], 'character_id': [], 'ship_type_id': []}
+
+# ---------
+# News Watching Settings
+# ---------
+
+# The channel to post news articles to.
+news_channel = ''
+
+# Change the different types to "True" to enable posting them.
+news = False
+dev-blogs = False
+patch-notes = False
+
+# ---------
+# Jabber Settings
+# ---------
+
+# The url of the jabber server.
+server = ''
+
+# This is the jid that pings should come from.
+broadcast_jid = ''
+
+# Logo Link. This will display your corp/alliance logo on pings (or any image you want really)
+logo_url = ''
+
+# This is the user information for the bot to log in using.
+user_jid = ''
+user_password = ''
+
+# The channel that you want to post the pings to.
+ping_channel = ''
+
+# ---------
+# Thera Settings
+# ---------
+
+# Region IDs to watch for:
+regions = ['']
+
+# Constellation IDs to watch for: These will be @here'd
+cons = ['']
+
+# System IDs to watch for: These will be @everyone'd.
+# To avoid possible ping spam for members, generally only your home system should be listed here.
+systems = ['']
+
+# Channel to post to.
+thera_channel = ''

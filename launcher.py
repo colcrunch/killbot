@@ -6,6 +6,7 @@ import discord
 import logging
 from utils.config import msg
 import os
+import utils.core as core
 
 
 def main():
@@ -41,6 +42,11 @@ def setup():
     # First get the SDE... we can use the update() function above for this.
     update()
 
+    # Set up the bot database.
+    print('Creating bot database.')
+    core.botDB_create()
+
+    #Create Log Dir.
     print("Creating Log Directory")
     try:
         os.makedirs('./logs', exist_ok=False)
@@ -51,7 +57,15 @@ def setup():
 
 
 def test():
+    core.botDB_create()
     pass
+
+
+def migrate():
+    print('Updating bot database.')
+    core.botDB_update()
+    return print('Database up to date.')
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
@@ -62,6 +76,8 @@ if __name__ == '__main__':
         test()
     elif sys.argv[1] == 'update':
         update()
+    elif sys.argv[1] == 'migrate':
+        migrate()
     else:
         print(sys.argv[1]+' is not a valid argument. Starting bot.')
         main()

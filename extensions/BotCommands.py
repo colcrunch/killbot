@@ -18,7 +18,8 @@ class BotCommands:
         embed = discord.Embed(title="About {}".format(self.bot.user.name), description=about)
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url_as(format='png'))
         embed.set_thumbnail(url=self.bot.user.avatar_url_as(format='png'))
-        embed.add_field(name="Bot Owner", value=owner, inline=False)
+        embed.add_field(name="Bot Owner", value=owner, inline=True)
+        embed.add_field(name="Bot Author", value="col_crunch#2370", inline=True)
         embed.add_field(name="GitHub", value=link, inline=False)
 
         return await ctx.send(embed=embed)

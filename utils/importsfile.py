@@ -14,4 +14,5 @@ from utils import core
 from utils import esiutils
 from utils import sdeutils
 from discord.ext import commands
+from utils import checks
 

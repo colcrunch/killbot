@@ -1,6 +1,8 @@
 from utils.importsfile import *
 from pathlib import Path as path
 from bot import logger as logger
+from utils.core import mc
+import sqlite3
 
 
 class AdminCommands:
@@ -81,9 +83,9 @@ class AdminCommands:
         game = discord.Game(name=pres)
         if state in statuses:
             status = statuses[state]
-            return await self.bot.change_presence(status=status, game=game)
+            return await self.bot.change_presence(status=status, activity=game)
         elif state not in statuses or state is None:
-            return await self.bot.change_presence(game=game)
+            return await self.bot.change_presence(activity=game)
 
     @commands.command(aliases=['ld'], hidden=True)
     @commands.is_owner()
@@ -99,6 +101,73 @@ class AdminCommands:
                               f'Cogs: {cog_num} Loaded \n\n{cogs}'
                               f'```')
 
+    @commands.command(aliases=['ad'], hidden=True)
+    @checks.guild_owner()
+    async def admin(self, ctx, user: discord.Member):
+        """ Promotes a user to admin permissions in the current guild. (Only bot owners can promote users to admins) """
+        try:
+            uid = user.id
+            sid = ctx.guild.id
+            core.promote(uid, sid)
+            core.updateadmin(sid)
+            logger.info(f'{ctx.author.name} promoted {user.name}{user.discriminator} to admin in {sid}.')
+            return await ctx.send(f'{user.name}#{user.discriminator} has been promoted to an admin in this guild.')
+        except sqlite3.IntegrityError:
+            return await ctx.send(f'{user.name}#{user.discriminator} is already an admin in this guild.')
+
+    @commands.command(aliases=['rad'], hidden=True)
+    @checks.guild_owner()
+    async def remove_admin(self, ctx, user: discord.Member):
+        """ Demotes a member out of admin permissions in the current guild. (Owner Only)"""
+        try:
+            uid = user.id
+            sid = ctx.guild.id
+            core.demote(uid, sid)
+            core.updateadmin(sid)
+            return await ctx.send(f'{user.name}#{user.discriminator} has been demoted in this guild.')
+        except sqlite3.IntegrityError:
+            return await ctx.send(f'{user.name}#{user.discriminator} is not an admin in this guild.')
+
+    @commands.command(aliases=['lad'], hidden=True)
+    @checks.is_admin()
+    async def list_admin(self, ctx):
+        """ Lists all bot admins in the current guild. """
+        admins = mc.get(f'{ctx.guild.id}_admin')
+        if len(admins) is 0 or admins is None:
+            return await ctx.send('There are no admins set for this guild yet.')
+        adminis = []
+        for admin in admins:
+            admini = discord.Guild.get_member(ctx.guild, user_id=admin)
+            if admini.nick is None:
+                name = admini.name
+            else:
+                name = admini.nick
+            adminis.append(f'{name} ({admini.name}#{admini.discriminator})')
+        admins = "\n".join(adminis)
+        return await ctx.send(f'```\n'
+                              f'Admins: \n'
+                              f'{admins}'
+                              f'```')
+
+    @commands.command(aliases=['cstats'], hidden=True)
+    @checks.guild_owner()
+    async def cache_stats(self, ctx):
+        stat = mc.get_stats()
+        stats = stat[0][1]
+        maxmib = float(stats["limit_maxbytes"])/1048576
+        msg = f'```' \
+              f'Memcache Stats: \n-------------------\n' \
+              f'Up Time (in seconds): {stats["uptime"]}\n' \
+              f'Connections: Current: {stats["curr_connections"]} | Total: {stats["total_connections"]}\n' \
+              f'Threads: {stats["threads"]}\n' \
+              f'Max Size: {stats["limit_maxbytes"]} bytes | {str(maxmib)} MiB\n' \
+              f'Total Size: {stats["bytes"]} bytes \n' \
+              f'Cache Items: Current: {stats["curr_items"]} | Total: {stats["total_items"]}\n\n' \
+              f'Hits and Misses:\n-------------------\n' \
+              f'Get: {stats["get_hits"]} / {stats["get_misses"]}\n' \
+              f'Del: {stats["delete_hits"]} / {stats["delete_misses"]}\n' \
+              f'```'
+        return await ctx.send(msg)
 
 def setup(killbot):
     killbot.add_cog(AdminCommands(killbot))

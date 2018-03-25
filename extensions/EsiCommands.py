@@ -78,7 +78,7 @@ class EsiCommands:
 
             urls = {
                 'zkb': f'https://zkillboard.com/character/{eid}/',
-                'who': f'https://evehwo.com/pilot/{urln}'
+                'who': f'https://evewho.com/pilot/{urln}'
             }
 
             embed = discord.Embed(title=f'{inf["name"]} Character Info')

@@ -1,16 +1,53 @@
 from utils.importsfile import *
 import re
 from utils import marketutils, kbutils
+from sqlite3 import IntegrityError
+from utils.core import mc
+
+# TODO: Logging
+
 
 class LinkListener:
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command(aliases=['ig'], hidden=True)
+    @checks.is_admin()
+    async def ignore(self, ctx, channel: discord.TextChannel):
+        """ Tells LinkListener to ignore a channel. """
+        try:
+            chid = channel.id
+            print(chid)
+            core.link_ignore(chid, ctx.guild.id)
+            core.load_ignore(ctx.guild.id)
+            return await ctx.send(f'Channel ignored.')
+        except IntegrityError:
+            return await ctx.send(f'Channel already ignored.')
+
+    @commands.command(aliases=['uig'], hidden=True)
+    @checks.is_admin()
+    async def unignore(self, ctx, channel: discord.TextChannel):
+        """ Tells LinkListener to stop ignoring a channel. """
+        try:
+            chid = channel.id
+            core.stop_ignore(chid, ctx.guild.id)
+            core.load_ignore(ctx.guild.id)
+            return await ctx.send(f'Listening to channel again.')
+        except IntegrityError:
+            return await ctx.send(f'Channel not being ignored.')
 
     def passed(self, check):
         message = msg
         return check.id == message.id
 
     async def on_message(self, message):
+        chid = message.channel.id
+        if type(message.channel) is discord.TextChannel:
+            ignore = mc.get(f'{message.guild.id}_dontListen')
+        else:
+            ignore = [None]
+        if chid in ignore:
+            return
         match = re.match(r'(.*)(http[s]?://([A-Za-z]*).[a-zA-z]*(/[a-zA-z]*/?)([0-9]*)[a-zA-Z/]?)', message.content)
         """
          Match Groups:

@@ -13,6 +13,7 @@ if os.path.exists('logs'):
 else:
     logger = None
 
+
 class killbot(commands.Bot):
     def __init__(self, *args, **kwargs):
         self.token = config.token
@@ -29,11 +30,26 @@ class killbot(commands.Bot):
 
         super().__init__(command_prefix=self.prefix, description=self.description, pm_help=None, *args, **kwargs)
 
+    async def on_command_error(self, context, error):
+        if isinstance(error, commands.NoPrivateMessage):
+            await context.author.send('This command cannot be used in private messages.')
+        elif isinstance(error, commands.DisabledCommand):
+            await context.author.send('Sorry. This command is disabled and cannot be used.')
+        elif isinstance(error, commands.UserInputError):
+            await context.send(error)
+        elif isinstance(error, commands.NotOwner):
+            logger.error('%s tried to run %s but is not the owner' % (context.author, context.command.name))
+        elif isinstance(error, commands.CommandInvokeError):
+            logger.error('In %s:' % context.command.qualified_name)
+            logger.error(''.join(traceback.format_tb(error.original.__traceback__)))
+            logger.error('{0.__class__.__name__}: {0}'.format(error.original))
+
     def run(self):
         super().run(self.token)
 
     async def on_ready(self):
 
+        # Load Extensions
         for addon in self.addons:
             try:
                 self.load_extension(f'extensions.{addon}')
@@ -43,7 +59,12 @@ class killbot(commands.Bot):
             else:
                 print(f'{addon} Loaded')
 
-        await self.change_presence(game=discord.Game(name=self.playing))
+        # Load database config lists into cache.
+        for guild in super().guilds:
+            core.updateadmin(guild.id)
+            core.load_ignore(guild.id)
+
+        await self.change_presence(activity=discord.Game(name=self.playing))
         print('\nLogged In')
         print(self.user.name)
         print(self.user.id)
