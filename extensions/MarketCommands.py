@@ -1,6 +1,7 @@
 from utils.importsfile import *
 import utils.marketutils as market
 from utils.config import prefix as prefix
+from utils.core import mc
 
 
 class MarketCommands:
@@ -22,11 +23,17 @@ class MarketCommands:
             if item_id is None:
                 return await ctx.send('Item not found.')
             else:
-                self.logger.warning("It appears that the SDE may be out of date. Please run the launcher update"
-                                    " command")
-                appinf = await self.bot.application_info()
-                owner = self.bot.get_user(appinf.owner.id)
-                await owner.send("It appears the SDE is out of date, please run the launcher update.")
+                # If we have to hit ESI for a type_id, this means that the SDE that is currently in use is likely old.
+                if mc.get('sde_update_notice') is None:
+                    self.logger.warning("It appears that the SDE may be out of date. Please run the launcher update"
+                                        " command")
+                    appinf = await self.bot.application_info()
+                    owner = self.bot.get_user(appinf.owner.id)
+                    await owner.send("It appears the SDE is out of date, please run `python3 launcher.py update` and "
+                                     "restart the bot.")
+                    # Notifications should only happen once a day.
+                    mc.set('sde_update_notice', True, 86400)
+
                 item = await esiutils.esi_type(item_id)
         else:
             item = sdeutils.type_name(item_id)

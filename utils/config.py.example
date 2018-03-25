@@ -70,3 +70,20 @@ user_password = ''
 
 # The channel that you want to post the pings to.
 ping_channel = ''
+
+# ---------
+# Thera Settings
+# ---------
+
+# Region IDs to watch for:
+regions = ['']
+
+# Constellation IDs to watch for: These will be @here'd
+cons = ['']
+
+# System IDs to watch for: These will be @everyone'd.
+# To avoid possible ping spam for members, generally only your home system should be listed here.
+systems = ['']
+
+# Channel to post to.
+thera_channel = ''
