@@ -1,5 +1,7 @@
 # killbot
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/8a6e94242462e3c9f561/maintainability)](https://codeclimate.com/github/colcrunch/killbot/maintainability)
+
 Killbot is discord bot built using python3 and discord.py for use with EVE Online. 
 
 ## Major Dependencies
