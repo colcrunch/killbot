@@ -44,7 +44,7 @@ class WatchRedisq:
                         for key in keys:
                             if key in attacker:
                                 if str(attacker[key]) in ids[key]:
-                                    #If we get to this point, then the KM will be posted. No need to continue.
+                                    # If we get to this point, then the KM will be posted. No need to continue.
                                     embed = await kbutils.build_kill(resp['package'], 'esi')
                                     await channel.send(embed=embed)
                                     self.bot.kcounter += 1
@@ -52,7 +52,7 @@ class WatchRedisq:
                                     yes = True
                                     break
                         if yes == True:
-                            #Break the attacker loop
+                            # Break the attacker loop
                             break
                     if yes is not True:
                         # if the attackers don't post anything then we will look at the victim.

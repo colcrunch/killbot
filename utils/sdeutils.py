@@ -5,6 +5,12 @@ import urllib
 import sqlite3 as sqlite
 
 
+if os.path.exists('db/sde.sqlite'):
+    db = 'db/sde.sqlite'
+else:
+    db = None
+
+
 def getfile(url):
     r = requests.get('https://www.fuzzwork.co.uk/')
     if r.status_code != 200:
@@ -18,7 +24,7 @@ def getfile(url):
 def extract(file):
     with open('sde.sqlite', 'wb') as newfile, open(file, 'rb') as file:
         decompressor = bz2.BZ2Decompressor()
-        for data in iter(lambda : file.read(100 * 1024), b''):
+        for data in iter(lambda: file.read(100 * 1024), b''):
             newfile.write(decompressor.decompress(data))
     return True
 
@@ -29,14 +35,29 @@ def move():
     return True
 
 
-def type_id(name):
-    db = 'db/sde.sqlite'
+def exec_one(query):
     conn = sqlite.connect(db)
     c = conn.cursor()
-    n = (name,)
-    c.execute('SELECT typeID FROM invTypes WHERE typeName LIKE ?', n)
+    c.execute(query)
     t = c.fetchone()
     conn.close()
+
+    return t
+
+
+def exec_all(query):
+    conn = sqlite.connect(db)
+    c = conn.cursor()
+    c.execute(query)
+    t = c.fetchall()
+    conn.close()
+
+    return t
+
+
+def type_id(name):
+    query = f'SELECT typeID FROM invTypes WHERE typeName LIKE {name}'
+    t = exec_one(query)
 
     if t is None:
         return None
@@ -45,13 +66,8 @@ def type_id(name):
 
 
 def type_name(tid):
-    db = 'db/sde.sqlite'
-    conn = sqlite.connect(db)
-    c = conn.cursor()
-    n = (tid,)
-    c.execute('SELECT typeName FROM invTypes WHERE typeID = ?', n)
-    t = c.fetchone()
-    conn.close()
+    query = f'SELECT typeName FROM invTypes WHERE typeID = {tid}'
+    t = exec_one(query)
 
     if t is None:
         return None
@@ -60,55 +76,38 @@ def type_name(tid):
 
 
 def region_id(name):
-    db = 'db/sde.sqlite'
-    conn = sqlite.connect(db)
-    c = conn.cursor()
-    n = (name,)
-    c.execute('SELECT regionID FROM mapRegions WHERE regionName LIKE ?', n)
-    t = c.fetchone()
-    conn.close()
+    query = f'SELECT regionID FROM mapRegions WHERE regionName LIKE {name}'
+    t = exec_one(query)
 
     if t is None:
         return None
     else:
         return str(t[0])
+
 
 def region_name(rid):
-    db = 'db/sde.sqlite'
-    conn = sqlite.connect(db)
-    c = conn.cursor()
-    n = (rid,)
-    c.execute('SELECT regionName FROM mapRegions WHERE regionID = ?', n)
-    t = c.fetchone()
-    conn.close()
+    query = f'SELECT regionName FROM mapRegions WHERE regionID = {rid}'
+    t = exec_one(query)
 
     if t is None:
         return None
     else:
         return str(t[0])
 
+
 def constellation(cid):
-    db = 'db/sde.sqlite'
-    conn = sqlite.connect(db)
-    c = conn.cursor()
-    n = (cid,)
-    c.execute('SELECT constellationName, regionID FROM mapConstellations WHERE constellationID = ?', n)
-    t = c.fetchone()
-    conn.close()
+    query = f'SELECT constellationName, regionID FROM mapConstellations WHERE constellationID = {cid}'
+    t = exec_one(query)
 
     if t is None:
         return None
     else:
         return {'name': str(t[0]), 'regionID': t[1]}
 
+
 def system_id(name):
-    db = 'db/sde.sqlite'
-    conn = sqlite.connect(db)
-    c = conn.cursor()
-    n = (name,)
-    c.execute('SELECT solarSystemID FROM mapSolarSystems WHERE solarSystemName LIKE ?', n)
-    t = c.fetchone()
-    conn.close()
+    query = f'SELECT solarSystemID FROM mapSolarSystems WHERE solarSystemName LIKE {name}'
+    t = exec_one(query)
 
     if t is None:
         return None
@@ -117,27 +116,18 @@ def system_id(name):
 
 
 def system_name(sid):
-    db = 'db/sde.sqlite'
-    conn = sqlite.connect(db)
-    c = conn.cursor()
-    n = (sid,)
-    c.execute('SELECT solarSystemName FROM mapSolarSystems WHERE solarSystemID = ?', n)
-    t = c.fetchone()
-    conn.close()
+    query = f'SELECT solarSystemName FROM mapSolarSystems WHERE solarSystemID = {sid}'
+    t = exec_one(query)
 
     if t is None:
         return None
     else:
         return str(t[0])
 
+
 def system_star(sid):
-    db = 'db/sde.sqlite'
-    conn = sqlite.connect(db)
-    c = conn.cursor()
-    n = (sid,)
-    c.execute('SELECT sunTypeID FROM mapSolarSystems WHERE solarSystemID = ?', n)
-    t = c.fetchone()
-    conn.close()
+    query = f'SELECT sunTypeID FROM mapSolarSystems WHERE solarSystemID = {sid}'
+    t = exec_one(query)
 
     if t is None:
         return None
