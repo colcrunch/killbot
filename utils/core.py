@@ -165,7 +165,7 @@ def stop_ignore(chid, sid):
         raise sql.IntegrityError
     conn = sql.connect('db/killbot.db')
     c = conn.cursor()
-    query = f'DELETE FROM dontListen WHERE idstr = {chid}#{sid}'
+    query = f'DELETE FROM dontListen WHERE idstr = "{chid}#{sid}"'
     c.execute(query)
     conn.commit()
     conn.close()

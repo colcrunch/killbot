@@ -140,6 +140,7 @@ async def build_kill(km, type):
     embed.add_field(name='Value', value=f'{value} ISK', inline=True)
     embed.add_field(name='Damage Taken', value=vicDam, inline=True)
     embed.add_field(name='System', value=loc, inline=False)
+    embed.add_field(name='Link', value=f'http://zkillboard.com/kill/{killid}/', inline=False)
 
     return embed
 

@@ -45,8 +45,9 @@ class LinkListener:
         if type(message.channel) is discord.TextChannel:
             ignore = mc.get(f'{message.guild.id}_dontListen')
         else:
-            ignore = [None]
+            ignore = []
         if chid in ignore:
+            print("test")
             return
         match = re.match(r'(.*)(http[s]?://([A-Za-z]*).[a-zA-z]*(/[a-zA-z]*/?)([0-9]*)[a-zA-Z/]?)', message.content)
         """
