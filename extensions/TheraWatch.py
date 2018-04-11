@@ -66,6 +66,7 @@ class TheraWatch:
                 await asyncio.sleep(60)
 
         except Exception as e:
+            self.bg_task = self.bot.loop.create_task(self.thera())
             print("What?")
             print(e)
 
