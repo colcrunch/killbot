@@ -56,7 +56,7 @@ def exec_all(query):
 
 
 def type_id(name):
-    query = f'SELECT typeID FROM invTypes WHERE typeName LIKE {name}'
+    query = f"SELECT typeID FROM invTypes WHERE typeName LIKE '{name}'"
     t = exec_one(query)
 
     if t is None:
@@ -76,7 +76,7 @@ def type_name(tid):
 
 
 def region_id(name):
-    query = f'SELECT regionID FROM mapRegions WHERE regionName LIKE {name}'
+    query = f"SELECT regionID FROM mapRegions WHERE regionName LIKE '{name}'"
     t = exec_one(query)
 
     if t is None:
@@ -106,7 +106,7 @@ def constellation(cid):
 
 
 def system_id(name):
-    query = f'SELECT solarSystemID FROM mapSolarSystems WHERE solarSystemName LIKE {name}'
+    query = f"SELECT solarSystemID FROM mapSolarSystems WHERE solarSystemName LIKE '{name}'"
     t = exec_one(query)
 
     if t is None:
