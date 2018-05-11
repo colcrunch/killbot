@@ -4,14 +4,19 @@ import utils.sdeutils as sde
 import shutil
 import discord
 import logging
-from utils.config import msg
 import os
 import utils.core as core
 
 
-def main():
-    bot = killbot()
-    killbot.run(bot)
+if os.path.exists('utils/config.py'):
+    def main():
+        bot = killbot()
+        killbot.run(bot)
+else:
+    def main():
+        print('No config found!\n Please run the initial setup using the setup command.\n\n'
+              ' If you have already run the setup command but your config file somehow got deleted: \n'
+              ' Please run the makeconfig command, then fill out config.py in the utils folder.')
 
 
 def update():
@@ -53,8 +58,16 @@ def setup():
     except OSError:
         pass
 
+    print('Making configuration file.')
+    shutil.copy('utils/config.py.example', 'utils/config.py')
+
     return print('Bot ready for configuration.')
 
+def makeconfig():
+    print('Making config file.')
+    shutil.copy('utils/config.py.example', 'utils/config.py')
+
+    return print('Please edit utils/config.py to configure your bot.')
 
 def test():
     core.botDB_create()
@@ -78,6 +91,8 @@ if __name__ == '__main__':
         update()
     elif sys.argv[1] == 'migrate':
         migrate()
+    elif sys.argv[1] == 'makeconfig':
+        makeconfig()
     else:
         print(sys.argv[1]+' is not a valid argument. Starting bot.')
         main()

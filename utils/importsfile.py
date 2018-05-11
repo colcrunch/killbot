@@ -9,7 +9,8 @@ import requests
 import memcache
 import traceback
 import logging
-from utils import config
+if os.path.exists('utils/config.py'):
+    from utils import config
 from utils import core
 from utils import esiutils
 from utils import sdeutils

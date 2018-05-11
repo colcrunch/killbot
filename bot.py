@@ -1,6 +1,9 @@
 from utils.importsfile import *
-from utils import config
-from utils.config import logginglevel
+
+if os.path.exists('utils/config.py'):
+    from utils.config import logginglevel
+else:
+    logginglevel = 'DEBUG'
 
 if os.path.exists('logs'):
     level = logginglevel
