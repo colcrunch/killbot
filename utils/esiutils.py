@@ -17,7 +17,7 @@ async def get_id(name, ref):
                 'agent': 'agent',
                 'con': 'constellation',
                 'station': 'station'}
-        url = f'https://esi.tech.ccp.is/v2/search/?categories={defs[ref]}&datasource=tranquility&search={urlName}' \
+        url = f'https://esi.evetech.net/v2/search/?categories={defs[ref]}&datasource=tranquility&search={urlName}' \
               f'&strict=true'
 
         async with aiohttp.ClientSession() as session:
@@ -37,7 +37,7 @@ async def get_id(name, ref):
 
 async def esi_char(eid):
     if mc.get(f'{eid}') is None:
-        url = f'https://esi.tech.ccp.is/v4/characters/{eid}/?datasource=tranquility'
+        url = f'https://esi.evetech.net/v4/characters/{eid}/?datasource=tranquility'
         async with aiohttp.ClientSession() as session:
             respo = await get(session, url)
         resp = respo['resp']
@@ -64,7 +64,7 @@ async def esi_char(eid):
 
 async def esi_corp(eid):
     if mc.get(f'{eid}') is None:
-        url = f'https://esi.tech.ccp.is/v4/corporations/{eid}/?datasource=tranquility'
+        url = f'https://esi.evetech.net/v4/corporations/{eid}/?datasource=tranquility'
         async with aiohttp.ClientSession() as session:
             respo = await get(session, url)
         resp = respo['resp']
@@ -106,7 +106,7 @@ async def esi_corp(eid):
 
 async def esi_ally(eid):
     if mc.get(f'{eid}') is None:
-        url = f'https://esi.tech.ccp.is/v3/alliances/{eid}/?datasource=tranquility'
+        url = f'https://esi.evetech.net/v3/alliances/{eid}/?datasource=tranquility'
         async with aiohttp.ClientSession() as session:
             respo = await get(session, url)
         resp = respo['resp']
@@ -139,7 +139,7 @@ async def esi_ally(eid):
 async def esi_type(eid):
     ed = f'{eid}'
     if mc.get(ed) is None:
-        url = f'http://esi.tech.ccp.is/v3/universe/types/{eid}/?datasource=tranquility'
+        url = f'http://esi.evetech.net/v3/universe/types/{eid}/?datasource=tranquility'
         async with aiohttp.ClientSession() as session:
             respo = await core.get_esi(session, url)
         resp = respo['resp']
@@ -157,7 +157,7 @@ async def esi_type(eid):
 
 async def esi_system(eid):
     if mc.get(f'{eid}') is None:
-        url = f'https://esi.tech.ccp.is/v3/universe/systems/{eid}/?datasource=tranquility'
+        url = f'https://esi.evetech.net/v3/universe/systems/{eid}/?datasource=tranquility'
         async with aiohttp.ClientSession() as session:
             respo = await get(session, url)
         resp = respo['resp']
@@ -199,7 +199,7 @@ async def esi_system(eid):
 
 async def esi_sysKills():
     if mc.get('sysKills') is None:
-        url = 'https://esi.tech.ccp.is/v2/universe/system_kills/'
+        url = 'https://esi.evetech.net/v2/universe/system_kills/'
         async with aiohttp.ClientSession() as session:
             respo = await get(session, url)
         resp = respo['resp']
@@ -213,7 +213,7 @@ async def esi_sysKills():
 
 async def esi_sysJumps():
     if mc.get('sysJumps') is None:
-        url = 'https://esi.tech.ccp.is/v1/universe/system_jumps/'
+        url = 'https://esi.evetech.net/v1/universe/system_jumps/'
         async with aiohttp.ClientSession() as session:
             respo = await get(session, url)
         resp = respo['resp']
@@ -227,7 +227,7 @@ async def esi_sysJumps():
 
 async def esi_status():
     if mc.get('status') is None:
-        url = "https://esi.tech.ccp.is/latest/status/?datasource=tranquility"
+        url = "https://esi.evetech.net/latest/status/?datasource=tranquility"
         async with aiohttp.ClientSession() as session:
             respo = await get(session, url)
         if respo['code'] is not 200:
