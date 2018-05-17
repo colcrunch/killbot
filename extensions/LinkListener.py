@@ -4,8 +4,6 @@ from utils import marketutils, kbutils
 from sqlite3 import IntegrityError
 from utils.core import mc
 
-# TODO: Logging
-
 
 class LinkListener:
     def __init__(self, bot):

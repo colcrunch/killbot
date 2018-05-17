@@ -57,7 +57,8 @@ class killbot(commands.Bot):
             try:
                 self.load_extension(f'extensions.{addon}')
             except Exception as e:
-                # TODO: Log exception when we actually do logging.
+                logger.fatal(f'{addon} failed to load. Exception:')
+                logger.fatal(e)
                 print(f'{addon} FAIL')
             else:
                 print(f'{addon} Loaded')
