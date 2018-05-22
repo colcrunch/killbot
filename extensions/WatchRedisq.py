@@ -51,7 +51,7 @@ class WatchRedisq:
                                     # Set yes to true to trigger the breaking of the attacker loop.
                                     yes = True
                                     break
-                        if yes == True:
+                        if yes:
                             # Break the attacker loop
                             break
                     if yes is not True:

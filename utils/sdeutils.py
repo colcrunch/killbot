@@ -25,13 +25,14 @@ def extract(file):
     with open('sde.sqlite', 'wb') as newfile, open(file, 'rb') as file:
         decompressor = bz2.BZ2Decompressor()
         for data in iter(lambda: file.read(100 * 1024), b''):
+            # noinspection PyArgumentList
             newfile.write(decompressor.decompress(data))
     return True
 
 
 def move():
     os.remove('sqlite-latest.sqlite.bz2')
-    mv = shutil.move('sde.sqlite', 'db/sde.sqlite')
+    shutil.move('sde.sqlite', 'db/sde.sqlite')
     return True
 
 

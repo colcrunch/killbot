@@ -48,8 +48,9 @@ class MarketCommands:
     async def price_check(self, ctx, *item):
         """ Checks prices for specified items in a specified region. (Default: The Forge) """
         item = list(item)
+        # noinspection PyShadowingNames
         prefix = self.prefix
-        if self.prefix+'r' in item:
+        if prefix+'r' in item:
             i = item.index(prefix + 'r')
             item_list = item[:i]
             region_list = item[i + 1:]
@@ -62,6 +63,7 @@ class MarketCommands:
             item = it
             return await self.process_item(ctx, item, region_name)
 
+    # noinspection PyUnusedLocal
     @price_check.command(name=f'{prefix}r')
     async def placeholder(self, ctx):
         """ Use this to select the region to use in a price check. """

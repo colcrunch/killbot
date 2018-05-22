@@ -2,6 +2,7 @@ from bot import killbot
 import sys
 import utils.sdeutils as sde
 import shutil
+# noinspection PyPackageRequirements
 import discord
 import logging
 import os
@@ -23,18 +24,18 @@ def update():
     print('Downloading latest SDE... \n'
           'This might take a few mins.')
     file = sde.getfile('https://www.fuzzwork.co.uk/dump/sqlite-latest.sqlite.bz2')
-    if file == None:
+    if file is None:
         print('Error Downloading SDE.')
         return print('Set Up Failed.')
     else:
         print('SDE Downloaded.')
         print('Extracting Files...')
         extract = sde.extract(file)
-        if extract == True:
+        if extract:
             print('Files Extracted.')
             print('Moving SDE files.')
             mv = sde.move()
-            if mv == True:
+            if mv:
                 print('SDE Download complete.')
         else:
             print('Something went wrong when extracting the file.')

@@ -41,9 +41,9 @@ async def get_json(session, url):
                'content-type': 'application/json'}
     with async_timeout.timeout(15):
         async with session.get(url, headers=headers) as response:
-            json = await response.json()
+            resp = await response.json()
             resp_code = response.status
-            return {'resp': json, 'code': resp_code}
+            return {'resp': resp, 'code': resp_code}
 
 
 async def get_esi(session, url):
@@ -61,9 +61,9 @@ async def get_esi(session, url):
             else:
                 exp = datetime.datetime.strptime(response.headers['Expires'], "%a, %d %b %Y %H:%M:%S %Z")
                 exp_time = exp - now
-            json = await response.json()
+            resp = await response.json()
             resp_code = response.status
-            return {'resp': json, 'exp': exp_time, "code": resp_code}
+            return {'resp': resp, 'exp': exp_time, "code": resp_code}
 
 
 def botDB_create():

@@ -34,7 +34,8 @@ class LinkListener:
         except IntegrityError:
             return await ctx.send(f'Channel not being ignored.')
 
-    def passed(self, check):
+    @staticmethod
+    def passed(check):
         message = msg
         return check.id == message.id
 
@@ -106,8 +107,10 @@ class LinkListener:
                                 attAlly = await esiutils.esi_ally(attacker['alliance_id'])
                             else:
                                 attAlly = None
+                            # noinspection PyUnusedLocal
                             attShip = sdeutils.type_name(attacker['ship_type_id'])
 
+                    # noinspection PyUnboundLocalVariable,PyUnboundLocalVariable,PyUnboundLocalVariable
                     dict_km = {'vicChar': vicChar,
                                'vicShip': vicShip,
                                'vicCorp': vicCorp,

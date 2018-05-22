@@ -5,6 +5,7 @@ from utils.core import mc
 import sqlite3
 
 
+# noinspection PyUnusedLocal
 class AdminCommands:
     def __init__(self, bot):
         self.bot = bot

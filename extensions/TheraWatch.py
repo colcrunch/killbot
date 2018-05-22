@@ -13,6 +13,7 @@ class TheraWatch:
 
         self.bg_task = self.bot.loop.create_task(self.thera())
 
+    # noinspection PyUnboundLocalVariable
     async def post(self, level, info):
         tid = info['id']
         mc.set(f'last_thera', tid)
@@ -23,9 +24,9 @@ class TheraWatch:
         elif level is 2:
             note = '@everyone'
 
-        type = info['destinationWormholeType']['name']
-        if type == "K162":
-            type = info['sourceWormholeType']['name']
+        ttype = info['destinationWormholeType']['name']
+        if ttype == "K162":
+            ttype = info['sourceWormholeType']['name']
         system = info['destinationSolarSystem']['name']
         region = info['destinationSolarSystem']['region']['name']
         cons = info['destinationSolarSystem']['constellationID']
@@ -38,7 +39,7 @@ class TheraWatch:
         embed.add_field(name='Region', value=region, inline=False)
         embed.add_field(name='System', value=system, inline=True)
         embed.add_field(name='Constellation', value=cons, inline=True)
-        embed.add_field(name='Type', value=type, inline=False)
+        embed.add_field(name='Type', value=ttype, inline=False)
 
         return await self.channel.send(content=note, embed=embed)
 

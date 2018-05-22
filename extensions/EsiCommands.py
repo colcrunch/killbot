@@ -64,6 +64,7 @@ class EsiCommands:
             embed.add_field(name='Additional Information', value=f'{urls["zkb"]}\n{urls["dotlan"]}', inline=False)
             return await ctx.send(embed=embed)
 
+    # noinspection PyUnresolvedReferences
     @commands.command(aliases=['ch'])
     async def char(self, ctx, *, char: str):
         """ Displays public information for a character. """
@@ -74,6 +75,7 @@ class EsiCommands:
             inf = await esi.esi_char(eid)
             corp = await esi.esi_corp(inf['corpid'])
 
+            # noinspection PyUnresolvedReferences
             urln = urllib.parse.quote_plus(inf['name'])
 
             urls = {

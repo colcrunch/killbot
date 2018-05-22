@@ -9,7 +9,7 @@ Killbot is discord bot built using python3 and discord.py for use with EVE Onlin
 * python3.6
   * f-strings are not supported on earlier versions.
 * discord.py 1.0.0a0 (rewrite)
-  * **NOTE:** discord.py 1.0.0a0 is NOT in requiremenst.txt. You will have to install it using the following command: `python3 -m pip install -U git+https://github.com/Rapptz/discord.py@rewrite`
+  * **NOTE:** discord.py 1.0.0a0 is NOT in requirements.txt. You will have to install it using the following command: `python3 -m pip install -U git+https://github.com/Rapptz/discord.py@rewrite`
 * aiohttp
 * aioxmpp
   * **NOTE:** This is required for the JabberPings extension, and requires libxml, which means you must be running the bot on a linux distro to use this feature.

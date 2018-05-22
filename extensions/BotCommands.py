@@ -38,7 +38,7 @@ class BotCommands:
         embed = discord.Embed(title="Bot Statistics", colour=discord.Colour.green())
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url_as(format='png'))
         embed.set_thumbnail(url=self.bot.user.avatar_url_as(format='png'))
-        embed.add_field(name="Servers", value=len(servers), inline=True)
+        embed.add_field(name="Servers", value=str(len(servers)), inline=True)
         embed.add_field(name="Uptime", value=core.strftdelta(uptime), inline=True)
         if 'WatchRedisq' in self.bot.cogs:
             embed.add_field(name="Killmails Processed", value=self.bot.counter, inline=True)

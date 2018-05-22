@@ -66,9 +66,10 @@ async def get_stats(cid):
     return data
 
 
-async def build_kill(km, type):
+# noinspection PyUnboundLocalVariable
+async def build_kill(km, ktype):
 
-    if type == 'api':
+    if ktype == 'api':
         vicChar = km['vicChar']
         vicAlly = km['vicAlly']
         vicCorp = km['vicCorp']
@@ -82,7 +83,7 @@ async def build_kill(km, type):
         vicDam = km['vicDam']
         value = km['value']
         killTime = km['time']
-    elif type == 'esi':
+    elif ktype == 'esi':
         vic = km['killmail']['victim']
         if 'character_id' in vic:
             vicChar = await esiutils.esi_char(vic['character_id'])
@@ -117,8 +118,8 @@ async def build_kill(km, type):
         killid = km['killID']
         killTime = datetime.datetime.strptime(km['killmail']['killmail_time'], '%Y-%m-%dT%H:%M:%SZ')
 
-
     if vicChar is None:
+
         if vicAlly is None:
             embed = discord.Embed(title=f'{vicCorp["name"]} lost their {vicShip}', timestamp=killTime)
         else:

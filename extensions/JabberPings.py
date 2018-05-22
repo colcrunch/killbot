@@ -32,6 +32,7 @@ class JabberPings:
                 return asyncio.Task(post(msg))
             return
 
+        # noinspection PyUnresolvedReferences
         message_dispatcher = client.summon(aioxmpp.dispatcher.SimpleMessageDispatcher)
         message_dispatcher.register_callback(aioxmpp.MessageType.CHAT, None, message_recieved)
 
@@ -53,6 +54,7 @@ class JabberPings:
             embed.set_footer(icon_url=bot.user.avatar_url_as(format='png'), text=f"Service provided by {bot.user.name}")
             return await self.channel.send(embed=embed)
 
+        # noinspection PyUnresolvedReferences
         @aioxmpp.service.iq_handler()
         async def iq_handle():
             pass

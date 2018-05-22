@@ -1,6 +1,7 @@
 import aiohttp
 import asyncio
 import os
+# noinspection PyPackageRequirements
 import discord
 import urllib
 import json
@@ -14,6 +15,7 @@ if os.path.exists('utils/config.py'):
 from utils import core
 from utils import esiutils
 from utils import sdeutils
+# noinspection PyPackageRequirements
 from discord.ext import commands
 from utils import checks
 

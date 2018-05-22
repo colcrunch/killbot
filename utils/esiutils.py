@@ -6,6 +6,7 @@ from utils.core import mc
 async def get_id(name, ref):
     key_name = name.replace(' ', '+')
     if mc.get(f'{ref}_{key_name}') is None:
+        # noinspection PyUnresolvedReferences
         urlName = urllib.parse.quote_plus(name)
         defs = {'ally': 'alliance',
                 'corp': 'corporation',
