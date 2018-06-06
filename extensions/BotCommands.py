@@ -10,7 +10,7 @@ class BotCommands:
         """Displays general information about the bot."""
         info = await self.bot.application_info()
         owner = "{0}#{1}".format(info.owner.name, info.owner.discriminator)
-        link = "https://github.com/colcrunch/killbot"
+        link = "https://gitlab.com/colcrunch/killbot"
         about = ("Killbot is a general use discord bot for use with EVE Online."
                  "The aim of Killbot is to make it easy to get public info from the game and"
                  "to easily monitor zkillboard for kills that are interesting to you.")
@@ -19,7 +19,7 @@ class BotCommands:
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url_as(format='png'))
         embed.set_thumbnail(url=self.bot.user.avatar_url_as(format='png'))
         embed.add_field(name="Bot Owner", value=owner, inline=True)
-        embed.add_field(name="Bot Author", value="col_crunch#2370", inline=True)
+        embed.add_field(name="Bot Author", value="Col Crunch#2370", inline=True)
         embed.add_field(name="GitHub", value=link, inline=False)
 
         return await ctx.send(embed=embed)
