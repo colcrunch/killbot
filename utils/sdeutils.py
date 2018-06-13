@@ -57,6 +57,7 @@ def exec_all(query):
 
 
 def type_id(name):
+    name = name.replace("'", "''")
     query = f"SELECT typeID FROM invTypes WHERE typeName LIKE '{name}'"
     t = exec_one(query)
 
@@ -77,6 +78,7 @@ def type_name(tid):
 
 
 def region_id(name):
+    name = name.replace("'", "''")
     query = f"SELECT regionID FROM mapRegions WHERE regionName LIKE '{name}'"
     t = exec_one(query)
 
@@ -107,6 +109,7 @@ def constellation(cid):
 
 
 def system_id(name):
+    name = name.replace("'", "''")
     query = f"SELECT solarSystemID FROM mapSolarSystems WHERE solarSystemName LIKE '{name}'"
     t = exec_one(query)
 
