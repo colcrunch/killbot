@@ -74,7 +74,8 @@ class LinkListener:
                 if match[1] is not '':
                     return await channel.send(embed=embed)
                 else:
-                    await channel.purge(check=self.passed)
+                    if commands.bot_has_permissions(manage_messages=True):
+                        await channel.purge(check=self.passed)
 
                     return await channel.send(content=content, embed=embed)
             elif match[3] == 'zkillboard':
@@ -130,7 +131,8 @@ class LinkListener:
                     if match[1] is not '':
                         return await channel.send(embed=embed)
                     else:
-                        await channel.purge(check=self.passed)
+                        if commands.bot_has_permissions(manage_messages=True):
+                            await channel.purge(check=self.passed)
 
                         return await channel.send(content=content, embed=embed)
                 elif match[4] == '/character/':
