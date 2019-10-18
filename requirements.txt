@@ -1,7 +1,7 @@
 aiohttp==2.2.5
 aioopenssl==0.3.1
 aiosasl==0.3.1
-aioxmpp==0.9.1
+aioxmpp==0.10.3
 asn1crypto==0.24.0
 async-timeout==2.0.1
 Babel==2.5.3
