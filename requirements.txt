@@ -12,7 +12,7 @@ cryptography==2.2.1
 -e git://github.com/Rapptz/discord.py@rewrite#egg=discord
 dnspython==1.15.0
 idna==2.6
-lxml==3.8.0
+lxml==4.6.2
 multidict==2.1.6
 orderedset==2.0.1
 pyasn1==0.4.2
