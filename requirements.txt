@@ -1,4 +1,4 @@
-aiohttp==2.2.5
+aiohttp==3.7.4
 aioopenssl==0.3.1
 aiosasl==0.3.1
 aioxmpp==0.9.1
