@@ -5,7 +5,7 @@ aioxmpp==0.9.1
 asn1crypto==0.24.0
 async-timeout==2.0.1
 Babel==2.5.3
-certifi==2018.1.18
+certifi==2022.12.7
 cffi==1.11.5
 chardet==3.0.4
 cryptography==2.2.1
